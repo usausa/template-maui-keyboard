@@ -33,13 +33,8 @@ public sealed partial class App
         // Report previous exception
         await CrashReport.ShowReport();
 
-        // Permissions
-        await Permissions.RequestCameraAsync();
-        await Permissions.RequestMicrophoneAsync();
-        await Permissions.RequestLocationAsync();
-
         // Navigate
         var navigator = serviceProvider.GetRequiredService<INavigator>();
-        await navigator.ForwardAsync(ViewId.Menu);
+        await navigator.ForwardAsync(ViewId.KeyMenu);
     }
 }

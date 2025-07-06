@@ -1,49 +1,29 @@
 namespace Template.MobileApp;
 
-using System.Text.Encodings.Web;
-using System.Text.Json.Serialization;
-using System.Text.Unicode;
-
 #if ANDROID && DEVICE_HAS_KEYPAD
 using Android.Views;
 #endif
-
-using BarcodeScanning;
 
 using CommunityToolkit.Maui;
 
 using Fonts;
 
-using Indiko.Maui.Controls.Markdown;
-
 using MauiComponents.Resolver;
 
 using Microsoft.Maui.LifecycleEvents;
 
-using Plugin.Maui.Audio;
 #if DEBUG
 using Plugin.Maui.DebugRainbows;
 #endif
 
-using Rester;
-
-using Shiny;
-
-using SkiaSharp.Views.Maui.Controls.Hosting;
-
-using Smart.Data.Mapper;
 using Smart.Resolver;
 
 using Template.MobileApp.Behaviors;
 using Template.MobileApp.Components;
 using Template.MobileApp.Extender;
 using Template.MobileApp.Helpers;
-using Template.MobileApp.Helpers.Data;
 using Template.MobileApp.Modules;
-using Template.MobileApp.Providers;
-using Template.MobileApp.Services;
 using Template.MobileApp.Shell;
-using Template.MobileApp.Usecase;
 
 public static partial class MauiProgram
 {
@@ -56,18 +36,11 @@ public static partial class MauiProgram
             .ConfigureEssentials(ConfigureEssentials)
             .ConfigureLogging()
             .ConfigureGlobalSettings()
-            .UseSkiaSharp()
             .UseMauiCommunityToolkit()
-            .UseMauiCommunityToolkitCamera()
-            .UseBarcodeScanning()
-            .UseShiny()
-            .UseMarkdownView()
             .UseMauiServices()
             .UseMauiComponents()
             .UseCommunityToolkitServices()
             .UseCustomView()
-            .ConfigureComponents()
-            .ConfigureHttpClient()
             .ConfigureContainer()
             .Build();
 
@@ -144,21 +117,6 @@ public static partial class MauiProgram
 
     private static MauiAppBuilder ConfigureGlobalSettings(this MauiAppBuilder builder)
     {
-        // Config DataMapper
-        SqlMapperConfig.Default.ConfigureTypeHandlers(static config =>
-        {
-            config[typeof(DateTime)] = new DateTimeTypeHandler();
-            config[typeof(Guid)] = new GuidTypeHandler();
-        });
-
-        // Config Rest
-        RestConfig.Default.UseJsonSerializer(static config =>
-        {
-            config.Converters.Add(new Template.MobileApp.Helpers.Json.DateTimeConverter());
-            config.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
-            config.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-        });
-
         // TODO App center alternative
 
         // Crash dump
@@ -219,16 +177,6 @@ public static partial class MauiProgram
     // Components
     // ------------------------------------------------------------
 
-    private static MauiAppBuilder ConfigureComponents(this MauiAppBuilder builder)
-    {
-        // Components
-        builder.Services.AddBluetoothLE();
-        builder.Services.AddBleHostedCharacteristic<UserCharacteristic>();
-        builder.Services.AddBluetoothLeHosting();
-
-        return builder;
-    }
-
     private static MauiAppBuilder ConfigureContainer(this MauiAppBuilder builder)
     {
         builder.ConfigureContainer(new SmartServiceProviderFactory(), ConfigureContainer);
@@ -278,40 +226,9 @@ public static partial class MauiProgram
 
         // Components
         config.BindSingleton<IStorageManager, StorageManager>();
-        config.BindSingleton<INfcReader, NfcReader>();
-        config.BindSingleton<INoiseMonitor, NoiseMonitor>();
-        config.BindSingleton<IOcrReader, OcrReader>();
-
-        config.BindSingleton(AudioManager.Current);
 
         // State
         config.BindSingleton<DeviceState>();
-        config.BindSingleton<Session>();
-        config.BindSingleton<Settings>();
-
-        // Service
-        config.BindSingleton(static p =>
-        {
-            var storage = p.GetRequiredService<IStorageManager>();
-            return new DataServiceOptions
-            {
-#if DEBUG
-                Path = Path.Combine(storage.PublicFolder, "data.db")
-#else
-                Path = Path.Combine(storage.PrivateFolder, "data.db")
-#endif
-            };
-        });
-        config.BindSingleton<DataService>();
-
-        config.BindSingleton<NetworkService>();
-
-        // Usecase
-        config.BindSingleton<NetworkOperator>();
-
-        config.BindSingleton<NetworkUsecase>();
-        config.BindSingleton<CognitiveUsecase>();
-        config.BindSingleton<SampleUsecase>();
 
         // Startup
         config.BindSingleton<IMauiInitializeService, ApplicationInitializer>();

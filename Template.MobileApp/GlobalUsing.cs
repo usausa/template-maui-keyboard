@@ -50,15 +50,10 @@ global using Smart.Reactive;
 global using Smart.Text;
 
 global using SkiaSharp;
-global using SkiaSharp.Views.Maui.Controls;
 
 global using Template.MobileApp;
 global using Template.MobileApp.Domain;
-global using Template.MobileApp.Domain.Logic;
 global using Template.MobileApp.Messaging;
 global using Template.MobileApp.Models;
-global using Template.MobileApp.Models.Api;
-global using Template.MobileApp.Models.Entity;
 global using Template.MobileApp.Models.Input;
-global using Template.MobileApp.Models.Sample;
 global using Template.MobileApp.State;

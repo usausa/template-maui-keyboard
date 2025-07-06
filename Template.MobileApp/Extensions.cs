@@ -3,7 +3,6 @@ namespace Template.MobileApp;
 using System.Reflection;
 
 using Template.MobileApp.Behaviors;
-using Template.MobileApp.Components;
 using Template.MobileApp.Helpers;
 
 public static class Extensions
@@ -96,16 +95,4 @@ public static class Extensions
 
     public static IObservable<ScreenStateEventArgs> StateChangedAsObservable(this IScreen screen) =>
         Observable.FromEvent<EventHandler<ScreenStateEventArgs>, ScreenStateEventArgs>(static h => (_, e) => h(e), h => screen.ScreenStateChanged += h, h => screen.ScreenStateChanged -= h);
-
-    public static IObservable<LocationEventArgs> LocationChangedAsObservable(this ILocationService locationService) =>
-        Observable.FromEvent<EventHandler<LocationEventArgs>, LocationEventArgs>(static h => (_, e) => h(e), h => locationService.LocationChanged += h, h => locationService.LocationChanged -= h);
-
-    public static IObservable<SpeechRecognizeEventArgs> RecognizedAsObservable(this ISpeechService speechService) =>
-        Observable.FromEvent<EventHandler<SpeechRecognizeEventArgs>, SpeechRecognizeEventArgs>(static h => (_, e) => h(e), h => speechService.Recognized += h, h => speechService.Recognized -= h);
-
-    public static IObservable<NfcEventArgs> DetectedAsObservable(this INfcReader nfcReader) =>
-        Observable.FromEvent<EventHandler<NfcEventArgs>, NfcEventArgs>(static h => (_, e) => h(e), h => nfcReader.Detected += h, h => nfcReader.Detected -= h);
-
-    public static IObservable<NoiseEventArgs> MeasuredAsObservable(this INoiseMonitor noiseMonitor) =>
-        Observable.FromEvent<EventHandler<NoiseEventArgs>, NoiseEventArgs>(static h => (_, e) => h(e), h => noiseMonitor.Measured += h, h => noiseMonitor.Measured -= h);
 }
