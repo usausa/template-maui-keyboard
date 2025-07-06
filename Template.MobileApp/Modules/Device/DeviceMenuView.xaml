@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:s="http://smart/maui"
+             xmlns:shell="clr-namespace:Template.MobileApp.Shell"
+             xmlns:markup="clr-namespace:Template.MobileApp.Markup"
+             xmlns:module="clr-namespace:Template.MobileApp.Modules.Device"
+             x:Class="Template.MobileApp.Modules.Device.DeviceMenuView"
+             x:DataType="{x:Type module:DeviceMenuViewModel}"
+             s:BindingContextResolver.Type="{x:Type module:DeviceMenuViewModel}"
+             shell:ShellProperty.Title="Device"
+             shell:ShellProperty.Function1Text="Back"
+             shell:ShellProperty.Function1Enabled="True">
+
+    <Grid Style="{StaticResource MenuGrid}"
+          RowDefinitions="*,*,*,*,*,*,*,*,*"
+          ColumnDefinitions="*,*">
+        <Button Grid.Row="0" Grid.Column="0"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding ForwardCommand}"
+                CommandParameter="{markup:ViewId DeviceInfo}"
+                Text="Info" />
+        <Button Grid.Row="0" Grid.Column="1"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding ForwardCommand}"
+                CommandParameter="{markup:ViewId DeviceStatus}"
+                Text="Status" />
+
+        <Button Grid.Row="1" Grid.Column="0"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding ForwardCommand}"
+                CommandParameter="{markup:ViewId DeviceSensor}"
+                Text="Sensor" />
+        <Button Grid.Row="1" Grid.Column="1"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding ForwardCommand}"
+                CommandParameter="{markup:ViewId DeviceLocation}"
+                Text="Location" />
+
+        <Button Grid.Row="2" Grid.Column="0"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding ForwardCommand}"
+                CommandParameter="{markup:ViewId DeviceQrDisplay}"
+                Text="QR Display" />
+        <Button Grid.Row="2" Grid.Column="1"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding ForwardCommand}"
+                CommandParameter="{markup:ViewId DeviceQrScan}"
+                Text="QR Scan" />
+
+        <Button Grid.Row="3" Grid.Column="0"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding ForwardCommand}"
+                CommandParameter="{markup:ViewId DeviceCamera}"
+                Text="Camera" />
+        <Button Grid.Row="3" Grid.Column="1"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding ForwardCommand}"
+                CommandParameter="{markup:ViewId DeviceOcr}"
+                Text="OCR" />
+
+        <Button Grid.Row="4" Grid.Column="0"
+                Style="{StaticResource MenuButton}"
+                IsEnabled="False"
+                Text="WiFi" />
+        <Button Grid.Row="4" Grid.Column="1"
+                Style="{StaticResource MenuButton}"
+                IsEnabled="False"
+                Text="Bluetooth" />
+
+        <Button Grid.Row="5" Grid.Column="0"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding ForwardCommand}"
+                CommandParameter="{markup:ViewId DeviceBleScan}"
+                Text="BLE Scan" />
+        <Button Grid.Row="5" Grid.Column="1"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding ForwardCommand}"
+                CommandParameter="{markup:ViewId DeviceBleHost}"
+                Text="BLE Host" />
+
+        <Button Grid.Row="6" Grid.Column="0"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding ForwardCommand}"
+                CommandParameter="{markup:ViewId DeviceNfc}"
+                Text="NFC" />
+        <Button Grid.Row="6" Grid.Column="1"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding ForwardCommand}"
+                CommandParameter="{markup:ViewId DeviceAudio}"
+                Text="Audio" />
+
+        <Button Grid.Row="7" Grid.Column="0"
+                Style="{StaticResource MenuButton}"
+                IsEnabled="False"
+                Text="Biometric" />
+        <Button Grid.Row="7" Grid.Column="1"
+                Style="{StaticResource MenuButton}"
+                IsEnabled="False"
+                Text="" />
+
+        <Button Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding ForwardCommand}"
+                CommandParameter="{markup:ViewId DeviceMisc}"
+                Text="Misc" />
+    </Grid>
+
+</ContentView>

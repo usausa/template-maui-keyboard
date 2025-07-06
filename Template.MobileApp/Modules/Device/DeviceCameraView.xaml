@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:s="http://smart/maui"
+             xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:shell="clr-namespace:Template.MobileApp.Shell"
+             xmlns:behaviors="clr-namespace:Template.MobileApp.Behaviors"
+             xmlns:module="clr-namespace:Template.MobileApp.Modules.Device"
+             x:Class="Template.MobileApp.Modules.Device.DeviceCameraView"
+             x:DataType="{x:Type module:DeviceCameraViewModel}"
+             s:BindingContextResolver.Type="{x:Type module:DeviceCameraViewModel}"
+             shell:ShellProperty.Title="Camera"
+             shell:ShellProperty.Function1Text="Back"
+             shell:ShellProperty.Function2Text="Switch"
+             shell:ShellProperty.Function3Text="{Binding IsPreview, Converter={s:BoolToText True='Stop', False='Start'}}"
+             shell:ShellProperty.Function4Text="Shot"
+             shell:ShellProperty.Function1Enabled="True"
+             shell:ShellProperty.Function2Enabled="True"
+             shell:ShellProperty.Function3Enabled="True"
+             shell:ShellProperty.Function4Enabled="True">
+
+    <Grid Style="{StaticResource FillGrid}"
+          RowDefinitions="*,Auto,Auto">
+
+        <mct:CameraView Grid.Row="0"
+                        behaviors:CameraBind.Controller="{Binding Controller}" />
+
+        <Grid Grid.Row="1"
+              Style="{StaticResource FillGrid}"
+              RowDefinitions="*,*"
+              ColumnDefinitions="*,*">
+            <Label Grid.Row="0" Grid.Column="0"
+                   FontSize="14"
+                   Text="{Binding Controller.Selected.Name, StringFormat='Camera: {0}', FallbackValue='-'}" />
+            <Label Grid.Row="0" Grid.Column="1"
+                   FontSize="14"
+                   Text="{Binding Controller.ZoomFactor, StringFormat='Zoom: x{0}', FallbackValue='-'}" />
+            <Label Grid.Row="1" Grid.Column="0"
+                   FontSize="14"
+                   Text="{Binding Controller.CameraFlashMode, StringFormat='Flash mode: {0}', FallbackValue='-'}" />
+            <Label Grid.Row="1" Grid.Column="1"
+                   FontSize="14"
+                   Text="{Binding Controller.IsTorchOn, StringFormat='Torch: {0}', FallbackValue='-'}" />
+        </Grid>
+
+        <Grid Grid.Row="2"
+              Style="{StaticResource SubMenuGrid}"
+              ColumnDefinitions="*,*,*,*">
+            <Button Grid.Column="0"
+                    Style="{StaticResource SubMenuButton}"
+                    Command="{Binding TorchCommand}"
+                    Text="Torch" />
+            <Button Grid.Column="1"
+                    Style="{StaticResource SubMenuButton}"
+                    Command="{Binding FlashModeCommand}"
+                    Text="Flash" />
+            <Button Grid.Column="2"
+                    Style="{StaticResource SubMenuButton}"
+                    Command="{Binding ZoomOutCommand}"
+                    Text="ZoomOut" />
+            <Button Grid.Column="3"
+                    Style="{StaticResource SubMenuButton}"
+                    Command="{Binding ZoomInCommand}"
+                    Text="ZoomIn" />
+        </Grid>
+    </Grid>
+
+</ContentView>

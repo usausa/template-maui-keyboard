@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:s="http://smart/maui"
+             xmlns:shell="clr-namespace:Template.MobileApp.Shell"
+             xmlns:module="clr-namespace:Template.MobileApp.Modules.Device"
+             x:Class="Template.MobileApp.Modules.Device.DeviceAudioView"
+             x:DataType="{x:Type module:DeviceAudioViewModel}"
+             s:BindingContextResolver.Type="{x:Type module:DeviceAudioViewModel}"
+             shell:ShellProperty.Title="Audio"
+             shell:ShellProperty.Function1Text="Back"
+             shell:ShellProperty.Function1Enabled="True">
+
+    <Grid Style="{StaticResource MenuGrid}"
+          RowDefinitions="*,*,*,*,*,*,*,*,*">
+        <Button Grid.Row="0"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding PlayCommand}"
+                Text="Play" />
+        <Button Grid.Row="1"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding PauseCommand}"
+                Text="Pause" />
+        <Button Grid.Row="2"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding StopCommand}"
+                Text="Stop" />
+
+        <Slider Grid.Row="3"
+                Value="{Binding AudioPlayer.Volume, FallbackValue=0.5}"
+                Maximum="1" Minimum="0" />
+
+    </Grid>
+
+</ContentView>
