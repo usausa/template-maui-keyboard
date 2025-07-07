@@ -107,8 +107,7 @@
     "ios:*",
     "mcs:*",
     "behaviors:*",
-    "si:*",
-    "six:*",
+    "s:*",
     "input:*",
     "effects:*",
 
