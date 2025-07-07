@@ -16,19 +16,15 @@ using Android.OS;
     ScreenOrientation = ScreenOrientation.Portrait)]
 public sealed class MainActivity : MauiAppCompatActivity
 {
-#if DEVICE_HAS_KEYPAD
     private KeyInputDriver keyInputDriver = default!;
-#endif
+
     protected override void OnCreate(Bundle? savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
 
-#if DEVICE_HAS_KEYPAD
         keyInputDriver = new KeyInputDriver(this);
-#endif
     }
 
-#if DEVICE_HAS_KEYPAD
     public override bool DispatchKeyEvent(Android.Views.KeyEvent? e)
     {
         if (keyInputDriver.Process(e!))
@@ -38,5 +34,4 @@ public sealed class MainActivity : MauiAppCompatActivity
 
         return base.DispatchKeyEvent(e);
     }
-#endif
 }

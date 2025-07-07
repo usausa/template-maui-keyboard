@@ -1,9 +1,5 @@
 namespace Template.MobileApp;
 
-#if ANDROID && DEVICE_HAS_KEYPAD
-using Android.Views;
-#endif
-
 using CommunityToolkit.Maui;
 
 using Fonts;
@@ -103,9 +99,6 @@ public static partial class MauiProgram
     // ReSharper disable UnusedParameter.Local
     private static void ConfigureLifecycle(ILifecycleBuilder effects)
     {
-#if ANDROID && DEVICE_FULL_SCREEN
-        events.AddAndroid(static android => android.OnCreate(static (activity, _) => AndroidHelper.FullScreen(activity)));
-#endif
     }
     // ReSharper restore UnusedParameter.Local
 
@@ -130,13 +123,8 @@ public static partial class MauiProgram
         // Behaviors
         builder.ConfigureCustomBehaviors(static options =>
         {
-#if DEVICE_HAS_KEYPAD
             options.HandleEnterKey = true;
             options.DisableShowSoftInputOnFocus = true;
-#else
-            options.HandleEnterKey = false;
-            options.DisableShowSoftInputOnFocus = false;
-#endif
         });
 
         // Busy
