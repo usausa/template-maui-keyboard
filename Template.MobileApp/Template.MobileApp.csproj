@@ -75,9 +75,9 @@
     <PackageReference Include="BunnyTail.EmbeddedBuildProperty" Version="1.5.0" />
     <PackageReference Include="BunnyTail.MemberAccessor" Version="1.7.0" />
     <PackageReference Include="CommunityToolkit.Maui" Version="12.1.0" />
-    <PackageReference Include="Components.Maui" Version="1.21.1" />
-    <PackageReference Include="Components.Maui.Resolver" Version="1.21.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.6" />
+    <PackageReference Include="Components.Maui" Version="1.22.0" />
+    <PackageReference Include="Components.Maui.Resolver" Version="1.22.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.7" />
     <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.81" />
     <PackageReference Include="SkiaSharp" Version="3.119.0" />
     <PackageReference Include="Plugin.Maui.DebugRainbows" Version="1.2.2" />

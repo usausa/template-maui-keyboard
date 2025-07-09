@@ -11,8 +11,6 @@ public sealed class PopupFocusPlugin : IPopupPlugin
         view.Content?.Behaviors.Add(new InputPopupBehavior());
         if (view is Popup popup)
         {
-            popup.Margin = new Thickness(0);
-            popup.Padding = new Thickness(0);
             popup.Opened += (_, _) =>
             {
                 Application.Current?.Dispatcher.Dispatch(() => view.Content?.SetDefaultFocus());
