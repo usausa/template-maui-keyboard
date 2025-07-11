@@ -112,12 +112,12 @@ public static partial class MauiProgram
     {
         options.SetPopupDefaults(new DefaultPopupSettings
         {
-            CanBeDismissedByTappingOutsideOfPopup = true,
+            CanBeDismissedByTappingOutsideOfPopup = false,
             Padding = 0
         });
         options.SetPopupOptionsDefaults(new DefaultPopupOptionsSettings
         {
-            CanBeDismissedByTappingOutsideOfPopup = true,
+            CanBeDismissedByTappingOutsideOfPopup = false,
             Shadow = null,
             Shape = null
         });
@@ -141,9 +141,6 @@ public static partial class MauiProgram
             options.HandleEnterKey = true;
             options.DisableShowSoftInputOnFocus = true;
         });
-
-        // Busy
-        builder.UseCustomBusyOverlay();
 
         return builder;
     }
