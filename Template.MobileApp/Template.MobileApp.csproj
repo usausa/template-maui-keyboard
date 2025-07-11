@@ -99,15 +99,4 @@
     <PackageReference Include="Usa.Smart.Resolver.Extensions.DependencyInjection" Version="2.6.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controls\" />
-    <Folder Include="Converters\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <MauiXaml Update="Modules\Navigation\Modal\InputNumberView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-  </ItemGroup>
-
 </Project>
