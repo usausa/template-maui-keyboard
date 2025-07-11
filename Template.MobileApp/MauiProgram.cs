@@ -19,7 +19,6 @@ using Template.MobileApp.Components;
 using Template.MobileApp.Extender;
 using Template.MobileApp.Helpers;
 using Template.MobileApp.Modules;
-using Template.MobileApp.Shell;
 
 public static partial class MauiProgram
 {
