@@ -8,7 +8,7 @@ using MauiComponents.Resolver;
 
 using Microsoft.Maui.LifecycleEvents;
 
-#if DEBUG
+#if false
 using Plugin.Maui.DebugRainbows;
 #endif
 
@@ -25,7 +25,7 @@ public static partial class MauiProgram
     public static MauiApp CreateMauiApp() =>
         MauiApp.CreateBuilder()
             .UseMauiApp<App>()
-            //.ConfigureDebug()
+            .ConfigureDebug()
             .ConfigureFonts(ConfigureFonts)
             .ConfigureLifecycleEvents(ConfigureLifecycleEvents)
             .ConfigureEssentials(ConfigureEssentials)
@@ -46,6 +46,7 @@ public static partial class MauiProgram
     private static MauiAppBuilder ConfigureDebug(this MauiAppBuilder builder)
     {
 #if DEBUG
+#if false
         builder
             .UseDebugRainbows(new DebugRainbowsOptions
             {
@@ -59,7 +60,7 @@ public static partial class MauiProgram
                 GridOrigin = DebugGridOrigin.TopLeft
             });
 #endif
-
+#endif
         return builder;
     }
 
