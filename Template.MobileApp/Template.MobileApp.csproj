@@ -80,7 +80,9 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.7" />
     <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.90" />
     <PackageReference Include="SkiaSharp" Version="3.119.0" />
+    <PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="3.119.0" />
     <PackageReference Include="Plugin.Maui.DebugRainbows" Version="1.2.2" />
+    <PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.5" />
     <PackageReference Include="System.Interactive" Version="6.0.3" />
     <PackageReference Include="System.Linq.Async" Version="6.0.3" />
     <PackageReference Include="System.Reactive" Version="6.0.1" />

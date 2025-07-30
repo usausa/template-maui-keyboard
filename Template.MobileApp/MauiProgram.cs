@@ -12,7 +12,11 @@ using Microsoft.Maui.LifecycleEvents;
 using Plugin.Maui.DebugRainbows;
 #endif
 
+using SkiaSharp.Views.Maui.Controls.Hosting;
+
 using Smart.Resolver;
+
+using Syncfusion.Maui.Toolkit.Hosting;
 
 using Template.MobileApp.Behaviors;
 using Template.MobileApp.Components;
@@ -31,6 +35,8 @@ public static partial class MauiProgram
             .ConfigureEssentials(ConfigureEssentials)
             .ConfigureLogging()
             .ConfigureGlobalSettings()
+            .ConfigureSyncfusionToolkit()
+            .UseSkiaSharp()
             .UseMauiCommunityToolkit(ConfigureMauiCommunityToolkit)
             .UseMauiServices()
             .UseMauiComponents()
