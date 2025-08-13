@@ -94,7 +94,19 @@
     "Margin, Padding",
     "HorizontalTextAlignment, VerticalTextAlignment, HorizontalContentAlignment, VerticalContentAlignment, Panel.ZIndex",
 
-    "Platform, PageSource, PageIndex, Offset, Color, TargetName, Property, Value, StartPoint, EndPoint",
+    "Platform",
+
+    "Source",
+    "PageSource, PageIndex, Offset", 
+
+    "TargetName",
+    "Property",
+
+    "Color, TextColor, BackgroundColor",
+
+    "Value",
+    "StartPoint, EndPoint",
+    "Progress",
 
     "Storyboard.*, From, To, Duration",
 
@@ -110,12 +122,12 @@
     "mcs:*",
     "behaviors:*",
     "s:*",
-    "input:*",
     "effects:*",
 
     "FontFamily, FontSize, FontAttributes",
     "Text",
-    "TextColor, BackgroundColor",
+
+    "IsAnimationEnabled",
 
     "Keyboard",
 
