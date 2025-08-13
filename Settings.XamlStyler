@@ -63,6 +63,9 @@
     "Class",
     "ClassId",
 
+    "TargetName",
+    "Property",
+
     "Grid.Row, Grid.RowSpan, Grid.Column, Grid.ColumnSpan",
     "Canvas.Left, Canvas.Top, Canvas.Right, Canvas.Bottom",
     "AbsoluteLayout.LayoutBounds, AbsoluteLayout.LayoutFlags",
@@ -90,46 +93,44 @@
     "ColumnDefinitions",
     "Width, Height, MinWidth, MinHeight, MaxWidth, MaxHeight, WidthRequest, HeightRequest",
 
-    "Orientation",
-    "Margin, Padding",
-    "HorizontalTextAlignment, VerticalTextAlignment, HorizontalContentAlignment, VerticalContentAlignment, Panel.ZIndex",
-
-    "Platform",
-
-    "Source",
-    "PageSource, PageIndex, Offset", 
-
-    "TargetName",
-    "Property",
-
-    "Color, TextColor, BackgroundColor",
-
-    "Value",
-    "StartPoint, EndPoint",
-    "Progress",
-
-    "Storyboard.*, From, To, Duration",
-
-    "KeyCode",
-
-    "Command, CommandParameter",
-
-    "IsEnabled",
-    "IsVisible",
-    "ItemsSource",
-
     "ios:*",
     "mcs:*",
     "behaviors:*",
     "s:*",
     "effects:*",
 
-    "FontFamily, FontSize, FontAttributes",
-    "Text",
+    "Platform",
 
-    "IsAnimationEnabled",
+    "Orientation",
+    "Margin, Padding",
+    "HorizontalTextAlignment, VerticalTextAlignment, HorizontalContentAlignment, VerticalContentAlignment, Panel.ZIndex",
+
+    "ItemsSource",
+    "Source",
+    "PageSource, PageIndex, Offset", 
+
+    "Command, CommandParameter",
+
+    "IsEnabled",
+    "IsVisible",
+
+    "Value",
+    "StartPoint, EndPoint",
+    "Progress",
+
+    "Text",
+    "Glyph",
+
+    "FontFamily, FontSize, FontAttributes",
+    "Color, TextColor, BackgroundColor",
+
+    "Storyboard.*, From, To, Duration",
+
+    "KeyCode",
 
     "Keyboard",
+
+    "IsAnimationEnabled",
 
     "GaugeColor",
     "ValueColor",
