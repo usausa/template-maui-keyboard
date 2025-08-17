@@ -50,6 +50,7 @@ public static class Extensions
     {
         if (navigator.Executing)
         {
+            // ReSharper disable once AsyncVoidEventHandlerMethod
             async void ExecutingChanged(object? sender, EventArgs args)
             {
                 if (!navigator.Executing)
@@ -72,6 +73,7 @@ public static class Extensions
     {
         if (navigator.Executing)
         {
+            // ReSharper disable once AsyncVoidEventHandlerMethod
             async void ExecutingChanged(object? sender, EventArgs args)
             {
                 if (!navigator.Executing)
