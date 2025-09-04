@@ -88,9 +88,9 @@
     <PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.6" />
     <PackageReference Include="System.Interactive" Version="6.0.3" />
     <PackageReference Include="System.Linq.Async" Version="6.0.3" />
-    <PackageReference Include="System.Reactive" Version="6.0.1" />
+    <PackageReference Include="System.Reactive" Version="6.0.2" />
     <PackageReference Include="Usa.Smart.Converter" Version="2.4.0" />
-    <PackageReference Include="Usa.Smart.Core" Version="2.4.4" />
+    <PackageReference Include="Usa.Smart.Core" Version="2.4.6" />
     <PackageReference Include="Usa.Smart.Mapper" Version="0.8.2" />
     <PackageReference Include="Usa.Smart.Maui" Version="2.9.3" />
     <PackageReference Include="Usa.Smart.Maui.Extensions" Version="2.9.3" />
