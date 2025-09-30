@@ -93,8 +93,8 @@
     <PackageReference Include="Usa.Smart.Converter" Version="2.4.0" />
     <PackageReference Include="Usa.Smart.Core" Version="2.4.6" />
     <PackageReference Include="Usa.Smart.Mapper" Version="0.8.2" />
-    <PackageReference Include="Usa.Smart.Maui" Version="2.9.5" />
-    <PackageReference Include="Usa.Smart.Maui.Extensions" Version="2.9.5" />
+    <PackageReference Include="Usa.Smart.Maui" Version="2.9.6" />
+    <PackageReference Include="Usa.Smart.Maui.Extensions" Version="2.9.6" />
     <PackageReference Include="Usa.Smart.Mvvm" Version="1.8.0" />
     <PackageReference Include="Usa.Smart.Navigation" Version="2.16.0" />
     <PackageReference Include="Usa.Smart.Navigation.Extensions.DependencyInjection" Version="2.16.0" />
