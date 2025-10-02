@@ -30,21 +30,25 @@
                            NullValue="False"
                            NonNullValue="True" />
 
+    <s:CompareToBoolConverter x:Key="GreaterThanToBoolConverter"
+                              Expression="{x:Static s:CompareExpressions.GreaterThan}" />
+
+    <s:ColorToBrushConverter x:Key="ColorToBrushConverter" />
+
     <!-- ================================================================================ -->
     <!-- Main -->
     <!-- ================================================================================ -->
 
     <Style x:Key="MainGrid"
            TargetType="Grid">
-        <Setter Property="RowSpacing" Value="0" />
-        <Setter Property="ColumnSpacing" Value="0" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
+        <Setter Property="RowSpacing" Value="0" />
+        <Setter Property="ColumnSpacing" Value="0" />
     </Style>
 
     <Style x:Key="ContainerLayout"
            TargetType="AbsoluteLayout">
-        <Setter Property="CompressedLayout.IsHeadless" Value="True" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="HorizontalOptions" Value="Fill" />
@@ -57,58 +61,25 @@
 
     <Style x:Key="HeaderGrid"
            TargetType="Grid">
-        <Setter Property="CompressedLayout.IsHeadless" Value="True" />
-        <Setter Property="BackgroundColor" Value="{StaticResource BlueDarken4}" />
-        <Setter Property="RowSpacing" Value="0" />
-        <Setter Property="ColumnSpacing" Value="0" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
+        <Setter Property="RowSpacing" Value="0" />
+        <Setter Property="ColumnSpacing" Value="0" />
         <Setter Property="HeightRequest" Value="48" />
+        <Setter Property="BackgroundColor" Value="{StaticResource BlueDarken4}" />
     </Style>
 
     <Style x:Key="HeaderTitleLabel"
            TargetType="Label">
-        <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="TextColor" Value="White" />
-        <Setter Property="FontSize" Value="36" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="HorizontalOptions" Value="Fill" />
         <Setter Property="VerticalOptions" Value="Fill" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="36" />
         <Setter Property="HorizontalTextAlignment" Value="Center" />
         <Setter Property="VerticalTextAlignment" Value="Center" />
-    </Style>
-
-    <!-- ================================================================================ -->
-    <!-- Footer -->
-    <!-- ================================================================================ -->
-
-    <Style x:Key="FooterGrid"
-           TargetType="Grid">
-        <Setter Property="CompressedLayout.IsHeadless" Value="True" />
-        <Setter Property="RowSpacing" Value="0" />
-        <Setter Property="ColumnSpacing" Value="0" />
-        <Setter Property="Margin" Value="0" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="HeightRequest" Value="48" />
-    </Style>
-
-    <Style x:Key="FooterInfoLabelBase"
-           TargetType="Label">
-        <Setter Property="FontSize" Value="24" />
-        <Setter Property="Padding" Value="6,0,6,0" />
-    </Style>
-
-    <Style x:Key="FooterInfoLeftLabel"
-           BasedOn="{StaticResource FooterInfoLabelBase}"
-           TargetType="Label">
-        <Setter Property="HorizontalTextAlignment" Value="Start" />
-    </Style>
-
-    <Style x:Key="FooterInfoRightLabel"
-           BasedOn="{StaticResource FooterInfoLabelBase}"
-           TargetType="Label">
-        <Setter Property="HorizontalTextAlignment" Value="End" />
     </Style>
 
     <!-- ================================================================================ -->
@@ -117,27 +88,26 @@
 
     <Style x:Key="FunctionGrid"
            TargetType="Grid">
-        <Setter Property="CompressedLayout.IsHeadless" Value="True" />
-        <Setter Property="RowSpacing" Value="0" />
-        <Setter Property="ColumnSpacing" Value="1" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="HeightRequest" Value="48" />
+        <Setter Property="RowSpacing" Value="0" />
+        <Setter Property="ColumnSpacing" Value="1" />
     </Style>
 
     <Style x:Key="FunctionButtonBase"
            TargetType="Button">
-        <Setter Property="TextColor" Value="White" />
-        <Setter Property="FontSize" Value="24" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="BorderWidth" Value="0" />
         <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="24" />
     </Style>
 
     <Style x:Key="FunctionButton1"
-           BasedOn="{StaticResource FunctionButtonBase}"
-           TargetType="Button">
+           TargetType="Button"
+           BasedOn="{StaticResource FunctionButtonBase}">
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -162,8 +132,8 @@
     </Style>
 
     <Style x:Key="FunctionButton2"
-           BasedOn="{StaticResource FunctionButtonBase}"
-           TargetType="Button">
+           TargetType="Button"
+           BasedOn="{StaticResource FunctionButtonBase}">
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -188,8 +158,8 @@
     </Style>
 
     <Style x:Key="FunctionButton3"
-           BasedOn="{StaticResource FunctionButtonBase}"
-           TargetType="Button">
+           TargetType="Button"
+           BasedOn="{StaticResource FunctionButtonBase}">
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -214,8 +184,8 @@
     </Style>
 
     <Style x:Key="FunctionButton4"
-           BasedOn="{StaticResource FunctionButtonBase}"
-           TargetType="Button">
+           TargetType="Button"
+           BasedOn="{StaticResource FunctionButtonBase}">
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -245,21 +215,21 @@
 
     <Style x:Key="SubMenuGrid"
            TargetType="Grid">
-        <Setter Property="RowSpacing" Value="0" />
-        <Setter Property="ColumnSpacing" Value="1" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="HeightRequest" Value="48" />
+        <Setter Property="RowSpacing" Value="0" />
+        <Setter Property="ColumnSpacing" Value="1" />
     </Style>
 
     <Style x:Key="SubMenuButton"
            TargetType="Button">
-        <Setter Property="TextColor" Value="White" />
-        <Setter Property="FontSize" Value="24" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="BorderWidth" Value="0" />
         <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="24" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -289,20 +259,20 @@
 
     <Style x:Key="MenuGrid"
            TargetType="Grid">
-        <Setter Property="RowSpacing" Value="6" />
-        <Setter Property="ColumnSpacing" Value="6" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="6" />
+        <Setter Property="RowSpacing" Value="6" />
+        <Setter Property="ColumnSpacing" Value="6" />
     </Style>
 
     <Style x:Key="FillGrid"
            TargetType="Grid">
-        <Setter Property="RowSpacing" Value="0" />
-        <Setter Property="ColumnSpacing" Value="0" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="HorizontalOptions" Value="Fill" />
         <Setter Property="VerticalOptions" Value="Fill" />
+        <Setter Property="RowSpacing" Value="0" />
+        <Setter Property="ColumnSpacing" Value="0" />
     </Style>
 
     <Style x:Key="FillVerticalStack"
@@ -329,12 +299,12 @@
 
     <Style x:Key="MenuButton"
            TargetType="Button">
-        <Setter Property="TextColor" Value="White" />
-        <Setter Property="FontSize" Value="24" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="BorderWidth" Value="0" />
         <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="24" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -362,17 +332,17 @@
 
     <Style x:Key="ActionButtonBase"
            TargetType="Button">
-        <Setter Property="TextColor" Value="White" />
-        <Setter Property="FontSize" Value="24" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="BorderWidth" Value="0" />
         <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="24" />
     </Style>
 
     <Style x:Key="PrimaryButton"
-           BasedOn="{StaticResource ActionButtonBase}"
-           TargetType="Button">
+           TargetType="Button"
+           BasedOn="{StaticResource ActionButtonBase}">
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -397,8 +367,8 @@
     </Style>
 
     <Style x:Key="SecondaryButton"
-           BasedOn="{StaticResource ActionButtonBase}"
-           TargetType="Button">
+           TargetType="Button"
+           BasedOn="{StaticResource ActionButtonBase}">
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -423,8 +393,8 @@
     </Style>
 
     <Style x:Key="TertiaryButton"
-           BasedOn="{StaticResource ActionButtonBase}"
-           TargetType="Button">
+           TargetType="Button"
+           BasedOn="{StaticResource ActionButtonBase}">
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -449,8 +419,8 @@
     </Style>
 
     <Style x:Key="InformationButton"
-           BasedOn="{StaticResource ActionButtonBase}"
-           TargetType="Button">
+           TargetType="Button"
+           BasedOn="{StaticResource ActionButtonBase}">
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -475,8 +445,8 @@
     </Style>
 
     <Style x:Key="SuccessButton"
-           BasedOn="{StaticResource ActionButtonBase}"
-           TargetType="Button">
+           TargetType="Button"
+           BasedOn="{StaticResource ActionButtonBase}">
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -501,8 +471,8 @@
     </Style>
 
     <Style x:Key="WarningButton"
-           BasedOn="{StaticResource ActionButtonBase}"
-           TargetType="Button">
+           TargetType="Button"
+           BasedOn="{StaticResource ActionButtonBase}">
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -527,8 +497,8 @@
     </Style>
 
     <Style x:Key="ErrorButton"
-           BasedOn="{StaticResource ActionButtonBase}"
-           TargetType="Button">
+           TargetType="Button"
+           BasedOn="{StaticResource ActionButtonBase}">
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -556,13 +526,13 @@
 
     <Style x:Key="SelectButtonBase"
            TargetType="Button">
-        <Setter Property="TextColor" Value="Black" />
-        <Setter Property="FontSize" Value="18" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="3" />
-        <Setter Property="BorderColor" Value="{StaticResource BorderColor}" />
         <Setter Property="BorderWidth" Value="1" />
         <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="TextColor" Value="Black" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="BorderColor" Value="{StaticResource BorderColor}" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -587,20 +557,20 @@
     </Style>
 
     <Style x:Key="LeftSelectButton"
-           BasedOn="{StaticResource SelectButtonBase}"
-           TargetType="Button">
+           TargetType="Button"
+           BasedOn="{StaticResource SelectButtonBase}">
         <!-- TODO -->
     </Style>
 
     <Style x:Key="CenterSelectButton"
-           BasedOn="{StaticResource SelectButtonBase}"
-           TargetType="Button">
+           TargetType="Button"
+           BasedOn="{StaticResource SelectButtonBase}">
         <!-- TODO -->
     </Style>
 
     <Style x:Key="RightSelectButton"
-           BasedOn="{StaticResource SelectButtonBase}"
-           TargetType="Button">
+           TargetType="Button"
+           BasedOn="{StaticResource SelectButtonBase}">
         <!-- TODO -->
     </Style>
 
@@ -608,122 +578,105 @@
     <!-- Label -->
     <!-- ================================================================================ -->
 
+    <!-- Alignment -->
+
+    <Style TargetType="Label"
+           Class="LabelLeft">
+        <Setter Property="HorizontalTextAlignment" Value="Start" />
+    </Style>
+
+    <Style TargetType="Label"
+           Class="LabelCenter">
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    </Style>
+
+    <Style TargetType="Label"
+           Class="LabelRight">
+        <Setter Property="HorizontalTextAlignment" Value="End" />
+    </Style>
+
     <!-- Size -->
 
-    <Style x:Key="MicroLeftLabel"
-           TargetType="Label">
+    <Style TargetType="Label"
+           Class="LabelMicro">
         <Setter Property="FontSize" Value="12" />
     </Style>
 
-    <Style x:Key="SmallLeftLabel"
-           TargetType="Label">
+    <Style TargetType="Label"
+           Class="LabelSmall">
         <Setter Property="FontSize" Value="14" />
     </Style>
 
-    <Style x:Key="MediumLeftLabel"
-           TargetType="Label">
+    <Style TargetType="Label"
+           Class="LabelMedium">
         <Setter Property="FontSize" Value="18" />
     </Style>
 
-    <Style x:Key="LargeLeftLabel"
-           TargetType="Label">
+    <Style TargetType="Label"
+           Class="LabelLarge">
         <Setter Property="FontSize" Value="24" />
     </Style>
 
-    <Style x:Key="ExtraLargeLeftLabel"
-           TargetType="Label">
+    <Style TargetType="Label"
+           Class="LabelExtraLarge">
         <Setter Property="FontSize" Value="28" />
     </Style>
 
-    <Style x:Key="HugeLeftLabel"
-           TargetType="Label">
+    <Style TargetType="Label"
+           Class="LabelHuge">
         <Setter Property="FontSize" Value="36" />
     </Style>
 
-    <Style x:Key="MicroCenterLabel"
-           TargetType="Label">
-        <Setter Property="FontSize" Value="12" />
-        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    <!-- Color -->
+
+    <Style TargetType="Label"
+           Class="LabelPrimary">
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="BackgroundColor" Value="{StaticResource BlueDefault}" />
     </Style>
 
-    <Style x:Key="SmallCenterLabel"
-           TargetType="Label">
-        <Setter Property="FontSize" Value="14" />
-        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    <Style TargetType="Label"
+           Class="LabelSecondary">
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="BackgroundColor" Value="{StaticResource CyanDefault}" />
     </Style>
 
-    <Style x:Key="MediumCenterLabel"
-           TargetType="Label">
-        <Setter Property="FontSize" Value="18" />
-        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    <Style TargetType="Label"
+           Class="LabelTertiary">
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="BackgroundColor" Value="{StaticResource TealDefault}" />
     </Style>
 
-    <Style x:Key="LargeCenterLabel"
-           TargetType="Label">
-        <Setter Property="FontSize" Value="24" />
-        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    <Style TargetType="Label"
+           Class="LabelInformation">
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="BackgroundColor" Value="{StaticResource LightBlueDefault}" />
     </Style>
 
-    <Style x:Key="ExtraLargeCenterLabel"
-           TargetType="Label">
-        <Setter Property="FontSize" Value="28" />
-        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    <Style TargetType="Label"
+           Class="LabelSuccess">
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="BackgroundColor" Value="{StaticResource GreenDefault}" />
     </Style>
 
-    <Style x:Key="HugeCenterLabel"
-           TargetType="Label">
-        <Setter Property="FontSize" Value="36" />
-        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    <Style TargetType="Label"
+           Class="LabelWarning">
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="BackgroundColor" Value="{StaticResource OrangeDefault}" />
     </Style>
 
-    <Style x:Key="MicroRightLabel"
-           TargetType="Label">
-        <Setter Property="FontSize" Value="12" />
-        <Setter Property="HorizontalTextAlignment" Value="End" />
-    </Style>
-
-    <Style x:Key="SmallRightLabel"
-           TargetType="Label">
-        <Setter Property="FontSize" Value="14" />
-        <Setter Property="HorizontalTextAlignment" Value="End" />
-    </Style>
-
-    <Style x:Key="MediumRightLabel"
-           TargetType="Label">
-        <Setter Property="FontSize" Value="18" />
-        <Setter Property="HorizontalTextAlignment" Value="End" />
-    </Style>
-
-    <Style x:Key="LargeRightLabel"
-           TargetType="Label">
-        <Setter Property="FontSize" Value="24" />
-        <Setter Property="HorizontalTextAlignment" Value="End" />
-    </Style>
-
-    <Style x:Key="ExtraLargeRightLabel"
-           TargetType="Label">
-        <Setter Property="FontSize" Value="28" />
-        <Setter Property="HorizontalTextAlignment" Value="End" />
-    </Style>
-
-    <Style x:Key="HugeRightLabel"
-           TargetType="Label">
-        <Setter Property="FontSize" Value="36" />
-        <Setter Property="HorizontalTextAlignment" Value="End" />
+    <Style TargetType="Label"
+           Class="LabelError">
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="BackgroundColor" Value="{StaticResource RedDefault}" />
     </Style>
 
     <!-- Semantic -->
 
-    <Style x:Key="NameLabel"
+    <Style x:Key="TitleLabel"
            TargetType="Label">
-        <Setter Property="FontSize" Value="18" />
-        <Setter Property="FontAttributes" Value="Bold" />
-    </Style>
-
-    <Style x:Key="GroupLabel"
-           TargetType="Label">
-        <Setter Property="TextColor" Value="{StaticResource BlueGrayDarken2}" />
-        <Setter Property="FontSize" Value="24" />
+        <Setter Property="TextColor" Value="{StaticResource BlueGrayDarken4}" />
+        <Setter Property="FontSize" Value="36" />
         <Setter Property="FontAttributes" Value="Bold" />
     </Style>
 
@@ -734,28 +687,34 @@
         <Setter Property="FontAttributes" Value="Bold" />
     </Style>
 
-    <Style x:Key="TitleLabel"
+    <Style x:Key="GroupLabel"
            TargetType="Label">
-        <Setter Property="TextColor" Value="{StaticResource BlueGrayDarken4}" />
-        <Setter Property="FontSize" Value="36" />
+        <Setter Property="TextColor" Value="{StaticResource BlueGrayDarken2}" />
+        <Setter Property="FontSize" Value="24" />
         <Setter Property="FontAttributes" Value="Bold" />
     </Style>
 
-    <Style x:Key="TextValueLabel"
+    <Style x:Key="NameLabel"
+           TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource BlueGrayDarken1}" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontAttributes" Value="Bold" />
+    </Style>
+
+    <Style x:Key="ErrorMessageLabel"
+           TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource RedDefault}" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+
+    <Style x:Key="ValueLabel"
            TargetType="Label">
         <Setter Property="FontSize" Value="18" />
     </Style>
 
-    <Style x:Key="StatusValueLabel"
+    <Style x:Key="ResultLabel"
            TargetType="Label">
-        <Setter Property="FontSize" Value="18" />
-        <Setter Property="HorizontalTextAlignment" Value="Center" />
-    </Style>
-
-    <Style x:Key="NumericValueLabel"
-           TargetType="Label">
-        <Setter Property="FontSize" Value="18" />
-        <Setter Property="HorizontalTextAlignment" Value="End" />
+        <Setter Property="FontSize" Value="24" />
     </Style>
 
     <!-- ================================================================================ -->
@@ -804,54 +763,42 @@
 
     <Style x:Key="ItemCollectionGrid"
            TargetType="Grid">
-        <Setter Property="HeightRequest" Value="48" />
-        <Setter Property="RowSpacing" Value="0" />
-        <Setter Property="ColumnSpacing" Value="0" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="HorizontalOptions" Value="Fill" />
         <Setter Property="VerticalOptions" Value="Fill" />
+        <Setter Property="HeightRequest" Value="48" />
+        <Setter Property="RowSpacing" Value="0" />
+        <Setter Property="ColumnSpacing" Value="0" />
     </Style>
 
-    <Style x:Key="ItemCollectionLabelBase"
+    <Style x:Key="ItemCollectionLabel"
            TargetType="Label">
         <Setter Property="FontSize" Value="24" />
         <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="LineBreakMode" Value="TailTruncation" />
     </Style>
 
-    <Style x:Key="ItemCollectionLeftLabel"
-           BasedOn="{StaticResource ItemCollectionLabelBase}"
-           TargetType="Label">
-        <Setter Property="HorizontalOptions" Value="Start" />
-    </Style>
-
-    <Style x:Key="ItemCollectionRightLabel"
-           BasedOn="{StaticResource ItemCollectionLabelBase}"
-           TargetType="Label">
-        <Setter Property="HorizontalOptions" Value="End" />
-    </Style>
-
     <Style x:Key="ItemCollectionButtonBase"
            TargetType="Button">
-        <Setter Property="FontSize" Value="24" />
-        <Setter Property="FontFamily" Value="MaterialIcons" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="BorderWidth" Value="0" />
         <Setter Property="CornerRadius" Value="3" />
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="FontFamily" Value="MaterialIcons" />
     </Style>
 
     <Style x:Key="ItemCollectionButtonPrimary"
-           BasedOn="{StaticResource ItemCollectionButtonBase}"
-           TargetType="Button">
+           TargetType="Button"
+           BasedOn="{StaticResource ItemCollectionButtonBase}">
         <Setter Property="TextColor" Value="White" />
         <Setter Property="BackgroundColor" Value="{StaticResource GreenAccent3}" />
     </Style>
 
     <Style x:Key="ItemCollectionButtonDanger"
-           BasedOn="{StaticResource ItemCollectionButtonBase}"
-           TargetType="Button">
+           TargetType="Button"
+           BasedOn="{StaticResource ItemCollectionButtonBase}">
         <Setter Property="TextColor" Value="White" />
         <Setter Property="BackgroundColor" Value="{StaticResource RedAccent3}" />
     </Style>
@@ -862,61 +809,61 @@
 
     <Style x:Key="DialogTitleLabel"
            TargetType="Label">
-        <Setter Property="BackgroundColor" Value="{StaticResource BlueDarken4}" />
-        <Setter Property="TextColor" Value="White" />
-        <Setter Property="HeightRequest" Value="48" />
-        <Setter Property="FontSize" Value="36" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="HorizontalOptions" Value="Fill" />
+        <Setter Property="HeightRequest" Value="48" />
+        <Setter Property="BackgroundColor" Value="{StaticResource BlueDarken4}" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="36" />
         <Setter Property="HorizontalTextAlignment" Value="Center" />
         <Setter Property="VerticalTextAlignment" Value="Center" />
     </Style>
 
     <Style x:Key="InputGrid"
            TargetType="Grid">
-        <Setter Property="RowSpacing" Value="6" />
-        <Setter Property="ColumnSpacing" Value="6" />
         <Setter Property="Margin" Value="6" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="HorizontalOptions" Value="Fill" />
         <Setter Property="VerticalOptions" Value="Fill" />
+        <Setter Property="RowSpacing" Value="6" />
+        <Setter Property="ColumnSpacing" Value="6" />
     </Style>
 
     <Style x:Key="LeftInputLabel"
            TargetType="Label">
-        <Setter Property="BackgroundColor" Value="{StaticResource BlueGrayDefault}" />
-        <Setter Property="TextColor" Value="White" />
-        <Setter Property="FontSize" Value="48" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="6,0,6,0" />
         <Setter Property="HorizontalOptions" Value="Fill" />
         <Setter Property="HorizontalTextAlignment" Value="End" />
+        <Setter Property="BackgroundColor" Value="{StaticResource BlueGrayDefault}" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="48" />
     </Style>
 
     <Style x:Key="InputTextButton"
            TargetType="Button">
-        <Setter Property="TextColor" Value="Black" />
-        <Setter Property="BackgroundColor" Value="{StaticResource GrayLighten4}" />
-        <Setter Property="FontSize" Value="36" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="BackgroundColor" Value="{StaticResource GrayLighten4}" />
+        <Setter Property="TextColor" Value="Black" />
+        <Setter Property="FontSize" Value="36" />
     </Style>
 
     <Style x:Key="InputCommandButton"
            TargetType="Button">
-        <Setter Property="TextColor" Value="White" />
-        <Setter Property="BackgroundColor" Value="{StaticResource AmberDarken2}" />
-        <Setter Property="FontSize" Value="36" />
-        <Setter Property="CornerRadius" Value="6" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="BackgroundColor" Value="{StaticResource AmberDarken2}" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="36" />
     </Style>
 
     <Style x:Key="InputFunctionButton"
-           BasedOn="{StaticResource FunctionButtonBase}"
-           TargetType="Button">
+           TargetType="Button"
+           BasedOn="{StaticResource FunctionButtonBase}">
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -939,6 +886,5 @@
             </VisualStateGroupList>
         </Setter>
     </Style>
-
 
 </ResourceDictionary>
