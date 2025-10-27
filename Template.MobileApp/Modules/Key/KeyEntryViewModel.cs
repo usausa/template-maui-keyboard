@@ -53,7 +53,7 @@ public sealed class KeyEntryViewModel : AppViewModelBase
             Input1.Text = string.Empty;
             Input2.Text = string.Empty;
             Input3.Text = string.Empty;
-            Input1.FocusRequest();
+            Input1.Focus();
         }
     }
 }
