@@ -79,10 +79,10 @@
     </PackageReference>
     <PackageReference Include="BunnyTail.MemberAccessor" Version="1.7.0" />
     <PackageReference Include="CommunityToolkit.Maui" Version="12.2.0" />
-    <PackageReference Include="Components.Maui" Version="1.23.1" />
-    <PackageReference Include="Components.Maui.Resolver" Version="1.23.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.9" />
-    <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.110" />
+    <PackageReference Include="Components.Maui" Version="1.24.0" />
+    <PackageReference Include="Components.Maui.Resolver" Version="1.24.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.10" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.120" />
     <PackageReference Include="SkiaSharp" Version="3.119.1" />
     <PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="3.119.1" />
     <PackageReference Include="Plugin.Maui.DebugRainbows" Version="1.2.2" />
