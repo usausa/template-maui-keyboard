@@ -11,7 +11,7 @@
     <File Path="Settings.XamlStyler" />
     <File Path="Template.MobileBlazorApp.sln.DotSettings" />
   </Folder>
-  <Project Path="Template.MobileApp/Template.MobileApp.csproj">
+  <Project Path="Template.MobileApp/Template.MobileApp.csproj" DefaultStartup="true">
     <Deploy />
   </Project>
 </Solution>
