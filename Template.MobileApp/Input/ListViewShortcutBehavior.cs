@@ -2,6 +2,8 @@ namespace Template.MobileApp.Input;
 
 using Smart.Maui.Interactivity;
 
+// TODO update
+#pragma warning disable CS0618
 public sealed class ListViewShortcutBehavior : BehaviorBase<ListView>, IShortcutBehavior
 {
     public static readonly BindableProperty ShortcutProperty = BindableProperty.Create(
@@ -48,3 +50,4 @@ public sealed class ListViewShortcutBehavior : BehaviorBase<ListView>, IShortcut
         return true;
     }
 }
+#pragma warning restore CS0618
