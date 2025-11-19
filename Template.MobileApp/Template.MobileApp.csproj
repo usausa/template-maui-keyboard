@@ -86,6 +86,7 @@
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Maui.Essentials" Version="10.0.10" />
     <PackageReference Include="SkiaSharp" Version="3.119.1" />
     <PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="3.119.1" />
     <PackageReference Include="Plugin.Maui.DebugRainbows" Version="1.2.2">
