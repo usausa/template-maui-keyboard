@@ -79,28 +79,28 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="BunnyTail.MemberAccessor" Version="1.8.2" />
-    <PackageReference Include="CommunityToolkit.Maui" Version="13.0.0" />
-    <PackageReference Include="Components.Maui" Version="1.26.0" />
-    <PackageReference Include="Components.Maui.Resolver" Version="1.26.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.2">
+    <PackageReference Include="CommunityToolkit.Maui" Version="14.0.0" />
+    <PackageReference Include="Components.Maui" Version="1.26.1" />
+    <PackageReference Include="Components.Maui.Resolver" Version="1.26.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.3">
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">none</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.30" />
-    <PackageReference Include="Microsoft.Maui.Essentials" Version="10.0.30" />
-    <PackageReference Include="SkiaSharp" Version="3.119.1" />
-    <PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="3.119.1" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.40" />
+    <PackageReference Include="Microsoft.Maui.Essentials" Version="10.0.40" />
+    <PackageReference Include="SkiaSharp" Version="3.119.2" />
+    <PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="3.119.2" />
     <PackageReference Include="Plugin.Maui.DebugRainbows" Version="1.2.2">
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">none</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.8" />
+    <PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.9" />
     <PackageReference Include="System.Reactive" Version="6.1.0" />
     <PackageReference Include="Usa.Smart.Converter" Version="2.5.1" />
     <PackageReference Include="Usa.Smart.Core" Version="2.5.0" />
     <PackageReference Include="Usa.Smart.Mapper" Version="0.9.0" />
-    <PackageReference Include="Usa.Smart.Maui" Version="2.11.0" />
-    <PackageReference Include="Usa.Smart.Maui.Extensions" Version="2.11.0" />
+    <PackageReference Include="Usa.Smart.Maui" Version="2.11.1" />
+    <PackageReference Include="Usa.Smart.Maui.Extensions" Version="2.11.1" />
     <PackageReference Include="Usa.Smart.Mvvm" Version="1.9.2" />
     <PackageReference Include="Usa.Smart.Navigation" Version="2.17.1" />
     <PackageReference Include="Usa.Smart.Navigation.Extensions.DependencyInjection" Version="2.17.1" />
