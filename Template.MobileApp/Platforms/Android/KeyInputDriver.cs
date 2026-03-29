@@ -2,11 +2,11 @@
 // ReSharper disable once CheckNamespace
 namespace Template.MobileApp;
 
-using Template.MobileApp.Input;
-
 using Android.App;
 using Android.Views;
 using Android.Widget;
+
+using Template.MobileApp.Input;
 
 public sealed class KeyInputDriver
 {

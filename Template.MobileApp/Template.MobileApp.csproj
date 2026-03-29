@@ -74,11 +74,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BunnyTail.EmbeddedBuildProperty" Version="1.8.3">
+    <PackageReference Include="BunnyTail.EmbeddedBuildProperty" Version="1.8.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="BunnyTail.MemberAccessor" Version="1.8.3" />
+    <PackageReference Include="BunnyTail.MemberAccessor" Version="1.8.4" />
     <PackageReference Include="CommunityToolkit.Maui" Version="14.0.1" />
     <PackageReference Include="Components.Maui" Version="1.26.3" />
     <PackageReference Include="Components.Maui.Resolver" Version="1.26.3" />
@@ -99,13 +99,13 @@
     <PackageReference Include="Usa.Smart.Converter" Version="2.5.1" />
     <PackageReference Include="Usa.Smart.Core" Version="2.5.0" />
     <PackageReference Include="Usa.Smart.Mapper" Version="0.9.0" />
-    <PackageReference Include="Usa.Smart.Maui" Version="2.11.3" />
-    <PackageReference Include="Usa.Smart.Maui.Extensions" Version="2.11.3" />
-    <PackageReference Include="Usa.Smart.Mvvm" Version="1.9.2" />
-    <PackageReference Include="Usa.Smart.Navigation" Version="2.17.1" />
-    <PackageReference Include="Usa.Smart.Navigation.Extensions.DependencyInjection" Version="2.17.1" />
-    <PackageReference Include="Usa.Smart.Navigation.Maui" Version="2.17.1" />
-    <PackageReference Include="Usa.Smart.Navigation.Resolver" Version="2.17.1" />
+    <PackageReference Include="Usa.Smart.Maui" Version="2.11.4" />
+    <PackageReference Include="Usa.Smart.Maui.Extensions" Version="2.11.4" />
+    <PackageReference Include="Usa.Smart.Mvvm" Version="1.9.3" />
+    <PackageReference Include="Usa.Smart.Navigation" Version="2.17.2" />
+    <PackageReference Include="Usa.Smart.Navigation.Extensions.DependencyInjection" Version="2.17.2" />
+    <PackageReference Include="Usa.Smart.Navigation.Maui" Version="2.17.2" />
+    <PackageReference Include="Usa.Smart.Navigation.Resolver" Version="2.17.2" />
     <PackageReference Include="Usa.Smart.Reactive" Version="2.6.0" />
     <PackageReference Include="Usa.Smart.Resolver" Version="2.7.1" />
     <PackageReference Include="Usa.Smart.Resolver.Extensions.DependencyInjection" Version="2.7.1" />
