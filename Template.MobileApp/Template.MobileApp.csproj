@@ -80,8 +80,8 @@
     </PackageReference>
     <PackageReference Include="BunnyTail.MemberAccessor" Version="1.8.4" />
     <PackageReference Include="CommunityToolkit.Maui" Version="14.0.1" />
-    <PackageReference Include="Components.Maui" Version="1.26.3" />
-    <PackageReference Include="Components.Maui.Resolver" Version="1.26.3" />
+    <PackageReference Include="Components.Maui" Version="1.26.4" />
+    <PackageReference Include="Components.Maui.Resolver" Version="1.26.4" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.5">
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">none</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">all</PrivateAssets>
