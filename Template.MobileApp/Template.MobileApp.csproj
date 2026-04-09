@@ -79,7 +79,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="BunnyTail.MemberAccessor" Version="1.8.4" />
-    <PackageReference Include="CommunityToolkit.Maui" Version="14.0.1" />
+    <PackageReference Include="CommunityToolkit.Maui" Version="14.1.0" />
     <PackageReference Include="Components.Maui" Version="1.26.4" />
     <PackageReference Include="Components.Maui.Resolver" Version="1.26.4" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.5">
