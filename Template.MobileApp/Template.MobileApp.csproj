@@ -24,6 +24,18 @@
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">30.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
+  <!--
+  <PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
+    <UseMonoRuntime>false</UseMonoRuntime>
+  </PropertyGroup>
+  -->
+
+  <!--
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <PublishAot>true</PublishAot>
+  </PropertyGroup>
+  -->
+
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net10.0-android|AnyCPU'">
     <AndroidKeyStore>True</AndroidKeyStore>
     <AndroidSigningKeyStore>example.keystore</AndroidSigningKeyStore>
@@ -70,15 +82,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BunnyTail.EmbeddedBuildProperty" Version="1.8.4">
+    <PackageReference Include="BunnyTail.EmbeddedBuildProperty" Version="1.8.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="BunnyTail.MemberAccessor" Version="1.8.4" />
+    <PackageReference Include="BunnyTail.MemberAccessor" Version="1.8.5" />
     <PackageReference Include="CommunityToolkit.Maui" Version="14.1.0" />
-    <PackageReference Include="Components.Maui" Version="1.26.4" />
-    <PackageReference Include="Components.Maui.Resolver" Version="1.26.4" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.5">
+    <PackageReference Include="Components.Maui" Version="1.26.5" />
+    <PackageReference Include="Components.Maui.Resolver" Version="1.26.5" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.6">
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">none</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">all</PrivateAssets>
     </PackageReference>
@@ -97,11 +109,11 @@
     <PackageReference Include="Usa.Smart.Mapper" Version="0.9.0" />
     <PackageReference Include="Usa.Smart.Maui" Version="2.11.4" />
     <PackageReference Include="Usa.Smart.Maui.Extensions" Version="2.11.4" />
-    <PackageReference Include="Usa.Smart.Mvvm" Version="1.9.3" />
-    <PackageReference Include="Usa.Smart.Navigation" Version="2.17.2" />
-    <PackageReference Include="Usa.Smart.Navigation.Extensions.DependencyInjection" Version="2.17.2" />
-    <PackageReference Include="Usa.Smart.Navigation.Maui" Version="2.17.2" />
-    <PackageReference Include="Usa.Smart.Navigation.Resolver" Version="2.17.2" />
+    <PackageReference Include="Usa.Smart.Mvvm" Version="1.9.4" />
+    <PackageReference Include="Usa.Smart.Navigation" Version="2.18.1" />
+    <PackageReference Include="Usa.Smart.Navigation.Extensions.DependencyInjection" Version="2.18.1" />
+    <PackageReference Include="Usa.Smart.Navigation.Maui" Version="2.18.1" />
+    <PackageReference Include="Usa.Smart.Navigation.Resolver" Version="2.18.1" />
     <PackageReference Include="Usa.Smart.Reactive" Version="2.6.0" />
     <PackageReference Include="Usa.Smart.Resolver" Version="2.7.1" />
     <PackageReference Include="Usa.Smart.Resolver.Extensions.DependencyInjection" Version="2.7.1" />
