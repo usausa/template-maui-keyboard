@@ -10,7 +10,7 @@ public sealed class InputManager
 
     public void PopHandler(IInputHandler handler) => handlers.Remove(handler);
 
-    public bool Process(ShortcutKey key) => handlers.Count > 0 && handlers[^1].Handle(key);
+    public bool Process(ShortcutKey key) => (handlers.Count > 0) && handlers[^1].Handle(key);
 
     public VisualElement? FindFocused() => handlers.Count > 0 ? handlers[^1].FindFocused() : null;
 }

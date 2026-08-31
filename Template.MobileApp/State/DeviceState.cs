@@ -22,7 +22,7 @@ public enum NetworkState
 public static class DeviceStateExtensions
 {
     public static bool IsConnected(this NetworkAccess access) =>
-        access != NetworkAccess.None && access != NetworkAccess.Unknown;
+        (access != NetworkAccess.None) && (access != NetworkAccess.Unknown);
 
     public static bool IsHighSpeed(this NetworkProfile profile) =>
         profile.HasFlag(NetworkProfile.Ethernet) || profile.HasFlag(NetworkProfile.WiFi);

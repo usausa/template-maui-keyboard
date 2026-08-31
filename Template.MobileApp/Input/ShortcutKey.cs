@@ -1,5 +1,6 @@
 namespace Template.MobileApp.Input;
 
+#pragma warning disable CA1028
 public enum ShortcutKey : byte
 {
     None = 0,
@@ -29,3 +30,4 @@ public enum ShortcutKey : byte
 
     Del = 0x7f
 }
+#pragma warning restore CA1028

@@ -5,6 +5,7 @@ using System.Reflection;
 using Template.MobileApp.Behaviors;
 using Template.MobileApp.Helpers;
 
+#pragma warning disable CA1724
 public static class Extensions
 {
     //--------------------------------------------------------------------------------
@@ -129,3 +130,4 @@ public static class Extensions
     public static IObservable<ScreenStateEventArgs> StateChangedAsObservable(this IScreen screen) =>
         Observable.FromEvent<EventHandler<ScreenStateEventArgs>, ScreenStateEventArgs>(static h => (_, e) => h(e), h => screen.ScreenStateChanged += h, h => screen.ScreenStateChanged -= h);
 }
+#pragma warning restore CA1724
