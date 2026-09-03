@@ -1,10 +1,10 @@
 namespace Template.MobileApp;
 
+using BunnyTail.DependencyInjection;
+
 using CommunityToolkit.Maui;
 
 using Fonts;
-
-using MauiComponents.Resolver;
 
 using Microsoft.Maui.LifecycleEvents;
 
@@ -13,8 +13,6 @@ using Plugin.Maui.DebugRainbows;
 #endif
 
 using SkiaSharp.Views.Maui.Controls.Hosting;
-
-using Smart.Resolver;
 
 using Syncfusion.Maui.Toolkit.Hosting;
 
@@ -26,6 +24,8 @@ using Template.MobileApp.Modules;
 
 public static partial class MauiProgram
 {
+    private const string ModulesNamespace = "Template.MobileApp.Modules";
+
     public static MauiApp CreateMauiApp() =>
         MauiApp.CreateBuilder()
             .UseMauiApp<App>()
@@ -185,22 +185,22 @@ public static partial class MauiProgram
 
     private static MauiAppBuilder ConfigureContainer(this MauiAppBuilder builder)
     {
-        builder.ConfigureContainer(new SmartServiceProviderFactory(), ConfigureContainer);
-
+        builder.ConfigureContainer(
+            new GeneratedServiceProviderFactory(static options => options.TrackTransientDisposables = false),
+            ConfigureContainer);
         return builder;
     }
 
-    private static void ConfigureContainer(ResolverConfig config)
+    private static void ConfigureContainer(IServiceCollection services)
     {
-        config
-            .UseAutoBinding()
-            .UseArrayBinding()
-            .UseAssignableBinding()
-            .UsePropertyInjector()
-            .UsePageContextScope();
+        // View & ViewModel
+        services.AddTransient<MainPage>();
+        services.AddTransient<MainPageViewModel>();
+        services.AddViews();
+        services.AddViewModels();
 
         // MauiComponents
-        config.AddComponentsDialog(static c =>
+        services.AddComponentsDialog(static c =>
         {
             ConfigureDialogDesign(c);
 #if DEVICE_HAS_KEYPAD
@@ -211,40 +211,51 @@ public static partial class MauiProgram
             c.EnablePromptEnterAction = true;
             c.EnablePromptSelectAll = true;
         });
-        config.AddComponentsPopup(static c => c.AutoRegister(DialogSource()));
-        config.AddComponentsPopupPlugin<PopupFocusPlugin>();
-        config.AddComponentsScreen();
-        config.AddComponentsLocation();
-        config.AddComponentsSpeech();
-        config.AddCommunication();
+        services.AddComponentsPopup(static c => c.AutoRegister(DialogSource()));
+        services.AddComponentsPopupPlugin<PopupFocusPlugin>();
+        services.AddComponentsScreen();
+        services.AddComponentsLocation();
+        services.AddComponentsSpeech();
+        services.AddCommunication();
 
         // Messenger
-        config.BindSingleton<IReactiveMessenger>(ReactiveMessenger.Default);
+        services.AddSingleton<IReactiveMessenger>(ReactiveMessenger.Default);
 
         // Navigator
-        config.AddNavigator(static c =>
+        services.AddNavigator(static (_, config) =>
         {
-            c.UseMauiNavigationProvider();
-            c.AddResolverPlugin();
-            c.AddPlugin<NavigationFocusPlugin>();
-            c.UseIdViewMapper(static m => m.AutoRegister(ViewSource()));
+            config.UseMauiNavigationProvider();
+            config.AddPlugin<NavigationFocusPlugin>();
+            config.UseIdViewMapper(static m => m.AutoRegister(ViewSource()));
         });
 
         // Components
-        config.BindSingleton<IStorageManager, StorageManager>();
+        services.AddSingleton<IStorageManager, StorageManager>();
 
         // Resource
-        config.BindSingleton<ResourceDictionary>(_ => Application.Current!.Resources);
+        services.AddSingleton<ResourceDictionary>(static _ => Application.Current!.Resources);
 
         // State
-        config.BindSingleton<DeviceState>();
+        services.AddSingleton<DeviceState>();
 
         // Startup
-        config.BindSingleton<IMauiInitializeService, ApplicationInitializer>();
+        services.AddSingleton<IMauiInitializeService, ApplicationInitializer>();
     }
 
     // ------------------------------------------------------------
-    // View & Dialog
+    // View & ViewModel
+    // ------------------------------------------------------------
+
+    // ReSharper disable UnusedMethodReturnValue.Local
+    [ComponentRegistration(Lifetime.Transient, "View$", Namespace = ModulesNamespace)]
+    private static partial IServiceCollection AddViews(this IServiceCollection services);
+
+    [ComponentRegistration(Lifetime.Transient, "ViewModel$", Namespace = ModulesNamespace)]
+    private static partial IServiceCollection AddViewModels(this IServiceCollection services);
+    // ReSharper restore UnusedMethodReturnValue.Local
+
+    // ------------------------------------------------------------
+    // Navigation
     // ------------------------------------------------------------
 
     [ViewSource]

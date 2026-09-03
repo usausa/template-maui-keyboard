@@ -25,7 +25,7 @@ public abstract class AppDialogViewModelBase : ExtendViewModelBase, IValidatable
 
     public void Validate(string name)
     {
-        propertyAccessor ??= AccessorRegistry.FindAccessor(GetType());
+        propertyAccessor ??= AccessorProvider.FindAccessor(GetType());
         if (propertyAccessor is null)
         {
             throw new InvalidOperationException($"Accessor is not supported. type=[{GetType()}]");

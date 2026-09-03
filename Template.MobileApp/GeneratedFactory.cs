@@ -1,0 +1,12 @@
+#pragma warning disable IDE0001
+[assembly: global::BunnyTail.DependencyInjection.GenerateComponentFactory(typeof(global::Template.MobileApp.App))]
+[assembly: global::BunnyTail.DependencyInjection.GenerateComponentFactory(typeof(global::Template.MobileApp.Extender.PopupFocusPlugin))]
+[assembly: global::BunnyTail.DependencyInjection.GenerateComponentFactory(typeof(global::CommunityToolkit.Maui.Services.PopupService))]
+[assembly: global::BunnyTail.DependencyInjection.GenerateComponentFactory(typeof(global::MauiComponents.DefaultPopupFactory))]
+[assembly: global::BunnyTail.DependencyInjection.GenerateComponentFactory(typeof(global::MauiComponents.DialogImplementation))]
+[assembly: global::BunnyTail.DependencyInjection.GenerateComponentFactory(typeof(global::MauiComponents.DisplayImplementation))]
+[assembly: global::BunnyTail.DependencyInjection.GenerateComponentFactory(typeof(global::MauiComponents.FileLoggerProvider))]
+[assembly: global::BunnyTail.DependencyInjection.GenerateComponentFactory(typeof(global::MauiComponents.LocationService))]
+[assembly: global::BunnyTail.DependencyInjection.GenerateComponentFactory(typeof(global::MauiComponents.PopupNavigator))]
+[assembly: global::BunnyTail.DependencyInjection.GenerateComponentFactory(typeof(global::MauiComponents.ScreenImplementation))]
+[assembly: global::BunnyTail.DependencyInjection.GenerateComponentFactory(typeof(global::MauiComponents.SpeechService))]
