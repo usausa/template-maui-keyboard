@@ -10,9 +10,14 @@ public sealed partial class App
 {
     private readonly IServiceProvider serviceProvider;
 
+    private readonly ILogger<App> log;
+
+    private bool windowCreated;
+
     public App(IServiceProvider serviceProvider, ILogger<App> log)
     {
         this.serviceProvider = serviceProvider;
+        this.log = log;
 
         // Light theme based application
         Current!.UserAppTheme = AppTheme.Light;
@@ -25,7 +30,46 @@ public sealed partial class App
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
-        return new Window(serviceProvider.GetRequiredService<MainPage>());
+        var window = new Window(serviceProvider.GetRequiredService<MainPage>());
+
+        if (windowCreated)
+        {
+            window.Created += OnWindowRecreated;
+        }
+
+        windowCreated = true;
+
+        return window;
+    }
+
+    private void OnWindowRecreated(object? sender, EventArgs e)
+    {
+        if (sender is Window window)
+        {
+            window.Created -= OnWindowRecreated;
+        }
+
+        RestoreInitialViewAsync().ContinueWith(
+            t => log.WarnWindowRecreateError(t.Exception!),
+            CancellationToken.None,
+            TaskContinuationOptions.OnlyOnFaulted,
+            TaskScheduler.Default);
+    }
+
+    private async Task RestoreInitialViewAsync()
+    {
+        var navigator = serviceProvider.GetRequiredService<INavigator>();
+
+        if (navigator.CurrentViewId is null)
+        {
+            return;
+        }
+
+        log.InfoWindowRecreated();
+
+        navigator.Exit();
+
+        await navigator.ForwardAsync(ViewId.KeyMenu);
     }
 
     // ReSharper disable once AsyncVoidMethod
