@@ -14,6 +14,8 @@ using Plugin.Maui.DebugRainbows;
 
 using SkiaSharp.Views.Maui.Controls.Hosting;
 
+using Smart.Mvvm.Resolver;
+
 using Syncfusion.Maui.Toolkit.Hosting;
 
 using Template.MobileApp.Behaviors;
@@ -42,8 +44,8 @@ public static partial class MauiProgram
             .UseMauiComponents()
             .UseCommunityToolkitServices()
             .UseCustomView()
-            .ConfigureContainer()
-            .Build();
+            .ConfigureComponents()
+            .BuildApplication();
 
     // ------------------------------------------------------------
     // Debug
@@ -183,7 +185,7 @@ public static partial class MauiProgram
     // Components
     // ------------------------------------------------------------
 
-    private static MauiAppBuilder ConfigureContainer(this MauiAppBuilder builder)
+    private static MauiAppBuilder ConfigureComponents(this MauiAppBuilder builder)
     {
         builder.ConfigureContainer(
             new GeneratedServiceProviderFactory(static options => options.TrackTransientDisposables = false),
@@ -236,10 +238,46 @@ public static partial class MauiProgram
         services.AddSingleton<ResourceDictionary>(static _ => Application.Current!.Resources);
 
         // State
+        services.AddSingleton(BusyState.Default);
+        services.AddSingleton<StartupState>();
         services.AddSingleton<DeviceState>();
+    }
 
-        // Startup
-        services.AddSingleton<IMauiInitializeService, ApplicationInitializer>();
+    // ------------------------------------------------------------
+    // Build
+    // ------------------------------------------------------------
+
+    private static MauiApp BuildApplication(this MauiAppBuilder builder)
+    {
+        var app = builder.Build();
+
+        var services = app.Services;
+
+        // Setup provider
+        ResolveProvider.Default.Provider = services;
+
+#if DEBUG
+        // Diagnostics for GeneratedServiceProvider
+        if (services is GeneratedServiceProvider generatedProvider)
+        {
+            foreach (var line in BunnyTail.DependencyInjection.Diagnostics.ServiceFactoryReportExtensions.DescribeRuntimeFallbacks(generatedProvider).Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries))
+            {
+                System.Diagnostics.Debug.WriteLine(line);
+            }
+        }
+#endif
+
+#if DEBUG
+        // Setup navigator
+        var navigator = services.GetRequiredService<INavigator>();
+        navigator.Navigated += (_, args) =>
+        {
+            // for debug
+            System.Diagnostics.Debug.WriteLine($"Navigated: [{args.Context.FromId}]->[{args.Context.ToId}] : stacked=[{navigator.StackedCount}]");
+        };
+#endif
+
+        return app;
     }
 
     // ------------------------------------------------------------
