@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net10.0-android</TargetFrameworks>
@@ -82,14 +82,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BunnyTail.DependencyInjection" Version="0.5.0" />
-    <PackageReference Include="BunnyTail.EmbeddedBuildProperty" Version="1.18.0">
+    <PackageReference Include="BunnyTail.DependencyInjection" Version="0.6.0" />
+    <PackageReference Include="BunnyTail.EmbeddedBuildProperty" Version="1.19.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="BunnyTail.MemberAccessor" Version="1.15.0" />
+    <PackageReference Include="BunnyTail.MemberAccessor" Version="1.16.0" />
+    <PackageReference Include="BunnyTail.XamlProperty.Maui" Version="1.2.0" />
     <PackageReference Include="CommunityToolkit.Maui" Version="15.0.1" />
-    <PackageReference Include="Components.Maui" Version="1.42.0" />
+    <PackageReference Include="Components.Maui" Version="1.43.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.11">
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">none</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">all</PrivateAssets>
@@ -102,18 +103,19 @@
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">none</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.10" />
+    <PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.11" />
     <PackageReference Include="System.Reactive" Version="7.0.0" />
     <PackageReference Include="Usa.Smart.Converter" Version="2.16.0" />
     <PackageReference Include="Usa.Smart.Core" Version="2.19.0" />
-    <PackageReference Include="Usa.Smart.Mapper" Version="0.9.0" />
+    <PackageReference Include="Usa.Smart.Mapper" Version="1.0.0-beta8" />
     <PackageReference Include="Usa.Smart.Maui" Version="2.25.0" />
     <PackageReference Include="Usa.Smart.Maui.Extensions" Version="2.25.0" />
-    <PackageReference Include="Usa.Smart.Mvvm" Version="2.11.0" />
-    <PackageReference Include="Usa.Smart.Navigation" Version="3.8.0" />
-    <PackageReference Include="Usa.Smart.Navigation.Extensions.DependencyInjection" Version="3.8.0" />
-    <PackageReference Include="Usa.Smart.Navigation.Maui" Version="3.8.0" />
+    <PackageReference Include="Usa.Smart.Mvvm" Version="2.12.0" />
+    <PackageReference Include="Usa.Smart.Navigation" Version="3.9.0" />
+    <PackageReference Include="Usa.Smart.Navigation.Extensions.DependencyInjection" Version="3.9.0" />
+    <PackageReference Include="Usa.Smart.Navigation.Maui" Version="3.9.0" />
     <PackageReference Include="Usa.Smart.Reactive" Version="2.15.0" />
+    <PackageReference Include="Usa.Smart.Results" Version="2.2.0" />
   </ItemGroup>
 
 </Project>
