@@ -5,6 +5,7 @@
            xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
            xmlns:input="clr-namespace:Template.MobileApp.Input"
            xmlns:behaviors="clr-namespace:Template.MobileApp.Behaviors"
+           xmlns:fonts="clr-namespace:Fonts"
            xmlns:module="clr-namespace:Template.MobileApp.Modules.Navigation.Modal"
            xmlns:modules="clr-namespace:Template.MobileApp.Modules"
            x:Class="Template.MobileApp.Modules.Navigation.Modal.InputNumberView"
@@ -103,16 +104,16 @@
         <Grid Style="{StaticResource FunctionGrid}"
               ColumnDefinitions="*,*">
             <Button Grid.Column="0"
-                    Style="{StaticResource InputFunctionButton}"
+                    Style="{StaticResource InputIconButton}"
                     Command="{Binding CloseCommand}"
                     input:Shortcut.Key="Function1"
-                    Text="❌" />
+                    Text="{x:Static fonts:MaterialIcons.Close}" />
             <Button Grid.Column="1"
-                    Style="{StaticResource InputFunctionButton}"
-                    Command="{Binding CommitCommand}"
+                    Style="{StaticResource InputIconButton}"
                     behaviors:Focus.Default="True"
+                    Command="{Binding CommitCommand}"
                     input:Shortcut.Key="Function4"
-                    Text="✔" />
+                    Text="{x:Static fonts:MaterialIcons.Check}" />
         </Grid>
     </VerticalStackLayout>
 

@@ -8,9 +8,9 @@ public sealed partial class MainPageViewModel : ExtendViewModelBase, IShellContr
 {
     private readonly IScreen screen;
 
-    private readonly StartupState startup;
-
     private bool destroying;
+
+    public StartupState Startup { get; }
 
     public INavigator Navigator { get; }
 
@@ -52,14 +52,14 @@ public sealed partial class MainPageViewModel : ExtendViewModelBase, IShellContr
 
     public MainPageViewModel(
         ILogger<MainPageViewModel> log,
+        StartupState startup,
         INavigator navigator,
         IScreen screen,
-        IDialog dialog,
-        StartupState startup)
+        IDialog dialog)
     {
+        Startup = startup;
         Navigator = navigator;
         this.screen = screen;
-        this.startup = startup;
 
         Function1Command = MakeAsyncCommand(() => Navigator.NotifyAsync(ShellEvent.Function1), () => Function1Enabled);
         Function2Command = MakeAsyncCommand(() => Navigator.NotifyAsync(ShellEvent.Function2), () => Function2Enabled);
@@ -88,7 +88,7 @@ public sealed partial class MainPageViewModel : ExtendViewModelBase, IShellContr
     {
         screen.EnableDetectScreenState(true);
 
-        await startup.Completed;
+        await Startup.Completed;
 
         // Guard for the case where the Activity is recreated while initialization is still in progress
         if (destroying)

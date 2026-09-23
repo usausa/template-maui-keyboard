@@ -2,7 +2,8 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:s="http://smart/maui"
-                    xmlns:behaviors="clr-namespace:Template.MobileApp.Behaviors">
+                    xmlns:behaviors="clr-namespace:Template.MobileApp.Behaviors"
+                    xmlns:fonts="clr-namespace:Fonts">
 
     <!-- ================================================================================ -->
     <!-- Value -->
@@ -568,12 +569,14 @@
     <Style x:Key="CenterSelectButton"
            TargetType="Button"
            BasedOn="{StaticResource SelectButtonBase}">
+        <Setter Property="Margin" Value="-1,0,0,0" />
         <!-- TODO -->
     </Style>
 
     <Style x:Key="RightSelectButton"
            TargetType="Button"
            BasedOn="{StaticResource SelectButtonBase}">
+        <Setter Property="Margin" Value="-1,0,0,0" />
         <!-- TODO -->
     </Style>
 
@@ -860,6 +863,7 @@
         <Setter Property="BackgroundColor" Value="{StaticResource GrayLighten4}" />
         <Setter Property="TextColor" Value="Black" />
         <Setter Property="FontSize" Value="36" />
+        <Setter Property="behaviors:ButtonOption.PressEffect" Value="True" />
     </Style>
 
     <Style x:Key="InputCommandButton"
@@ -870,11 +874,13 @@
         <Setter Property="BackgroundColor" Value="{StaticResource AmberDarken2}" />
         <Setter Property="TextColor" Value="White" />
         <Setter Property="FontSize" Value="36" />
+        <Setter Property="behaviors:ButtonOption.PressEffect" Value="True" />
     </Style>
 
     <Style x:Key="InputFunctionButton"
            TargetType="Button"
            BasedOn="{StaticResource FunctionButtonBase}">
+        <Setter Property="behaviors:ButtonOption.PressEffect" Value="True" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -896,6 +902,12 @@
                 </VisualStateGroup>
             </VisualStateGroupList>
         </Setter>
+    </Style>
+
+    <Style x:Key="InputIconButton"
+           TargetType="Button"
+           BasedOn="{StaticResource InputFunctionButton}">
+        <Setter Property="FontFamily" Value="{x:Static fonts:MaterialIcons.FontFamily}" />
     </Style>
 
 </ResourceDictionary>

@@ -17,4 +17,12 @@ internal static partial class Log
 
     [LoggerMessage(Level = LogLevel.Debug, Message = "Connectivity changed. profile=[{profile}], access=[{access}]")]
     public static partial void DebugConnectivityState(this ILogger logger, NetworkProfile profile, NetworkAccess access);
+
+    // Navigation
+
+    [LoggerMessage(Level = LogLevel.Warning, Message = "Leak suspected. target=[{target}]")]
+    public static partial void WarnLeakSuspected(this ILogger logger, string target);
+
+    [LoggerMessage(Level = LogLevel.Debug, Message = "Closed object collected. target=[{target}]")]
+    public static partial void DebugClosedObjectCollected(this ILogger logger, string target);
 }
