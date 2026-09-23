@@ -8,12 +8,20 @@ public sealed class KeyEntryViewModel : AppViewModelBase
     public EntryController Input2 { get; }
     public EntryController Input3 { get; }
 
+    //--------------------------------------------------------------------------------
+    // Constructor
+    //--------------------------------------------------------------------------------
+
     public KeyEntryViewModel()
     {
         Input1 = new EntryController(MakeDelegateCommand<EntryCompleteEvent>(Input1Complete));
         Input2 = new EntryController(MakeDelegateCommand<EntryCompleteEvent>(Input2Complete));
         Input3 = new EntryController(MakeDelegateCommand<EntryCompleteEvent>(Input3Complete));
     }
+
+    //--------------------------------------------------------------------------------
+    // Navigation
+    //--------------------------------------------------------------------------------
 
     protected override Task OnNotifyBackAsync() => Navigator.ForwardAsync(ViewId.KeyMenu);
 
@@ -30,6 +38,10 @@ public sealed class KeyEntryViewModel : AppViewModelBase
         Input3.Text = "123";
         return Task.CompletedTask;
     }
+
+    //--------------------------------------------------------------------------------
+    // Operation
+    //--------------------------------------------------------------------------------
 
     private void Input1Complete(EntryCompleteEvent ice)
     {

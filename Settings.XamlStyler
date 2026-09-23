@@ -139,6 +139,8 @@
     "IsVisible",
     "InputTransparent",
 
+    "input:*",
+
     "Binding",
     "Value",
     "Minimum, Maximum",
