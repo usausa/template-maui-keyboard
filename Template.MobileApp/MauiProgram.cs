@@ -20,6 +20,7 @@ using Syncfusion.Maui.Toolkit.Hosting;
 
 using Template.MobileApp.Behaviors;
 using Template.MobileApp.Components;
+using Template.MobileApp.Diagnostics;
 using Template.MobileApp.Extender;
 using Template.MobileApp.Helpers;
 using Template.MobileApp.Modules;
@@ -236,6 +237,7 @@ public static partial class MauiProgram
         });
 
         // Components
+        services.AddSingleton<DeviceInformation>();
         services.AddSingleton<IStorageManager, StorageManager>();
 
         // Resource
@@ -259,6 +261,9 @@ public static partial class MauiProgram
 
         // Setup provider
         ResolveProvider.Default.Provider = services;
+
+        // Start device information
+        services.GetRequiredService<DeviceInformation>().Start();
 
 #if DEBUG
         // Diagnostics for GeneratedServiceProvider
