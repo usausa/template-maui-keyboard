@@ -22,7 +22,6 @@ using Template.MobileApp.Behaviors;
 using Template.MobileApp.Components;
 using Template.MobileApp.Diagnostics;
 using Template.MobileApp.Extender;
-using Template.MobileApp.Helpers;
 using Template.MobileApp.Modules;
 
 public static partial class MauiProgram

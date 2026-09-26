@@ -2,8 +2,6 @@ namespace Template.MobileApp.Diagnostics;
 
 using Android.Runtime;
 
-using Template.MobileApp.Helpers;
-
 public static partial class CrashReport
 {
     private static partial void PlatformStart()
