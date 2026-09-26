@@ -2,7 +2,7 @@ namespace Template.MobileApp;
 
 using Microsoft.Extensions.DependencyInjection;
 
-using Template.MobileApp.Helpers;
+using Template.MobileApp.Diagnostics;
 
 #pragma warning disable CA1724
 public sealed partial class App

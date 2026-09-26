@@ -1,5 +1,7 @@
 namespace Template.MobileApp.State;
 
+using Template.MobileApp.Components;
+
 #pragma warning disable CA1008
 [Flags]
 public enum NetworkProfile
@@ -35,7 +37,7 @@ public sealed partial class DeviceState : ObservableObject, IDisposable
 {
     private readonly ILogger<DeviceState> log;
 
-    private readonly List<IDisposable> disposables = [];
+    private readonly DeviceInformation deviceInformation;
 
     // Battery
 
@@ -59,54 +61,87 @@ public sealed partial class DeviceState : ObservableObject, IDisposable
     [ObservableProperty]
     public partial NetworkState NetworkState { get; private set; }
 
+    public int WiFiSignalStrength { get; private set; }
+
     public DeviceState(
         ILogger<DeviceState> log,
-        IBattery battery,
-        IConnectivity connectivity)
+        DeviceInformation deviceInformation)
     {
         this.log = log;
+        this.deviceInformation = deviceInformation;
 
         // Battery
-        UpdateBattery(battery.ChargeLevel, battery.State, battery.PowerSource);
-        disposables.Add(battery.BatteryInfoChangedAsObservable().ObserveOnCurrentContext().Subscribe(
-            x => UpdateBattery(x.ChargeLevel, x.State, x.PowerSource)));
+        if (deviceInformation.Battery is { } battery)
+        {
+            UpdateBattery(battery);
+        }
+
+        deviceInformation.BatteryChanged += OnBatteryChanged;
+
         // Connectivity
-        UpdateConnectivity(connectivity.ConnectionProfiles, connectivity.NetworkAccess);
-        disposables.Add(connectivity.ConnectivityChangedAsObservable().ObserveOnCurrentContext().Subscribe(
-            x => UpdateConnectivity(x.ConnectionProfiles, x.NetworkAccess)));
+        if (deviceInformation.Network is { } network)
+        {
+            UpdateConnectivity(network);
+        }
+
+        deviceInformation.NetworkChanged += OnNetworkChanged;
+
+        UpdateWiFi(deviceInformation.WiFi);
+
+        deviceInformation.WiFiChanged += OnWiFiChanged;
     }
 
     public void Dispose()
     {
-        foreach (var disposable in disposables)
-        {
-            disposable.Dispose();
-        }
+        deviceInformation.BatteryChanged -= OnBatteryChanged;
+        deviceInformation.NetworkChanged -= OnNetworkChanged;
+        deviceInformation.WiFiChanged -= OnWiFiChanged;
+    }
 
-        disposables.Clear();
+    private void OnBatteryChanged(object? sender, EventArgs args)
+    {
+        if (deviceInformation.Battery is { } battery)
+        {
+            MainThread.BeginInvokeOnMainThread(() => UpdateBattery(battery));
+        }
+    }
+
+    private void OnNetworkChanged(object? sender, EventArgs args)
+    {
+        if (deviceInformation.Network is { } network)
+        {
+            MainThread.BeginInvokeOnMainThread(() => UpdateConnectivity(network));
+        }
+    }
+
+    private void OnWiFiChanged(object? sender, EventArgs args)
+    {
+        var status = deviceInformation.WiFi;
+        MainThread.BeginInvokeOnMainThread(() => UpdateWiFi(status));
     }
 
     // ------------------------------------------------------------
     // Battery
     // ------------------------------------------------------------
 
-    private void UpdateBattery(double chargeLevel, BatteryState state, BatteryPowerSource powerSource)
+    private void UpdateBattery(BatteryStatus status)
     {
-        log.DebugBatteryState(chargeLevel, state, powerSource);
+        log.DebugBatteryState(status.Level, status.State, status.PowerSource);
 
-        BatteryChargeLevel = chargeLevel;
-        BatteryState = state;
-        BatteryPowerSource = powerSource;
+        BatteryChargeLevel = status.Level;
+        BatteryState = status.State;
+        BatteryPowerSource = status.PowerSource;
     }
 
     // ------------------------------------------------------------
     // Connectivity
     // ------------------------------------------------------------
 
-    private void UpdateConnectivity(IEnumerable<ConnectionProfile> profiles, NetworkAccess access)
+    private void UpdateConnectivity(NetworkStatus status)
     {
+        var access = status.Access;
         var profile = NetworkProfile.Unknown;
-        foreach (var value in profiles)
+        foreach (var value in status.Profiles)
         {
             switch (value)
             {
@@ -132,5 +167,10 @@ public sealed partial class DeviceState : ObservableObject, IDisposable
         NetworkState = access.IsConnected()
             ? (profile.IsHighSpeed() ? NetworkState.ConnectedHighSpeed : NetworkState.Connected)
             : NetworkState.Disconnected;
+    }
+
+    private void UpdateWiFi(WiFiStatus? status)
+    {
+        WiFiSignalStrength = status?.SignalStrength ?? 0;
     }
 }
