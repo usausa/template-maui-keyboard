@@ -6,6 +6,7 @@ using CommunityToolkit.Maui;
 
 using Fonts;
 
+using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.LifecycleEvents;
 
 #if false
@@ -149,6 +150,11 @@ public static partial class MauiProgram
             options.HandleEnterKey = true;
             options.DisableShowSoftInputOnFocus = true;
         });
+
+#if ANDROID
+        // Font icons
+        builder.ConfigureImageSources(static services => services.AddService<FontImageSource>(static provider => new DirectFontImageSourceService(provider.GetRequiredService<IFontManager>())));
+#endif
 
         return builder;
     }
