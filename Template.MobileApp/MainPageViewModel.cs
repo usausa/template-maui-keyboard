@@ -10,6 +10,8 @@ public sealed partial class MainPageViewModel : ExtendViewModelBase, IShellContr
 
     private bool destroying;
 
+    private IDisposable? navigatingBusy;
+
     public StartupState Startup { get; }
 
     public INavigator Navigator { get; }
@@ -66,6 +68,10 @@ public sealed partial class MainPageViewModel : ExtendViewModelBase, IShellContr
         Function3Command = MakeAsyncCommand(() => Navigator.NotifyAsync(ShellEvent.Function3), () => Function3Enabled);
         Function4Command = MakeAsyncCommand(() => Navigator.NotifyAsync(ShellEvent.Function4), () => Function4Enabled);
 
+        // Busy while navigating
+        Disposables.Add(Observable.FromEventPattern<EventArgs>(h => Navigator.ExecutingChanged += h, h => Navigator.ExecutingChanged -= h)
+            .Subscribe(_ => UpdateNavigatingBusy()));
+
         // Screen lock detection
         // ReSharper disable AsyncVoidLambda
         Disposables.Add(screen.StateChangedAsObservable().ObserveOnCurrentContext().Subscribe(async x =>
@@ -119,5 +125,22 @@ public sealed partial class MainPageViewModel : ExtendViewModelBase, IShellContr
     public void OnDestroying()
     {
         destroying = true;
+    }
+
+    //--------------------------------------------------------------------------------
+    // Navigation
+    //--------------------------------------------------------------------------------
+
+    private void UpdateNavigatingBusy()
+    {
+        if (Navigator.Executing)
+        {
+            navigatingBusy ??= BusyState.Begin();
+        }
+        else
+        {
+            navigatingBusy?.Dispose();
+            navigatingBusy = null;
+        }
     }
 }

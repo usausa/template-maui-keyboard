@@ -152,60 +152,20 @@ public static partial class ButtonOption
 
     private static void OnPressEffectChanged(BindableObject bindable, object? oldValue, object? newValue)
     {
-        if (bindable is not Button view)
+        if (bindable is not (Button or ImageButton))
         {
             return;
         }
 
-        if (oldValue is not null)
+        var view = (View)bindable;
+        var behavior = view.Behaviors.FirstOrDefault(static x => x is PressEffectBehavior);
+        if (behavior is not null)
         {
-            var behavior = view.Behaviors.FirstOrDefault(static x => x is PressEffectBehavior);
-            if (behavior is not null)
-            {
-                view.Behaviors.Remove(behavior);
-            }
+            view.Behaviors.Remove(behavior);
         }
-
-        if (newValue is not null)
+        if (newValue is true)
         {
             view.Behaviors.Add(new PressEffectBehavior());
-        }
-    }
-
-    private sealed class PressEffectBehavior : BehaviorBase<Button>
-    {
-        protected override void OnAttachedTo(Button bindable)
-        {
-            base.OnAttachedTo(bindable);
-
-            bindable.Pressed += OnButtonPressed;
-            bindable.Released += OnButtonReleased;
-        }
-
-        protected override void OnDetachingFrom(Button bindable)
-        {
-            base.OnDetachingFrom(bindable);
-
-            bindable.Pressed -= OnButtonPressed;
-            bindable.Released -= OnButtonReleased;
-        }
-
-        private static void OnButtonPressed(object? sender, EventArgs e)
-        {
-            if (sender is Button button)
-            {
-                button.ScaleToAsync(0.9, 50, Easing.CubicOut);
-                button.FadeToAsync(0.8, 50, Easing.CubicOut);
-            }
-        }
-
-        private static void OnButtonReleased(object? sender, EventArgs e)
-        {
-            if (sender is Button button)
-            {
-                button.ScaleToAsync(1.0, 100, Easing.CubicOut);
-                button.FadeToAsync(1.0, 100, Easing.CubicOut);
-            }
         }
     }
 }

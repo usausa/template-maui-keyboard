@@ -5,7 +5,9 @@ using System.ComponentModel.DataAnnotations;
 using Smart.Mvvm.Resolver;
 
 [ObservableGeneratorOption(Reactive = true, ViewModel = true)]
-public abstract class AppDialogViewModelBase : ExtendViewModelBase, IValidatable
+public abstract class AppDialogViewModelBase :
+    ExtendViewModelBase,
+    IValidatable
 {
     private List<ValidationResult>? validationResults;
 

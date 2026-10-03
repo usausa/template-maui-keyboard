@@ -7,13 +7,24 @@ using Smart.Mvvm.Resolver;
 using Template.MobileApp.Shell;
 
 [ObservableGeneratorOption(Reactive = true, ViewModel = true)]
-public abstract class AppViewModelBase : ExtendViewModelBase, IValidatable, INavigatorAware, INavigationEventSupportAsync, INotifySupportAsync<ShellEvent>
+public abstract class AppViewModelBase :
+    ExtendViewModelBase,
+    IValidatable,
+    INavigatorAware,
+    INavigationEventSupportAsync,
+    INotifySupportAsync<ShellEvent>,
+    INavigationLifecycleSupport
 {
     private List<ValidationResult>? validationResults;
 
     private IAccessor? propertyAccessor;
 
     public INavigator Navigator { get; set; } = default!;
+
+    protected AppViewModelBase()
+    {
+        AcceptsCommand = false;
+    }
 
     protected override void Dispose(bool disposing)
     {
@@ -51,19 +62,26 @@ public abstract class AppViewModelBase : ExtendViewModelBase, IValidatable, INav
 
     public virtual Task OnNavigatedToAsync(INavigationContext context) => Task.CompletedTask;
 
+    public void OnActivated() => AcceptsCommand = true;
+
+    public void OnDeactivated() => AcceptsCommand = false;
+
     public async Task NavigatorNotifyAsync(ShellEvent parameter)
     {
-        var task = parameter switch
+        if (AcceptsCommand)
         {
-            ShellEvent.Back => OnNotifyBackAsync(),
-            ShellEvent.Function1 => OnNotifyFunction1(),
-            ShellEvent.Function2 => OnNotifyFunction2(),
-            ShellEvent.Function3 => OnNotifyFunction3(),
-            ShellEvent.Function4 => OnNotifyFunction4(),
-            _ => Task.CompletedTask
-        };
+            var task = parameter switch
+            {
+                ShellEvent.Back => OnNotifyBackAsync(),
+                ShellEvent.Function1 => OnNotifyFunction1(),
+                ShellEvent.Function2 => OnNotifyFunction2(),
+                ShellEvent.Function3 => OnNotifyFunction3(),
+                ShellEvent.Function4 => OnNotifyFunction4(),
+                _ => Task.CompletedTask
+            };
 
-        await task.ConfigureAwait(true);
+            await task.ConfigureAwait(true);
+        }
     }
 
     protected virtual Task OnNotifyBackAsync() => Task.CompletedTask;
