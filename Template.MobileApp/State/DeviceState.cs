@@ -37,7 +37,7 @@ public sealed partial class DeviceState : ObservableObject, IDisposable
 {
     private readonly ILogger<DeviceState> log;
 
-    private readonly DeviceInformation deviceInformation;
+    private readonly List<IDisposable> disposables = [];
 
     // Battery
 
@@ -61,14 +61,14 @@ public sealed partial class DeviceState : ObservableObject, IDisposable
     [ObservableProperty]
     public partial NetworkState NetworkState { get; private set; }
 
-    public int WiFiSignalStrength { get; private set; }
+    [ObservableProperty]
+    public partial int? WiFiSignalStrength { get; private set; }
 
     public DeviceState(
         ILogger<DeviceState> log,
         DeviceInformation deviceInformation)
     {
         this.log = log;
-        this.deviceInformation = deviceInformation;
 
         // Battery
         if (deviceInformation.Battery is { } battery)
@@ -76,7 +76,10 @@ public sealed partial class DeviceState : ObservableObject, IDisposable
             UpdateBattery(battery);
         }
 
-        deviceInformation.BatteryChanged += OnBatteryChanged;
+        disposables.Add(deviceInformation.BatteryChangedAsObservable()
+            .Select(_ => deviceInformation.Battery!)
+            .ObserveOnCurrentContext()
+            .Subscribe(UpdateBattery));
 
         // Connectivity
         if (deviceInformation.Network is { } network)
@@ -84,40 +87,27 @@ public sealed partial class DeviceState : ObservableObject, IDisposable
             UpdateConnectivity(network);
         }
 
-        deviceInformation.NetworkChanged += OnNetworkChanged;
+        disposables.Add(deviceInformation.NetworkChangedAsObservable()
+            .Select(_ => deviceInformation.Network!)
+            .ObserveOnCurrentContext()
+            .Subscribe(UpdateConnectivity));
 
         UpdateWiFi(deviceInformation.WiFi);
 
-        deviceInformation.WiFiChanged += OnWiFiChanged;
+        disposables.Add(deviceInformation.WiFiChangedAsObservable()
+            .Select(_ => deviceInformation.WiFi)
+            .ObserveOnCurrentContext()
+            .Subscribe(UpdateWiFi));
     }
 
     public void Dispose()
     {
-        deviceInformation.BatteryChanged -= OnBatteryChanged;
-        deviceInformation.NetworkChanged -= OnNetworkChanged;
-        deviceInformation.WiFiChanged -= OnWiFiChanged;
-    }
-
-    private void OnBatteryChanged(object? sender, EventArgs args)
-    {
-        if (deviceInformation.Battery is { } battery)
+        foreach (var disposable in disposables)
         {
-            MainThread.BeginInvokeOnMainThread(() => UpdateBattery(battery));
+            disposable.Dispose();
         }
-    }
 
-    private void OnNetworkChanged(object? sender, EventArgs args)
-    {
-        if (deviceInformation.Network is { } network)
-        {
-            MainThread.BeginInvokeOnMainThread(() => UpdateConnectivity(network));
-        }
-    }
-
-    private void OnWiFiChanged(object? sender, EventArgs args)
-    {
-        var status = deviceInformation.WiFi;
-        MainThread.BeginInvokeOnMainThread(() => UpdateWiFi(status));
+        disposables.Clear();
     }
 
     // ------------------------------------------------------------
@@ -171,6 +161,6 @@ public sealed partial class DeviceState : ObservableObject, IDisposable
 
     private void UpdateWiFi(WiFiStatus? status)
     {
-        WiFiSignalStrength = status?.SignalStrength ?? 0;
+        WiFiSignalStrength = status?.SignalStrength;
     }
 }

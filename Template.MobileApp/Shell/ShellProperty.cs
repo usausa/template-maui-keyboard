@@ -1,11 +1,20 @@
 namespace Template.MobileApp.Shell;
 
+using CommunityToolkit.Maui.Core;
+
 using Microsoft.Maui.Controls.Shapes;
 
 using Smart.Maui.Interactivity;
 
 public static class ShellProperty
 {
+    private static WeakReference<BindableObject>? currentView;
+
+    internal static void SetCurrentView(BindableObject? view)
+    {
+        currentView = view is null ? null : new WeakReference<BindableObject>(view);
+    }
+
     // ------------------------------------------------------------
     // Shell
     // ------------------------------------------------------------
@@ -131,8 +140,35 @@ public static class ShellProperty
 
     public static void SetFunction4Enabled(BindableObject bindable, bool value) => bindable.SetValue(Function4EnabledProperty, value);
 
+    public static readonly BindableProperty StatusBarColorProperty = BindableProperty.CreateAttached(
+        "StatusBarColor",
+        typeof(Color),
+        typeof(ShellProperty),
+        null,
+        propertyChanged: PropertyChanged);
+
+    public static Color? GetStatusBarColor(BindableObject bindable) => (Color?)bindable.GetValue(StatusBarColorProperty);
+
+    public static void SetStatusBarColor(BindableObject bindable, Color? value) => bindable.SetValue(StatusBarColorProperty, value);
+
+    public static readonly BindableProperty StatusBarStyleProperty = BindableProperty.CreateAttached(
+        "StatusBarStyle",
+        typeof(StatusBarStyle),
+        typeof(ShellProperty),
+        StatusBarStyle.Default,
+        propertyChanged: PropertyChanged);
+
+    public static StatusBarStyle GetStatusBarStyle(BindableObject bindable) => (StatusBarStyle)bindable.GetValue(StatusBarStyleProperty);
+
+    public static void SetStatusBarStyle(BindableObject bindable, StatusBarStyle value) => bindable.SetValue(StatusBarStyleProperty, value);
+
     private static void PropertyChanged(BindableObject bindable, object oldValue, object newValue)
     {
+        if ((currentView is null) || !currentView.TryGetTarget(out var current) || !ReferenceEquals(current, bindable))
+        {
+            return;
+        }
+
         var parent = ((ContentView)bindable).Parent;
         if (parent?.BindingContext is IShellControl shell)
         {
@@ -144,31 +180,34 @@ public static class ShellProperty
     {
         if (bindable is null)
         {
-            shell.Title = string.Empty;
-            shell.HeaderVisible = true;
-            shell.FunctionVisible = false;
-            shell.Function1Text = string.Empty;
-            shell.Function2Text = string.Empty;
-            shell.Function3Text = string.Empty;
-            shell.Function4Text = string.Empty;
-            shell.Function1Enabled = false;
-            shell.Function2Enabled = false;
-            shell.Function3Enabled = false;
-            shell.Function4Enabled = false;
+            shell.Title.Value = string.Empty;
+            shell.HeaderVisible.Value = true;
+            shell.FunctionVisible.Value = false;
+            shell.StatusBarColor.Value = null;
+            shell.StatusBarStyle.Value = StatusBarStyle.Default;
+            foreach (var function in shell.Functions)
+            {
+                function.Text.Value = string.Empty;
+                function.Enabled.Value = false;
+            }
         }
         else
         {
-            shell.Title = GetTitle(bindable);
-            shell.HeaderVisible = GetHeaderVisible(bindable);
-            shell.FunctionVisible = GetFunctionVisible(bindable);
-            shell.Function1Text = GetFunction1Text(bindable);
-            shell.Function2Text = GetFunction2Text(bindable);
-            shell.Function3Text = GetFunction3Text(bindable);
-            shell.Function4Text = GetFunction4Text(bindable);
-            shell.Function1Enabled = GetFunction1Enabled(bindable);
-            shell.Function2Enabled = GetFunction2Enabled(bindable);
-            shell.Function3Enabled = GetFunction3Enabled(bindable);
-            shell.Function4Enabled = GetFunction4Enabled(bindable);
+            shell.Title.Value = GetTitle(bindable);
+            shell.HeaderVisible.Value = GetHeaderVisible(bindable);
+            shell.FunctionVisible.Value = GetFunctionVisible(bindable);
+            shell.StatusBarColor.Value = GetStatusBarColor(bindable);
+            shell.StatusBarStyle.Value = GetStatusBarStyle(bindable);
+
+            var functions = shell.Functions;
+            functions[0].Text.Value = GetFunction1Text(bindable);
+            functions[1].Text.Value = GetFunction2Text(bindable);
+            functions[2].Text.Value = GetFunction3Text(bindable);
+            functions[3].Text.Value = GetFunction4Text(bindable);
+            functions[0].Enabled.Value = GetFunction1Enabled(bindable);
+            functions[1].Enabled.Value = GetFunction2Enabled(bindable);
+            functions[2].Enabled.Value = GetFunction3Enabled(bindable);
+            functions[3].Enabled.Value = GetFunction4Enabled(bindable);
         }
     }
 
@@ -196,7 +235,7 @@ public static class ShellProperty
             return;
         }
 
-        if (oldValue is not null)
+        if (oldValue is true)
         {
             var behavior = view.Behaviors.FirstOrDefault(static x => x is BusyOverlayBehavior);
             if (behavior is not null)
@@ -205,7 +244,7 @@ public static class ShellProperty
             }
         }
 
-        if (newValue is not null)
+        if (newValue is true)
         {
             view.Behaviors.Add(new BusyOverlayBehavior());
         }

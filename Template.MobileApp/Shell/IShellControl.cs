@@ -1,26 +1,25 @@
 namespace Template.MobileApp.Shell;
 
+using CommunityToolkit.Maui.Core;
+
+public sealed class FunctionState
+{
+    public NotificationValue<string> Text { get; } = new(string.Empty);
+
+    public NotificationValue<bool> Enabled { get; } = new();
+}
+
 public interface IShellControl
 {
-    string Title { get; set; }
+    NotificationValue<string> Title { get; }
 
-    bool HeaderVisible { get; set; }
+    NotificationValue<bool> HeaderVisible { get; }
 
-    bool FunctionVisible { get; set; }
+    NotificationValue<bool> FunctionVisible { get; }
 
-    string Function1Text { get; set; }
+    NotificationValue<Color?> StatusBarColor { get; }
 
-    string Function2Text { get; set; }
+    NotificationValue<StatusBarStyle> StatusBarStyle { get; }
 
-    string Function3Text { get; set; }
-
-    string Function4Text { get; set; }
-
-    bool Function1Enabled { get; set; }
-
-    bool Function2Enabled { get; set; }
-
-    bool Function3Enabled { get; set; }
-
-    bool Function4Enabled { get; set; }
+    IReadOnlyList<FunctionState> Functions { get; }
 }

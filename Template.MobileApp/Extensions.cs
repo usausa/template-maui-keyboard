@@ -3,6 +3,7 @@ namespace Template.MobileApp;
 using System.Reflection;
 
 using Template.MobileApp.Behaviors;
+using Template.MobileApp.Components;
 using Template.MobileApp.Helpers;
 
 #pragma warning disable CA1724
@@ -129,5 +130,14 @@ public static class Extensions
 
     public static IObservable<ScreenStateEventArgs> StateChangedAsObservable(this IScreen screen) =>
         Observable.FromEvent<EventHandler<ScreenStateEventArgs>, ScreenStateEventArgs>(static h => (_, e) => h(e), h => screen.ScreenStateChanged += h, h => screen.ScreenStateChanged -= h);
+
+    public static IObservable<EventArgs> BatteryChangedAsObservable(this DeviceInformation deviceInformation) =>
+        Observable.FromEvent<EventHandler, EventArgs>(static h => (_, e) => h(e), h => deviceInformation.BatteryChanged += h, h => deviceInformation.BatteryChanged -= h);
+
+    public static IObservable<EventArgs> NetworkChangedAsObservable(this DeviceInformation deviceInformation) =>
+        Observable.FromEvent<EventHandler, EventArgs>(static h => (_, e) => h(e), h => deviceInformation.NetworkChanged += h, h => deviceInformation.NetworkChanged -= h);
+
+    public static IObservable<EventArgs> WiFiChangedAsObservable(this DeviceInformation deviceInformation) =>
+        Observable.FromEvent<EventHandler, EventArgs>(static h => (_, e) => h(e), h => deviceInformation.WiFiChanged += h, h => deviceInformation.WiFiChanged -= h);
 }
 #pragma warning restore CA1724

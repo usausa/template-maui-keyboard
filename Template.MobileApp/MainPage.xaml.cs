@@ -4,8 +4,12 @@ using Template.MobileApp.Shell;
 
 public sealed partial class MainPage
 {
-    public MainPage()
+    private readonly ILogger<MainPage> log;
+
+    public MainPage(ILogger<MainPage> log)
     {
+        this.log = log;
+
         InitializeComponent();
     }
 
@@ -13,7 +17,11 @@ public sealed partial class MainPage
     {
         if (BindingContext is MainPageViewModel { BusyState.IsBusy: false } context)
         {
-            context.Navigator.NotifyAsync(ShellEvent.Back);
+            context.Navigator.NotifyAsync(ShellEvent.Back).ContinueWith(
+                t => log.WarnUnhandledNavigationError(t.Exception!),
+                CancellationToken.None,
+                TaskContinuationOptions.OnlyOnFaulted,
+                TaskScheduler.Default);
         }
 
         return true;

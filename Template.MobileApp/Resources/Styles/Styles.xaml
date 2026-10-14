@@ -65,11 +65,11 @@
 
     <Style x:Key="HeaderGrid"
            TargetType="Grid">
+        <Setter Property="HeightRequest" Value="48" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="RowSpacing" Value="0" />
         <Setter Property="ColumnSpacing" Value="0" />
-        <Setter Property="HeightRequest" Value="48" />
         <Setter Property="BackgroundColor" Value="{StaticResource BlueDarken4}" />
     </Style>
 
@@ -772,11 +772,6 @@
     <!-- CollectionView -->
     <!-- ================================================================================ -->
 
-    <Style x:Key="ItemCollectionView"
-           TargetType="CollectionView">
-        <Setter Property="behaviors:Scroll.DisableOverScroll" Value="True" />
-    </Style>
-
     <Style x:Key="ItemCollectionGrid"
            TargetType="Grid">
         <Setter Property="Margin" Value="0" />
@@ -934,6 +929,22 @@
                 </VisualStateGroup>
             </VisualStateGroupList>
         </Setter>
+    </Style>
+
+    <!-- ================================================================================ -->
+    <!-- Basic -->
+    <!-- ================================================================================ -->
+
+    <!-- Loading -->
+
+    <Style x:Key="BasicLoadingIndicator"
+           TargetType="ActivityIndicator">
+        <Setter Property="WidthRequest" Value="48" />
+        <Setter Property="HeightRequest" Value="48" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="Color" Value="{StaticResource BlueDefault}" />
+        <Setter Property="InputTransparent" Value="True" />
     </Style>
 
 </ResourceDictionary>
