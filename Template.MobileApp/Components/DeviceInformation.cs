@@ -29,6 +29,10 @@ public sealed partial class DeviceInformation : IDisposable
 {
     private bool started;
 
+    // ------------------------------------------------------------
+    // Control
+    // ------------------------------------------------------------
+
     public void Start()
     {
         if (started)
@@ -53,9 +57,17 @@ public sealed partial class DeviceInformation : IDisposable
         StopBattery();
     }
 
+    // ------------------------------------------------------------
+    // Identity
+    // ------------------------------------------------------------
+
     public string DeviceId { get; } = ResolveDeviceId();
 
     private static partial string ResolveDeviceId();
+
+    // ------------------------------------------------------------
+    // Battery
+    // ------------------------------------------------------------
 
     public event EventHandler? BatteryChanged;
 
@@ -70,6 +82,10 @@ public sealed partial class DeviceInformation : IDisposable
     private partial void StartBattery();
 
     private partial void StopBattery();
+
+    // ------------------------------------------------------------
+    // Network
+    // ------------------------------------------------------------
 
     public event EventHandler? NetworkChanged;
 
@@ -94,6 +110,10 @@ public sealed partial class DeviceInformation : IDisposable
     private partial void StartNetwork();
 
     private partial void StopNetwork();
+
+    // ------------------------------------------------------------
+    // Process
+    // ------------------------------------------------------------
 
     public DateTime StartTime { get; } = ReadStartTime();
 

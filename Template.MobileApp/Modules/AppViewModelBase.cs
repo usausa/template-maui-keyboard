@@ -1,9 +1,5 @@
 namespace Template.MobileApp.Modules;
 
-using System.ComponentModel.DataAnnotations;
-
-using Smart.Mvvm.Resolver;
-
 using Template.MobileApp.Shell;
 
 [ObservableGeneratorOption(Reactive = true, ViewModel = true)]
@@ -12,13 +8,9 @@ public abstract class AppViewModelBase :
     IValidatable,
     INavigatorAware,
     INavigationEventSupportAsync,
-    INotifySupportAsync<ShellEvent>,
-    INavigationLifecycleSupport
+    INavigationLifecycleSupport,
+    INotifySupportAsync<ShellEvent>
 {
-    private List<ValidationResult>? validationResults;
-
-    private IAccessor? propertyAccessor;
-
     public INavigator Navigator { get; set; } = default!;
 
     protected AppViewModelBase()
@@ -35,25 +27,7 @@ public abstract class AppViewModelBase :
 
     public void Validate(string name)
     {
-        propertyAccessor ??= AccessorProvider.FindAccessor(GetType());
-        if (propertyAccessor is null)
-        {
-            throw new InvalidOperationException($"Accessor is not supported. type=[{GetType()}]");
-        }
-
-        var value = propertyAccessor.GetValue(this, name);
-        var context = new ValidationContext(this, ResolveProvider.Default, null)
-        {
-            MemberName = name
-        };
-        validationResults ??= [];
-
-        if (!Validator.TryValidateProperty(value, context, validationResults))
-        {
-            Errors.AddError(name, validationResults[0].ErrorMessage!);
-        }
-
-        validationResults.Clear();
+        ValidationHelper.Validate(this, name, Errors);
     }
 
     public virtual Task OnNavigatingFromAsync(INavigationContext context) => Task.CompletedTask;

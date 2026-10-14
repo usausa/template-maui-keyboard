@@ -54,7 +54,7 @@
     <!-- Splash Screen -->
     <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#0D47A1" BaseSize="128,128" />
     <!-- Images -->
-    <MauiImage Include="Resources\Images\*" />
+    <MauiImage Include="Resources\Images\**" />
     <MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
     <!-- Custom Fonts -->
     <MauiFont Include="Resources\Fonts\*" />
@@ -86,7 +86,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BunnyTail.DependencyInjection" Version="0.8.0" />
+    <PackageReference Include="BunnyTail.DependencyInjection" Version="0.9.0" />
     <PackageReference Include="BunnyTail.EmbeddedBuildProperty" Version="1.21.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -94,7 +94,7 @@
     <PackageReference Include="BunnyTail.MemberAccessor" Version="1.18.0" />
     <PackageReference Include="BunnyTail.XamlProperty.Maui" Version="1.4.0" />
     <PackageReference Include="CommunityToolkit.Maui" Version="15.0.1" />
-    <PackageReference Include="Components.Maui" Version="1.48.0" />
+    <PackageReference Include="Components.Maui" Version="1.50.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.12">
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">none</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">all</PrivateAssets>
@@ -112,12 +112,12 @@
     <PackageReference Include="Usa.Smart.Converter" Version="2.18.0" />
     <PackageReference Include="Usa.Smart.Core" Version="2.20.0" />
     <PackageReference Include="Usa.Smart.Mapper" Version="1.0.0-beta9" />
-    <PackageReference Include="Usa.Smart.Maui" Version="2.32.0" />
-    <PackageReference Include="Usa.Smart.Maui.Extensions" Version="2.32.0" />
+    <PackageReference Include="Usa.Smart.Maui" Version="2.33.0" />
+    <PackageReference Include="Usa.Smart.Maui.Extensions" Version="2.33.0" />
     <PackageReference Include="Usa.Smart.Mvvm" Version="2.16.0" />
-    <PackageReference Include="Usa.Smart.Navigation" Version="3.15.0" />
-    <PackageReference Include="Usa.Smart.Navigation.Extensions.DependencyInjection" Version="3.15.0" />
-    <PackageReference Include="Usa.Smart.Navigation.Maui" Version="3.15.0" />
+    <PackageReference Include="Usa.Smart.Navigation" Version="3.16.0" />
+    <PackageReference Include="Usa.Smart.Navigation.Extensions.DependencyInjection" Version="3.16.0" />
+    <PackageReference Include="Usa.Smart.Navigation.Maui" Version="3.16.0" />
     <PackageReference Include="Usa.Smart.Reactive" Version="2.15.0" />
     <PackageReference Include="Usa.Smart.Results" Version="2.2.0" />
   </ItemGroup>

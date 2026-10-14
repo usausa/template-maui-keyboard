@@ -3,11 +3,11 @@
            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
            xmlns:s="http://smart/maui"
            xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-           xmlns:input="clr-namespace:Template.MobileApp.Input"
            xmlns:behaviors="clr-namespace:Template.MobileApp.Behaviors"
            xmlns:markup="clr-namespace:Template.MobileApp.Markup"
-           xmlns:module="clr-namespace:Template.MobileApp.Modules.Navigation.Modal"
            xmlns:modules="clr-namespace:Template.MobileApp.Modules"
+           xmlns:module="clr-namespace:Template.MobileApp.Modules.Navigation.Modal"
+           xmlns:input="clr-namespace:Template.MobileApp.Input"
            x:Class="Template.MobileApp.Modules.Navigation.Modal.InputNumberView"
            x:DataType="{x:Type module:InputNumberViewModel}"
            s:BindingContextResolver.Type="{x:Type module:InputNumberViewModel}"
@@ -104,7 +104,7 @@
         <Grid Style="{StaticResource FunctionGrid}"
               ColumnDefinitions="*,*">
             <Button Grid.Column="0"
-                    Style="{StaticResource InputIconButton}"
+                    Style="{StaticResource InputCancelIconButton}"
                     Command="{Binding CloseCommand}"
                     input:Shortcut.Key="Function1"
                     ImageSource="{x:Static markup:AppIcons.Close}" />

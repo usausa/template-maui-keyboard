@@ -220,6 +220,7 @@ public static partial class MauiProgram
             c.EnablePromptSelectAll = true;
         });
         services.AddComponentsPopup(static c => c.AutoRegister(DialogSource()));
+        services.AddComponentsPopupPlugin<PopupActivationPlugin>();
         services.AddComponentsPopupPlugin<PopupFocusPlugin>();
         services.AddComponentsScreen();
         services.AddComponentsLocation();
@@ -232,7 +233,7 @@ public static partial class MauiProgram
         // Navigator
         services.AddNavigator(static (_, config) =>
         {
-            config.UseMauiNavigationProvider();
+            config.UseMauiNavigationProvider(static options => options.RestoreFocus = false);
             config.AddPlugin<NavigationFocusPlugin>();
             config.AddPlugin<NavigationFeedbackPlugin>();
 #if DEBUG

@@ -3,13 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:s="http://smart/maui"
              xmlns:navigation="http://smart/navigation"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:local="clr-namespace:Template.MobileApp"
-             xmlns:input="clr-namespace:Template.MobileApp.Input"
+             xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:application="clr-namespace:Template.MobileApp"
              xmlns:shell="clr-namespace:Template.MobileApp.Shell"
+             xmlns:input="clr-namespace:Template.MobileApp.Input"
              x:Class="Template.MobileApp.MainPage"
-             x:DataType="{x:Type local:MainPageViewModel}"
-             s:BindingContextResolver.Type="{x:Type local:MainPageViewModel}"
+             x:DataType="{x:Type application:MainPageViewModel}"
+             s:BindingContextResolver.Type="{x:Type application:MainPageViewModel}"
              SafeAreaEdges="Default">
 
     <!-- ReSharper disable Xaml.RedundantResource -->
@@ -51,9 +51,9 @@
         <s:AppLifecycleBehavior />
         <input:InputPageBehavior />
         <shell:ShellUpdateBehavior Navigator="{Binding Navigator, Mode=OneTime}" />
-        <toolkit:StatusBarBehavior ApplyOn="OnBehaviorAttachedTo"
-                                   StatusBarColor="{StaticResource BlueDefault}"
-                                   StatusBarStyle="LightContent" />
+        <mct:StatusBarBehavior ApplyOn="OnBehaviorAttachedTo"
+                               StatusBarColor="{StaticResource BlueDefault}"
+                               StatusBarStyle="LightContent" />
     </ContentPage.Behaviors>
 
     <Grid Style="{StaticResource MainGrid}"
@@ -90,23 +90,23 @@
             <Button Grid.Column="0"
                     Style="{StaticResource FunctionButton1}"
                     Command="{Binding Function1Command}"
-                    Text="{Binding Function1Text}"
-                    input:Shortcut.Key="Function1" />
+                    input:Shortcut.Key="Function1"
+                    Text="{Binding Function1Text}" />
             <Button Grid.Column="1"
                     Style="{StaticResource FunctionButton2}"
                     Command="{Binding Function2Command}"
-                    Text="{Binding Function2Text}"
-                    input:Shortcut.Key="Function2" />
+                    input:Shortcut.Key="Function2"
+                    Text="{Binding Function2Text}" />
             <Button Grid.Column="2"
                     Style="{StaticResource FunctionButton3}"
                     Command="{Binding Function3Command}"
-                    Text="{Binding Function3Text}"
-                    input:Shortcut.Key="Function3" />
+                    input:Shortcut.Key="Function3"
+                    Text="{Binding Function3Text}" />
             <Button Grid.Column="3"
                     Style="{StaticResource FunctionButton4}"
                     Command="{Binding Function4Command}"
-                    Text="{Binding Function4Text}"
-                    input:Shortcut.Key="Function4" />
+                    input:Shortcut.Key="Function4"
+                    Text="{Binding Function4Text}" />
         </Grid>
 
         <!-- startup -->
