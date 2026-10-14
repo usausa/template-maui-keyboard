@@ -62,11 +62,14 @@
     "xmlns:behaviors",
     "xmlns:controls",
     "xmlns:converters",
+    "xmlns:drawing",
     "xmlns:effects",
     "xmlns:markup",
 
-    "xmlns:drawing",
-    "xmlns:scene",
+    "xmlns:domain",
+    "xmlns:enums",
+    "xmlns:logic",
+    "xmlns:helpers",
 
     "xmlns:components",
     "xmlns:services",
@@ -75,8 +78,6 @@
 
     "xmlns:models",
     "xmlns:entity",
-    "xmlns:app",
-    "xmlns:sample",
 
     "xmlns:modules",
     "xmlns:module",
