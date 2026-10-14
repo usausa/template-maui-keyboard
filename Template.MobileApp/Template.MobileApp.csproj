@@ -86,13 +86,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BunnyTail.DependencyInjection" Version="0.9.0" />
-    <PackageReference Include="BunnyTail.EmbeddedBuildProperty" Version="1.21.0">
+    <PackageReference Include="BunnyTail.DependencyInjection" Version="0.10.0" />
+    <PackageReference Include="BunnyTail.EmbeddedBuildProperty" Version="1.22.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="BunnyTail.MemberAccessor" Version="1.18.0" />
-    <PackageReference Include="BunnyTail.XamlProperty.Maui" Version="1.4.0" />
+    <PackageReference Include="BunnyTail.MemberAccessor" Version="1.19.0" />
+    <PackageReference Include="BunnyTail.XamlProperty.Maui" Version="1.5.0" />
     <PackageReference Include="CommunityToolkit.Maui" Version="15.0.1" />
     <PackageReference Include="Components.Maui" Version="1.50.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.13">
