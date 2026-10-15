@@ -65,7 +65,10 @@ public static class Extensions
                 return;
             }
 
-            first ??= visualElement;
+            if (!Focus.GetSkip(visualElement))
+            {
+                first ??= visualElement;
+            }
         }
 
         if (first is not null)

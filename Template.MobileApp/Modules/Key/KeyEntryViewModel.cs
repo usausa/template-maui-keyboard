@@ -2,21 +2,33 @@ namespace Template.MobileApp.Modules.Key;
 
 using System.Diagnostics;
 
-public sealed class KeyEntryViewModel : AppViewModelBase
+public sealed partial class KeyEntryViewModel : AppViewModelBase
 {
+    private readonly IDialog dialog;
+
+    private readonly InputValidator validator;
+
     public EntryController Input1 { get; }
     public EntryController Input2 { get; }
     public EntryController Input3 { get; }
+
+    [ObservableProperty]
+    public partial string? Memo { get; set; }
 
     //--------------------------------------------------------------------------------
     // Constructor
     //--------------------------------------------------------------------------------
 
-    public KeyEntryViewModel()
+    public KeyEntryViewModel(
+        IDialog dialog)
     {
+        this.dialog = dialog;
+
         Input1 = new EntryController(MakeDelegateCommand<EntryCompleteEvent>(Input1Complete));
         Input2 = new EntryController(MakeDelegateCommand<EntryCompleteEvent>(Input2Complete));
         Input3 = new EntryController(MakeDelegateCommand<EntryCompleteEvent>(Input3Complete));
+
+        validator = new InputValidator(dialog, Validations());
     }
 
     //--------------------------------------------------------------------------------
@@ -26,6 +38,14 @@ public sealed class KeyEntryViewModel : AppViewModelBase
     protected override Task OnNotifyBackAsync() => Navigator.ForwardAsync(ViewId.KeyMenu);
 
     protected override Task OnNotifyFunction1() => OnNotifyBackAsync();
+
+    protected override async Task OnNotifyFunction2()
+    {
+        if (await validator.ValidateAsync())
+        {
+            await dialog.InformationAsync("OK");
+        }
+    }
 
     protected override Task OnNotifyFunction3()
     {
@@ -66,6 +86,20 @@ public sealed class KeyEntryViewModel : AppViewModelBase
             Input2.Text = string.Empty;
             Input3.Text = string.Empty;
             Input1.Focus();
+
+            // Input1 に戻したので、次の欄へは移さない
+            ice.Handled = true;
         }
+    }
+
+    //--------------------------------------------------------------------------------
+    // Helper
+    //--------------------------------------------------------------------------------
+
+    private IEnumerable<ValidationRule> Validations()
+    {
+        yield return ValidationRule.Required(Input1, "Input1 is required");
+        yield return ValidationRule.Required(Input2, "Input2 is required");
+        yield return ValidationRule.Make(Input3, static x => (x?.Length == 3) && x.All(Char.IsAsciiDigit), "Input3 must be 3 digits");
     }
 }

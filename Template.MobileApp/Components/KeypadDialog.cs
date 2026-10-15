@@ -7,6 +7,8 @@ public sealed partial class KeypadDialog : IDialog
 {
     private readonly DialogConfig config;
 
+    private readonly IDeviceDisplay deviceDisplay;
+
     private readonly DialogImplementation implementation;
 
     public KeypadDialog(
@@ -14,6 +16,7 @@ public sealed partial class KeypadDialog : IDialog
         IDeviceDisplay deviceDisplay)
     {
         this.config = config;
+        this.deviceDisplay = deviceDisplay;
         implementation = new DialogImplementation(config, deviceDisplay);
     }
 
@@ -27,7 +30,7 @@ public sealed partial class KeypadDialog : IDialog
 
     public partial ValueTask<PromptResult> PromptAsync(string? defaultValue, string? message, string? title, string ok, string cancel, string? placeHolder, PromptParameter? parameter);
 
-    public IDisposable Indicator() => implementation.Indicator();
+    public partial IDisposable Indicator();
 
     public IDisposable Lock() => implementation.Lock();
 

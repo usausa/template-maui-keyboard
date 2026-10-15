@@ -11,6 +11,8 @@ public sealed partial class KeyMiscViewModel : AppViewModelBase
     public IObserveCommand SelectCommand { get; }
     public IObserveCommand PromptCommand { get; }
     public IObserveCommand NumberCommand { get; }
+    public IObserveCommand IndicatorCommand { get; }
+    public IObserveCommand LoadingCommand { get; }
 
     //--------------------------------------------------------------------------------
     // Constructor
@@ -49,6 +51,24 @@ public sealed partial class KeyMiscViewModel : AppViewModelBase
         {
             var result = await popupNavigator.InputNumberAsync("Number", "0", 5);
             Result = $"Number={result ?? "Cancel"}";
+        });
+        IndicatorCommand = MakeAsyncCommand(async () =>
+        {
+            using (dialog.Indicator())
+            {
+                await Task.Delay(3000);
+            }
+
+            Result = "Indicator";
+        });
+        LoadingCommand = MakeAsyncCommand(async () =>
+        {
+            using (dialog.Loading("Loading"))
+            {
+                await Task.Delay(3000);
+            }
+
+            Result = "Loading";
         });
     }
 

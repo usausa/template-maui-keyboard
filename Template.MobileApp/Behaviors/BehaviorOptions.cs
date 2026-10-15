@@ -8,6 +8,8 @@ public sealed class BehaviorOptions
 
     public bool DisableOverScroll { get; set; } = true;
 
+    public bool FocusHighlight { get; set; } = true;
+
     // Label
 
     public bool AutoSize { get; set; } = true;
@@ -27,4 +29,8 @@ public sealed class BehaviorOptions
     public bool NoBorder { get; set; } = true;
 
     public bool InputFilter { get; set; } = true;
+
+    // Slider / Stepper
+
+    public bool HandleArrowKey { get; set; }
 }

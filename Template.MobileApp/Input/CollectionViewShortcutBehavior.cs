@@ -14,6 +14,12 @@ public sealed partial class CollectionViewShortcutBehavior : BehaviorBase<Collec
         typeof(ICommand),
         typeof(CollectionViewShortcutBehavior));
 
+    public static readonly BindableProperty SelectByNumberKeyProperty = BindableProperty.Create(
+        nameof(SelectByNumberKey),
+        typeof(bool),
+        typeof(CollectionViewShortcutBehavior),
+        false);
+
     public ShortcutKey KeyCode
     {
         get => (ShortcutKey)GetValue(KeyCodeProperty);
@@ -24,6 +30,13 @@ public sealed partial class CollectionViewShortcutBehavior : BehaviorBase<Collec
     {
         get => (ICommand)GetValue(CommandProperty);
         set => SetValue(CommandProperty, value);
+    }
+
+    // 数字キーの 1〜9 で 1〜9 行目を選ぶ
+    public bool SelectByNumberKey
+    {
+        get => (bool)GetValue(SelectByNumberKeyProperty);
+        set => SetValue(SelectByNumberKeyProperty, value);
     }
 
     protected override void OnAttachedTo(CollectionView bindable)
@@ -70,7 +83,7 @@ public sealed partial class CollectionViewShortcutBehavior : BehaviorBase<Collec
             return ResolveNextIndex(view, items, key) >= 0;
         }
 
-        return (key == KeyCode) && (Command is not null);
+        return IsNumberKey(key) || ((key == KeyCode) && (Command is not null));
     }
 
     public bool Handle(ShortcutKey key)
@@ -93,6 +106,18 @@ public sealed partial class CollectionViewShortcutBehavior : BehaviorBase<Collec
             return true;
         }
 
+        // 行の無い番号では何もしない(画面のショートカットには回さない)
+        if (IsNumberKey(key))
+        {
+            var number = key - ShortcutKey.Num1;
+            if (number < items.Count)
+            {
+                Select(view, items, number);
+            }
+
+            return true;
+        }
+
         if ((key != KeyCode) || (Command is not { } command))
         {
             return false;
@@ -106,6 +131,9 @@ public sealed partial class CollectionViewShortcutBehavior : BehaviorBase<Collec
 
         return true;
     }
+
+    private bool IsNumberKey(ShortcutKey key) =>
+        SelectByNumberKey && (key >= ShortcutKey.Num1) && (key <= ShortcutKey.Num9);
 
     private static int ResolveNextIndex(CollectionView view, IList items, ShortcutKey key)
     {

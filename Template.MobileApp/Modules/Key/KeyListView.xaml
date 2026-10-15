@@ -22,7 +22,8 @@
                         SelectionMode="Single">
             <CollectionView.Behaviors>
                 <input:CollectionViewShortcutBehavior Command="{Binding SelectCommand}"
-                                                      KeyCode="Enter" />
+                                                      KeyCode="Enter"
+                                                      SelectByNumberKey="True" />
             </CollectionView.Behaviors>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="x:String">

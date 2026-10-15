@@ -42,6 +42,6 @@ public sealed partial class InputBehavior
         }
 
         public bool OnKey(IDialogInterface? dialog, Keycode keyCode, KeyEvent? e) =>
-            (e is not null) && driver.Process(e, window.CurrentFocus);
+            (e is not null) && driver.Process(e, window);
     }
 }

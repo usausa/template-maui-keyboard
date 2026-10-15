@@ -14,6 +14,8 @@ public sealed partial class InputBehavior : BehaviorBase<VisualElement>, IInputH
         typeof(InputBehavior),
         false);
 
+    private bool closing;
+
     public bool IsBusy
     {
         get => (bool)GetValue(IsBusyProperty);
@@ -75,7 +77,7 @@ public sealed partial class InputBehavior : BehaviorBase<VisualElement>, IInputH
 
     public bool CanHandle(ShortcutKey key)
     {
-        if (IsBusy)
+        if (IsBusy || closing)
         {
             return true;
         }
@@ -91,15 +93,15 @@ public sealed partial class InputBehavior : BehaviorBase<VisualElement>, IInputH
             return true;
         }
 
-        return (key is ShortcutKey.Up or ShortcutKey.Down) ||
+        return (key is ShortcutKey.Up or ShortcutKey.Down or ShortcutKey.Left or ShortcutKey.Right) ||
                (FindShortcut(AssociatedObject, key) is not null) ||
-               ((key == ShortcutKey.Escape) && (AssociatedObject is Page));
+               ((key == ShortcutKey.Escape) && (AssociatedObject is Page or Popup));
     }
 
     public bool Handle(ShortcutKey key)
     {
-        // 処理中のキーは捨てる
-        if (IsBusy)
+        // 処理中と閉じている途中のキーは捨てる
+        if (IsBusy || closing)
         {
             return true;
         }
@@ -115,9 +117,11 @@ public sealed partial class InputBehavior : BehaviorBase<VisualElement>, IInputH
             return true;
         }
 
-        if (key is ShortcutKey.Up or ShortcutKey.Down)
+        // 端で止める時もキーは使ったものとし、範囲の外へフォーカスを出さない
+        if (key is ShortcutKey.Up or ShortcutKey.Down or ShortcutKey.Left or ShortcutKey.Right)
         {
-            return ElementHelper.MoveFocus(AssociatedObject, key == ShortcutKey.Down);
+            ElementHelper.MoveFocus(ElementHelper.ResolveScope(AssociatedObject), key is ShortcutKey.Down or ShortcutKey.Right);
+            return true;
         }
 
         var element = FindShortcut(AssociatedObject, key);
@@ -131,6 +135,14 @@ public sealed partial class InputBehavior : BehaviorBase<VisualElement>, IInputH
         if ((key == ShortcutKey.Escape) && (AssociatedObject is Page page))
         {
             page.SendBackButtonPressed();
+            return true;
+        }
+
+        // ポップアップの Esc はキャンセルで閉じる(結果は無し)
+        if ((key == ShortcutKey.Escape) && (AssociatedObject is Popup popup))
+        {
+            closing = true;
+            _ = popup.CloseAsync();
             return true;
         }
 

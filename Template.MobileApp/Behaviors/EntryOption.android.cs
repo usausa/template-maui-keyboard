@@ -5,7 +5,6 @@ using Android.Content;
 using Android.Content.Res;
 using Android.Text;
 using Android.Views;
-using Android.Views.InputMethods;
 using Android.Widget;
 
 using Java.Lang;
@@ -166,9 +165,10 @@ public static partial class EntryOption
         }
     }
 
+    // ハードキーの Enter では Android の既定の次の欄への移動をさせない(新しい Android では ActionId が ImeNull で来ない)
     private static void OnEditorAction(object? sender, TextView.EditorActionEventArgs e)
     {
-        if ((e.ActionId == ImeAction.ImeNull) && (e.Event?.KeyCode == Keycode.Enter))
+        if (e.Event?.KeyCode == Keycode.Enter)
         {
             e.Handled = true;
         }

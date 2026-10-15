@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:s="http://smart/maui"
+             xmlns:shell="clr-namespace:Template.MobileApp.Shell"
+             xmlns:module="clr-namespace:Template.MobileApp.Modules.Key"
+             xmlns:input="clr-namespace:Template.MobileApp.Input"
+             x:Class="Template.MobileApp.Modules.Key.KeyMixedView"
+             x:DataType="{x:Type module:KeyMixedViewModel}"
+             s:BindingContextResolver.Type="{x:Type module:KeyMixedViewModel}"
+             shell:ShellProperty.Title="Mixed"
+             shell:ShellProperty.Function1Text="Back"
+             shell:ShellProperty.Function1Enabled="True">
+
+    <ScrollView>
+        <Grid Style="{StaticResource MenuGrid}"
+              RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+            <Entry Grid.Row="0"
+                   Style="{StaticResource InputEntry}"
+                   Placeholder="Entry" />
+            <Entry Grid.Row="1"
+                   Style="{StaticResource InputEntry}"
+                   Placeholder="Number"
+                   Keyboard="Numeric" />
+            <Editor Grid.Row="2"
+                    Style="{StaticResource InputEditor}"
+                    Placeholder="Editor" />
+            <Picker Grid.Row="3"
+                    Style="{StaticResource InputPicker}"
+                    Title="Picker">
+                <Picker.Items>
+                    <x:String>Item-1</x:String>
+                    <x:String>Item-2</x:String>
+                    <x:String>Item-3</x:String>
+                </Picker.Items>
+            </Picker>
+            <Grid Grid.Row="4"
+                  ColumnDefinitions="*,*">
+                <DatePicker Grid.Column="0"
+                            Style="{StaticResource InputDatePicker}" />
+                <TimePicker Grid.Column="1"
+                            Style="{StaticResource InputTimePicker}" />
+            </Grid>
+            <Grid Grid.Row="5"
+                  ColumnDefinitions="*,*">
+                <HorizontalStackLayout Grid.Column="0"
+                                       Style="{StaticResource ToggleLayout}">
+                    <CheckBox Style="{StaticResource ToggleCheckBox}" />
+                    <Label Style="{StaticResource ToggleLabel}"
+                           Text="Check" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="1"
+                                       Style="{StaticResource ToggleLayout}">
+                    <Label Style="{StaticResource ToggleLabel}"
+                           Text="Switch" />
+                    <Switch Style="{StaticResource ToggleSwitch}" />
+                </HorizontalStackLayout>
+            </Grid>
+            <Grid Grid.Row="6"
+                  ColumnDefinitions="*,*"
+                  RadioButtonGroup.GroupName="Mixed">
+                <RadioButton Grid.Column="0"
+                             Style="{StaticResource ToggleRadioButton}"
+                             IsChecked="True"
+                             Content="Radio A" />
+                <RadioButton Grid.Column="1"
+                             Style="{StaticResource ToggleRadioButton}"
+                             Content="Radio B" />
+            </Grid>
+            <Grid Grid.Row="7"
+                  ColumnDefinitions="*,Auto">
+                <Slider Grid.Column="0"
+                        Style="{StaticResource InputSlider}"
+                        Maximum="100" />
+                <Label Grid.Column="1"
+                       Style="{StaticResource ToggleLabel}"
+                       Text="Slider" />
+            </Grid>
+            <HorizontalStackLayout Grid.Row="8"
+                                   Style="{StaticResource ToggleLayout}">
+                <Stepper Style="{StaticResource InputStepper}"
+                         Value="{Binding StepperValue}"
+                         Maximum="10" />
+                <Label Style="{StaticResource ToggleLabel}"
+                       Text="{Binding StepperValue, StringFormat='Stepper {0}'}" />
+            </HorizontalStackLayout>
+            <Button Grid.Row="9"
+                    Style="{StaticResource MenuButton}"
+                    Command="{Binding ButtonCommand}"
+                    Text="{Binding ButtonCount, StringFormat='Button {0}'}" />
+            <CollectionView Grid.Row="10"
+                            HeightRequest="240"
+                            ItemsSource="{Binding Items}"
+                            SelectionMode="Single">
+                <CollectionView.Behaviors>
+                    <input:CollectionViewShortcutBehavior />
+                </CollectionView.Behaviors>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <Grid Style="{StaticResource ItemCollectionGrid}">
+                            <Label Style="{StaticResource ItemCollectionLabel}"
+                                   Text="{Binding .}" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </ScrollView>
+
+</ContentView>

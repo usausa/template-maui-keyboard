@@ -46,7 +46,7 @@ public sealed class MainActivity : MauiAppCompatActivity
 
     public override bool DispatchKeyEvent(Android.Views.KeyEvent? e)
     {
-        if ((e is not null) && keyInputDriver.Process(e, CurrentFocus))
+        if ((e is not null) && (Window is not null) && keyInputDriver.Process(e, Window))
         {
             return true;
         }

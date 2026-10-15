@@ -46,6 +46,56 @@ public sealed partial class KeypadDialog
         return await dialog.ShowAsync(defaultValue, message, title, ok, cancel, placeHolder, parameter ?? new PromptParameter()).ConfigureAwait(true);
     }
 
+    // 処理が終わるまで Esc で閉じない(Android はキャンセルできないダイアログも Esc で閉じる)
+    public partial IDisposable Indicator()
+    {
+        var activity = ActivityResolver.CurrentActivity;
+        var size = (int)(deviceDisplay.MainDisplayInfo.Density * config.IndicatorSize);
+
+        using var parameters = new FrameLayout.LayoutParams(size, size);
+        parameters.Gravity = GravityFlags.Center;
+        using var filter = new Android.Graphics.BlendModeColorFilter(config.IndicatorColor.ToPlatform(), Android.Graphics.BlendMode.SrcAtop!);
+        using var progress = new ProgressBar(activity);
+        progress.Indeterminate = true;
+        progress.LayoutParameters = parameters;
+        progress.IndeterminateDrawable!.SetColorFilter(filter);
+        using var layout = new FrameLayout(activity);
+        layout.AddView(progress);
+
+        using var background = new ColorDrawable(Android.Graphics.Color.Transparent);
+        using var builder = new MaterialAlertDialogBuilder(activity);
+        builder.SetView(layout)!.SetCancelable(false);
+        builder.SetBackground(background);
+        var dialog = builder.Create();
+        dialog.SetOnKeyListener(IndicatorKeyListener.Instance);
+        dialog.Show();
+
+        return new IndicatorDismiss(dialog);
+    }
+
+    private sealed class IndicatorKeyListener : Java.Lang.Object, IDialogInterfaceOnKeyListener
+    {
+        public static IndicatorKeyListener Instance { get; } = new();
+
+        public bool OnKey(IDialogInterface? dialog, Keycode keyCode, KeyEvent? e) => keyCode == Keycode.Escape;
+    }
+
+    private sealed class IndicatorDismiss : IDisposable
+    {
+        private readonly AlertDialog dialog;
+
+        public IndicatorDismiss(AlertDialog dialog)
+        {
+            this.dialog = dialog;
+        }
+
+        public void Dispose()
+        {
+            dialog.Dismiss();
+            dialog.Dispose();
+        }
+    }
+
     // 閉じるキーは押した時から受け取り、Android に結果を返さずにダイアログを閉じさせない
     private abstract class KeyDialog : Java.Lang.Object, IDialogInterfaceOnKeyListener
     {

@@ -161,11 +161,19 @@ public static partial class MauiProgram
         {
             options.HandleEnterKey = true;
             options.DisableShowSoftInputOnFocus = true;
+            options.HandleArrowKey = true;
         });
 
 #if ANDROID
         // Font icons
         builder.ConfigureImageSources(static services => services.AddService<FontImageSource>(static provider => new DirectFontImageSourceService(provider.GetRequiredService<IFontManager>())));
+
+        // Esc 1 回で閉じる日付・時刻のダイアログ
+        builder.ConfigureMauiHandlers(static handlers =>
+        {
+            handlers.AddHandler<DatePicker, KeypadDatePickerHandler>();
+            handlers.AddHandler<TimePicker, KeypadTimePickerHandler>();
+        });
 #endif
 
         return builder;

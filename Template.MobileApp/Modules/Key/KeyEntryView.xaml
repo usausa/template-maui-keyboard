@@ -10,9 +10,11 @@
              s:BindingContextResolver.Type="{x:Type module:KeyEntryViewModel}"
              shell:ShellProperty.Title="Entry"
              shell:ShellProperty.Function1Text="Back"
+             shell:ShellProperty.Function2Text="Check"
              shell:ShellProperty.Function3Text="Switch"
              shell:ShellProperty.Function4Text="Set"
              shell:ShellProperty.Function1Enabled="True"
+             shell:ShellProperty.Function2Enabled="True"
              shell:ShellProperty.Function3Enabled="True"
              shell:ShellProperty.Function4Enabled="True">
 
@@ -23,6 +25,8 @@
                behaviors:EntryBind.Controller="{Binding Input2}" />
         <Entry Style="{StaticResource InputEntry}"
                behaviors:EntryBind.Controller="{Binding Input3}" />
+        <Editor Style="{StaticResource InputEditor}"
+                Text="{Binding Memo}" />
     </VerticalStackLayout>
 
 </ContentView>

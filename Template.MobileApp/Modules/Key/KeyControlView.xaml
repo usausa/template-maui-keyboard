@@ -18,14 +18,16 @@
           RadioButtonGroup.SelectedValue="{Binding RadioValue}">
         <HorizontalStackLayout Grid.Row="0"
                                Style="{StaticResource ToggleLayout}">
-            <CheckBox IsChecked="{Binding CheckA}"
+            <CheckBox Style="{StaticResource ToggleCheckBox}"
+                      IsChecked="{Binding CheckA}"
                       input:Shortcut.Key="Num1" />
             <Label Style="{StaticResource ToggleLabel}"
                    Text="1.Check A" />
         </HorizontalStackLayout>
         <HorizontalStackLayout Grid.Row="1"
                                Style="{StaticResource ToggleLayout}">
-            <CheckBox IsChecked="{Binding CheckB}"
+            <CheckBox Style="{StaticResource ToggleCheckBox}"
+                      IsChecked="{Binding CheckB}"
                       input:Shortcut.Key="Num2" />
             <Label Style="{StaticResource ToggleLabel}"
                    Text="2.Check B" />
@@ -36,6 +38,7 @@
                    Style="{StaticResource ToggleLabel}"
                    Text="3.Switch" />
             <Switch Grid.Column="1"
+                    Style="{StaticResource ToggleSwitch}"
                     IsToggled="{Binding SwitchOn}"
                     input:Shortcut.Key="Num3" />
         </Grid>

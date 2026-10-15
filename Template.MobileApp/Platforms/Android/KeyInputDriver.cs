@@ -2,6 +2,7 @@
 // ReSharper disable once CheckNamespace
 namespace Template.MobileApp;
 
+using Android.Text;
 using Android.Views;
 using Android.Widget;
 
@@ -11,7 +12,7 @@ public sealed class KeyInputDriver
 {
     private readonly HashSet<Keycode> consumedKeys = [];
 
-    public bool Process(KeyEvent e, View? focused)
+    public bool Process(KeyEvent e, Window window)
     {
         var entry = KeyMap.Find(e.KeyCode);
         if (entry is null)
@@ -40,9 +41,28 @@ public sealed class KeyInputDriver
             return false;
         }
 
-        if ((focused is EditText editText) && (entry.Editor != EditorKeyMode.Handle))
+        var focused = window.CurrentFocus;
+        var route = ResolveRoute(entry, focused);
+        if ((route == KeyRoute.Editor) && (focused is EditText))
         {
-            return (entry.Editor == EditorKeyMode.Cursor) && IsCursorEdge(editText, entry.Key);
+            return false;
+        }
+
+        if (route == KeyRoute.View)
+        {
+            // コントロールが処理するキー(入力欄の中のカーソルの移動など)はそちらを優先する
+            if (window.SuperDispatchKeyEvent(e))
+            {
+                // 押し続けている途中からコントロールが処理した時も、離すまではコントロールに任せる
+                consumedKeys.Remove(e.KeyCode);
+                return true;
+            }
+
+            // 押し続けて端に来ても、入力欄やキーを処理していたコントロール(スライダーなど)の外へは出さない
+            if ((e.RepeatCount > 0) && ((focused is EditText) || !consumedKeys.Contains(e.KeyCode)))
+            {
+                return true;
+            }
         }
 
         // 押し続けた時の繰り返し
@@ -73,9 +93,9 @@ public sealed class KeyInputDriver
         return consumed;
     }
 
-    private static bool IsCursorEdge(EditText editText, ShortcutKey key)
-    {
-        var position = key == ShortcutKey.Left ? 0 : (editText.Text?.Length ?? 0);
-        return (editText.SelectionStart == position) && (editText.SelectionEnd == position);
-    }
+    // 複数行の入力欄の中の上下は、行の移動を先にする
+    private static KeyRoute ResolveRoute(KeyMapEntry entry, View? focused) =>
+        (entry.Key is ShortcutKey.Up or ShortcutKey.Down) && (focused is EditText editText) && ((editText.InputType & InputTypes.TextFlagMultiLine) != 0)
+            ? KeyRoute.View
+            : entry.Route;
 }

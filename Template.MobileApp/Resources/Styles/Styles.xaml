@@ -768,6 +768,114 @@
         </Setter>
     </Style>
 
+    <Style x:Key="InputEditor"
+           TargetType="Editor">
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="HeightRequest" Value="90" />
+        <Setter Property="behaviors:Border.Color" Value="{StaticResource BorderColor}" />
+        <Setter Property="behaviors:Border.Width" Value="1" />
+        <Setter Property="behaviors:EntryOption.DisableShowSoftInputOnFocus" Value="True" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="White" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource SelectFocusColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource DisabledColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="InputPicker"
+           TargetType="Picker">
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="White" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource SelectFocusColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource DisabledColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="InputDatePicker"
+           TargetType="DatePicker">
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="White" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource SelectFocusColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource DisabledColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="InputTimePicker"
+           TargetType="TimePicker">
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="White" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource SelectFocusColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource DisabledColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
     <!-- ================================================================================ -->
     <!-- Toggle -->
     <!-- ================================================================================ -->
@@ -785,11 +893,68 @@
         <Setter Property="VerticalOptions" Value="Center" />
     </Style>
 
+    <!-- CheckBox はチェックの間 Focused の状態へ移らないので、ここからのフォーカスの色はトリガーで付ける -->
+
+    <Style x:Key="ToggleCheckBox"
+           TargetType="CheckBox">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="behaviors:Focus.DefaultHighlight" Value="False" />
+        <Style.Triggers>
+            <Trigger TargetType="CheckBox" Property="IsFocused" Value="True">
+                <Setter Property="BackgroundColor" Value="{StaticResource SelectFocusColor}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ToggleSwitch"
+           TargetType="Switch">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="behaviors:Focus.DefaultHighlight" Value="False" />
+        <Style.Triggers>
+            <Trigger TargetType="Switch" Property="IsFocused" Value="True">
+                <Setter Property="BackgroundColor" Value="{StaticResource SelectFocusColor}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="ToggleRadioButton"
            TargetType="RadioButton">
         <Setter Property="TextColor" Value="{StaticResource SecondaryTextColor}" />
         <Setter Property="FontSize" Value="24" />
         <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="behaviors:Focus.DefaultHighlight" Value="False" />
+        <Style.Triggers>
+            <Trigger TargetType="RadioButton" Property="IsFocused" Value="True">
+                <Setter Property="BackgroundColor" Value="{StaticResource SelectFocusColor}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- ================================================================================ -->
+    <!-- Slider / Stepper -->
+    <!-- ================================================================================ -->
+
+    <Style x:Key="InputSlider"
+           TargetType="Slider">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="behaviors:Focus.DefaultHighlight" Value="False" />
+        <Style.Triggers>
+            <Trigger TargetType="Slider" Property="IsFocused" Value="True">
+                <Setter Property="BackgroundColor" Value="{StaticResource SelectFocusColor}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="InputStepper"
+           TargetType="Stepper">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="behaviors:Focus.DefaultHighlight" Value="False" />
+        <Style.Triggers>
+            <Trigger TargetType="Stepper" Property="IsFocused" Value="True">
+                <Setter Property="BackgroundColor" Value="{StaticResource SelectFocusColor}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <!-- ================================================================================ -->
