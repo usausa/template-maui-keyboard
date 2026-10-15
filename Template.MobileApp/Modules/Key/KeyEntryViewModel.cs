@@ -2,14 +2,19 @@ namespace Template.MobileApp.Modules.Key;
 
 using System.Diagnostics;
 
+[GenerateAccessor]
 public sealed partial class KeyEntryViewModel : AppViewModelBase
 {
     private readonly IDialog dialog;
 
-    private readonly InputValidator validator;
-
+    [Required(ErrorMessage = "Input1 is required")]
     public EntryController Input1 { get; }
+
+    [Required(ErrorMessage = "Input2 is required")]
     public EntryController Input2 { get; }
+
+    [Required(ErrorMessage = "Input3 must be 3 digits")]
+    [RegularExpression("^[0-9]{3}$", ErrorMessage = "Input3 must be 3 digits")]
     public EntryController Input3 { get; }
 
     [ObservableProperty]
@@ -27,8 +32,6 @@ public sealed partial class KeyEntryViewModel : AppViewModelBase
         Input1 = new EntryController(MakeDelegateCommand<EntryCompleteEvent>(Input1Complete));
         Input2 = new EntryController(MakeDelegateCommand<EntryCompleteEvent>(Input2Complete));
         Input3 = new EntryController(MakeDelegateCommand<EntryCompleteEvent>(Input3Complete));
-
-        validator = new InputValidator(dialog, Validations());
     }
 
     //--------------------------------------------------------------------------------
@@ -41,7 +44,7 @@ public sealed partial class KeyEntryViewModel : AppViewModelBase
 
     protected override async Task OnNotifyFunction2()
     {
-        if (await validator.ValidateAsync())
+        if (await ValidateInputsAsync(dialog, nameof(Input1), nameof(Input2), nameof(Input3)))
         {
             await dialog.InformationAsync("OK");
         }
@@ -90,16 +93,5 @@ public sealed partial class KeyEntryViewModel : AppViewModelBase
             // Input1 に戻したので、次の欄へは移さない
             ice.Handled = true;
         }
-    }
-
-    //--------------------------------------------------------------------------------
-    // Helper
-    //--------------------------------------------------------------------------------
-
-    private IEnumerable<ValidationRule> Validations()
-    {
-        yield return ValidationRule.Required(Input1, "Input1 is required");
-        yield return ValidationRule.Required(Input2, "Input2 is required");
-        yield return ValidationRule.Make(Input3, static x => (x?.Length == 3) && x.All(Char.IsAsciiDigit), "Input3 must be 3 digits");
     }
 }

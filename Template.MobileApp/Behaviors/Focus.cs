@@ -1,9 +1,7 @@
 namespace Template.MobileApp.Behaviors;
 
-public static partial class Focus
+public static class Focus
 {
-    public static partial void UseCustomMapper(BehaviorOptions options);
-
     public static readonly BindableProperty SuppressDefaultFocusProperty = BindableProperty.CreateAttached(
         "SuppressDefaultFocus",
         typeof(bool),

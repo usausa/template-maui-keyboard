@@ -1,6 +1,7 @@
 namespace Template.MobileApp.Modules;
 
 using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 using Smart.Mvvm.Resolver;
 
@@ -24,11 +25,34 @@ internal static class ValidationHelper
         };
         validationResults ??= [];
 
-        if (!Validator.TryValidateProperty(value, context, validationResults))
+        // 入力欄(EntryController)は、プロパティの属性でその Text を確かめる
+        var valid = value is EntryController input
+            ? Validator.TryValidateValue(input.Text ?? string.Empty, context, validationResults, target.GetType().GetProperty(name)!.GetCustomAttributes<ValidationAttribute>())
+            : Validator.TryValidateProperty(value, context, validationResults);
+        if (!valid)
         {
             errors.AddError(name, validationResults[0].ErrorMessage!);
         }
 
         validationResults.Clear();
+    }
+
+    // 名前の順に確かめ、最初のエラーのメッセージを出してから、その入力欄(EntryController)へフォーカスを移す
+    public static async ValueTask<bool> ValidateInputsAsync(object target, ErrorInfo errors, IDialog dialog, string[] names)
+    {
+        foreach (var name in names)
+        {
+            errors.ClearErrors(name);
+            Validate(target, name, errors);
+        }
+
+        var error = Array.Find(names, errors.Contains);
+        if (error is not null)
+        {
+            await dialog.InformationAsync(errors[error]!);
+            (AccessorProvider.FindAccessor(target.GetType())?.GetValue(target, error) as EntryController)?.Focus();
+        }
+
+        return error is null;
     }
 }
