@@ -438,3 +438,5 @@ CLAUDE.local.md
 # Custom
 desktop.ini
 __*
+.EmbeddedProperty.props
+.Signing.props

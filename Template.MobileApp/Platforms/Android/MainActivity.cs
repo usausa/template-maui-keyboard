@@ -14,11 +14,11 @@ using AndroidX.Activity;
     MainLauncher = true,
     AlwaysRetainTaskState = true,
     LaunchMode = LaunchMode.SingleInstance,
-    ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density,
+    ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden | ConfigChanges.Navigation,
     ScreenOrientation = ScreenOrientation.Portrait)]
 public sealed class MainActivity : MauiAppCompatActivity
 {
-    private KeyInputDriver keyInputDriver = default!;
+    private readonly KeyInputDriver keyInputDriver = new();
 
     private BackPressedCallback? backPressedCallback;
 
@@ -28,8 +28,6 @@ public sealed class MainActivity : MauiAppCompatActivity
         Theme?.ApplyStyle(_Microsoft.Android.Resource.Designer.ResourceConstant.Style.NoOverScrollTheme, true);
 
         base.OnCreate(savedInstanceState);
-
-        keyInputDriver = new KeyInputDriver(this);
 
         backPressedCallback = new BackPressedCallback(this);
         OnBackPressedDispatcher.AddCallback(this, backPressedCallback);
@@ -48,7 +46,7 @@ public sealed class MainActivity : MauiAppCompatActivity
 
     public override bool DispatchKeyEvent(Android.Views.KeyEvent? e)
     {
-        if (keyInputDriver.Process(e!))
+        if ((e is not null) && keyInputDriver.Process(e, CurrentFocus))
         {
             return true;
         }

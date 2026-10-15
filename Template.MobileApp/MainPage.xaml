@@ -41,7 +41,7 @@
 
     <ContentPage.Behaviors>
         <s:AppLifecycleBehavior />
-        <input:InputPageBehavior />
+        <input:InputBehavior IsBusy="{Binding BusyState.IsBusy}" />
         <shell:ShellUpdateBehavior Navigator="{Binding Navigator, Mode=OneTime}" />
         <mct:StatusBarBehavior ApplyOn="OnBehaviorAttachedTo"
                                StatusBarColor="{StaticResource BlueDefault}"

@@ -61,14 +61,17 @@ public static class Extensions
         {
             if (Focus.GetDefault(visualElement))
             {
-                visualElement.Focus();
+                ElementHelper.RequestFocus(visualElement);
                 return;
             }
 
             first ??= visualElement;
         }
 
-        first?.Focus();
+        if (first is not null)
+        {
+            ElementHelper.RequestFocus(first);
+        }
     }
 
     //--------------------------------------------------------------------------------

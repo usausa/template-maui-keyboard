@@ -4,6 +4,7 @@
              xmlns:s="http://smart/maui"
              xmlns:shell="clr-namespace:Template.MobileApp.Shell"
              xmlns:module="clr-namespace:Template.MobileApp.Modules.Key"
+             xmlns:input="clr-namespace:Template.MobileApp.Input"
              x:Class="Template.MobileApp.Modules.Key.KeyListView"
              x:DataType="{x:Type module:KeyListViewModel}"
              s:BindingContextResolver.Type="{x:Type module:KeyListViewModel}"
@@ -11,6 +12,27 @@
              shell:ShellProperty.Function1Text="Back"
              shell:ShellProperty.Function1Enabled="True">
 
-    <VerticalStackLayout />
+    <Grid Style="{StaticResource MenuGrid}"
+          RowDefinitions="Auto,*">
+        <Label Grid.Row="0"
+               Style="{StaticResource ResultLabel}"
+               Text="{Binding Result, StringFormat='Result: {0}'}" />
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Items}"
+                        SelectionMode="Single">
+            <CollectionView.Behaviors>
+                <input:CollectionViewShortcutBehavior Command="{Binding SelectCommand}"
+                                                      KeyCode="Enter" />
+            </CollectionView.Behaviors>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="x:String">
+                    <Grid Style="{StaticResource ItemCollectionGrid}">
+                        <Label Style="{StaticResource ItemCollectionLabel}"
+                               Text="{Binding .}" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
 
 </ContentView>

@@ -25,6 +25,8 @@ using Template.MobileApp.Diagnostics;
 using Template.MobileApp.Extender;
 using Template.MobileApp.Modules;
 
+using Keycode = Android.Views.Keycode;
+
 public static partial class MauiProgram
 {
     private const string ModulesNamespace = "Template.MobileApp.Modules";
@@ -218,20 +220,21 @@ public static partial class MauiProgram
         services.AddViewModels();
 
         // MauiComponents
+        // ダイアログは物理キーの扱いを足した版を使う(AddComponentsDialog より先に登録する)
+        services.AddSingleton<IDialog, KeypadDialog>();
         services.AddComponentsDialog(static c =>
         {
             ConfigureDialogDesign(c);
-#if DEVICE_HAS_KEYPAD
-            c.DismissKeys = new[] { Keycode.Escape, Keycode.Del };
-            c.IgnorePromptDismissKeys = new[] { Keycode.Del };
+            c.DismissKeys = [Keycode.Escape, Keycode.Del];
+            c.IgnorePromptDismissKeys = [Keycode.Del];
             c.EnableDialogButtonFocus = true;
-#endif
             c.EnablePromptEnterAction = true;
             c.EnablePromptSelectAll = true;
         });
         services.AddComponentsPopup(static c => c.AutoRegister(DialogSource()));
         services.AddComponentsPopupPlugin<PopupActivationPlugin>();
         services.AddComponentsPopupPlugin<PopupFocusPlugin>();
+        services.AddComponentsPopupPlugin<PopupInputPlugin>();
         services.AddComponentsScreen();
         services.AddComponentsLocation();
         services.AddComponentsSpeech();

@@ -2,6 +2,8 @@ namespace Template.MobileApp.Input;
 
 using System;
 
+using Template.MobileApp.Helpers;
+
 public static class FocusHelper
 {
     public static async ValueTask<T> WithRestoreFocus<T>(Func<ValueTask<T>> func)
@@ -13,7 +15,7 @@ public static class FocusHelper
         if (focused is not null)
         {
 #pragma warning disable CA1849
-            Application.Current?.Dispatcher.Dispatch(() => focused.Focus());
+            Application.Current?.Dispatcher.Dispatch(() => ElementHelper.RequestFocus(focused));
 #pragma warning restore CA1849
         }
 
@@ -29,7 +31,7 @@ public static class FocusHelper
         if (focused is not null)
         {
 #pragma warning disable CA1849
-            Application.Current?.Dispatcher.Dispatch(() => focused.Focus());
+            Application.Current?.Dispatcher.Dispatch(() => ElementHelper.RequestFocus(focused));
 #pragma warning restore CA1849
         }
     }

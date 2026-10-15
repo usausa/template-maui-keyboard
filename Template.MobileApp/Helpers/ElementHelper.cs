@@ -69,6 +69,21 @@ public static partial class ElementHelper
         }
     }
 
+    // タッチの後でもボタンにフォーカスを置き、キーをアプリで受け取る(入力欄は MAUI の Focus でソフトキーボードも扱う)
+    public static void RequestFocus(VisualElement element)
+    {
+        if (element is InputView)
+        {
+            element.Focus();
+        }
+        else
+        {
+            PlatformRequestFocus(element);
+        }
+    }
+
+    private static partial void PlatformRequestFocus(VisualElement element);
+
     public static bool MoveFocus(VisualElement parent, bool forward) =>
         PlatformMoveFocus(parent, null, forward);
 

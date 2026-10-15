@@ -4,6 +4,7 @@
              xmlns:s="http://smart/maui"
              xmlns:shell="clr-namespace:Template.MobileApp.Shell"
              xmlns:module="clr-namespace:Template.MobileApp.Modules.Key"
+             xmlns:input="clr-namespace:Template.MobileApp.Input"
              x:Class="Template.MobileApp.Modules.Key.KeyMiscView"
              x:DataType="{x:Type module:KeyMiscViewModel}"
              s:BindingContextResolver.Type="{x:Type module:KeyMiscViewModel}"
@@ -11,6 +12,56 @@
              shell:ShellProperty.Function1Text="Back"
              shell:ShellProperty.Function1Enabled="True">
 
-    <VerticalStackLayout />
+    <Grid Style="{StaticResource MenuGrid}"
+          RowDefinitions="Auto,*,*,*,*,*,*,*,*,*">
+        <Label Grid.Row="0"
+               Style="{StaticResource ResultLabel}"
+               Text="{Binding Result, StringFormat='Result: {0}'}" />
+        <Button Grid.Row="1"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding InformationCommand}"
+                input:Shortcut.Key="Num1"
+                Text="1.Information" />
+        <Button Grid.Row="2"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding ConfirmCommand}"
+                input:Shortcut.Key="Num2"
+                Text="2.Confirm" />
+        <Button Grid.Row="3"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding Confirm3Command}"
+                input:Shortcut.Key="Num3"
+                Text="3.Confirm3" />
+        <Button Grid.Row="4"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding SelectCommand}"
+                input:Shortcut.Key="Num4"
+                Text="4.Select" />
+        <Button Grid.Row="5"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding PromptCommand}"
+                input:Shortcut.Key="Num5"
+                Text="5.Prompt" />
+        <Button Grid.Row="6"
+                Style="{StaticResource MenuButton}"
+                Command="{Binding NumberCommand}"
+                input:Shortcut.Key="Num6"
+                Text="6.Number" />
+        <Button Grid.Row="7"
+                Style="{StaticResource MenuButton}"
+                IsEnabled="False"
+                input:Shortcut.Key="Num7"
+                Text="" />
+        <Button Grid.Row="8"
+                Style="{StaticResource MenuButton}"
+                IsEnabled="False"
+                input:Shortcut.Key="Num8"
+                Text="" />
+        <Button Grid.Row="9"
+                Style="{StaticResource MenuButton}"
+                IsEnabled="False"
+                input:Shortcut.Key="Num9"
+                Text="" />
+    </Grid>
 
 </ContentView>

@@ -6,9 +6,15 @@ public sealed class InputManager
 
     private readonly List<IInputHandler> handlers = [];
 
-    public void PushHandler(IInputHandler handler) => handlers.Add(handler);
+    public void PushHandler(IInputHandler handler)
+    {
+        handlers.Remove(handler);
+        handlers.Add(handler);
+    }
 
     public void PopHandler(IInputHandler handler) => handlers.Remove(handler);
+
+    public bool CanProcess(ShortcutKey key) => (handlers.Count > 0) && handlers[^1].CanHandle(key);
 
     public bool Process(ShortcutKey key) => (handlers.Count > 0) && handlers[^1].Handle(key);
 

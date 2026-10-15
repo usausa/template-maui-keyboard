@@ -74,6 +74,9 @@ public sealed class ShortcutBehavior : BehaviorBase<Element>, IShortcutBehavior
         set => SetValue(ConverterParameterProperty, value);
     }
 
+    public bool CanHandle(ShortcutKey key) =>
+        (KeyCode == key) && (AssociatedObject is not null) && (Command is not null);
+
     public bool Handle(ShortcutKey key)
     {
         if ((KeyCode != key) || (AssociatedObject is null))

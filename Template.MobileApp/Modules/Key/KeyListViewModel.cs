@@ -1,7 +1,23 @@
 namespace Template.MobileApp.Modules.Key;
 
-public sealed class KeyListViewModel : AppViewModelBase
+public sealed partial class KeyListViewModel : AppViewModelBase
 {
+    [ObservableProperty]
+    public partial string Result { get; set; } = "-";
+
+    public IReadOnlyList<string> Items { get; } = Enumerable.Range(1, 20).Select(static x => $"Item-{x}").ToArray();
+
+    public IObserveCommand SelectCommand { get; }
+
+    //--------------------------------------------------------------------------------
+    // Constructor
+    //--------------------------------------------------------------------------------
+
+    public KeyListViewModel()
+    {
+        SelectCommand = MakeDelegateCommand<string>(x => Result = x);
+    }
+
     //--------------------------------------------------------------------------------
     // Navigation
     //--------------------------------------------------------------------------------

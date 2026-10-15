@@ -1,5 +1,8 @@
 namespace Template.MobileApp.Behaviors;
 
+using Android.App;
+using Android.Content;
+using Android.Content.Res;
 using Android.Text;
 using Android.Views;
 using Android.Views.InputMethods;
@@ -9,8 +12,17 @@ using Java.Lang;
 
 using Microsoft.Maui.Handlers;
 
+using KeyboardType = Android.Content.Res.KeyboardType;
+
 public static partial class EntryOption
 {
+    // DisableShowSoftInputOnFocus の入力欄(ハードキーボードの有無が変わった時に設定し直す)
+    private static readonly ConditionalWeakTable<TextView, object> SoftInputViews = [];
+
+    private static readonly KeyboardCallbacks KeyboardChanged = new();
+
+    private static bool hardKeyboard;
+
     public static partial void UseCustomMapper(BehaviorOptions options)
     {
         // HandleEnterKey
@@ -23,6 +35,9 @@ public static partial class EntryOption
         // DisableShowSoftInputOnFocus
         if (options.DisableShowSoftInputOnFocus)
         {
+            hardKeyboard = HasHardKeyboard(Application.Context.Resources!.Configuration!);
+            Application.Context.RegisterComponentCallbacks(KeyboardChanged);
+
             EntryHandler.Mapper.AppendToMapping(DisableShowSoftInputOnFocusProperty.PropertyName, static (handler, _) => UpdateDisableShowSoftInputOnFocus(handler.PlatformView, (Entry)handler.VirtualView));
             EditorHandler.Mapper.AppendToMapping(DisableShowSoftInputOnFocusProperty.PropertyName, static (handler, _) => UpdateDisableShowSoftInputOnFocus(handler.PlatformView, (Editor)handler.VirtualView));
         }
@@ -34,6 +49,17 @@ public static partial class EntryOption
             EditorHandler.Mapper.AppendToMapping(SelectAllOnFocusProperty.PropertyName, static (handler, _) => UpdateSelectAllOnFocus(handler.PlatformView, (Editor)handler.VirtualView));
         }
 
+        // NoBorder
+        if (options.NoBorder)
+        {
+            EntryHandler.Mapper.AppendToMapping(NoBorderProperty.PropertyName, static (handler, _) => UpdateHandleNoBorder(handler.PlatformView, (Entry)handler.VirtualView));
+            EditorHandler.Mapper.AppendToMapping(NoBorderProperty.PropertyName, static (handler, _) => UpdateHandleNoBorder(handler.PlatformView, (Editor)handler.VirtualView));
+            PickerHandler.Mapper.AppendToMapping(NoBorderProperty.PropertyName, static (handler, _) => UpdateHandleNoBorder(handler.PlatformView, (Picker)handler.VirtualView));
+            DatePickerHandler.Mapper.AppendToMapping(NoBorderProperty.PropertyName, static (handler, _) => UpdateHandleNoBorder(handler.PlatformView, (BindableObject)handler.VirtualView));
+            TimePickerHandler.Mapper.AppendToMapping(NoBorderProperty.PropertyName, static (handler, _) => UpdateHandleNoBorder(handler.PlatformView, (BindableObject)handler.VirtualView));
+            SearchBarHandler.Mapper.AppendToMapping(NoBorderProperty.PropertyName, static (handler, _) => UpdateSearchBarNoBorder(handler.PlatformView, (SearchBar)handler.VirtualView));
+        }
+
         // InputFilter
         if (options.InputFilter)
         {
@@ -42,16 +68,66 @@ public static partial class EntryOption
         }
     }
 
+    // ハードキーボード(キーパッドを含む)がある間だけ、フォーカスでソフトキーボードを出さない
     private static void UpdateDisableShowSoftInputOnFocus(TextView editText, BindableObject element)
     {
         var value = GetDisableShowSoftInputOnFocus(element);
-        editText.ShowSoftInputOnFocus = !value;
+        SoftInputViews.AddOrUpdate(editText, value);
+        editText.ShowSoftInputOnFocus = !(value && hardKeyboard);
+    }
+
+    private static bool HasHardKeyboard(Configuration configuration) =>
+        (configuration.Keyboard != KeyboardType.Nokeys) && (configuration.HardKeyboardHidden != HardKeyboardHidden.Yes);
+
+    private sealed class KeyboardCallbacks : Object, IComponentCallbacks
+    {
+        public void OnConfigurationChanged(Configuration newConfig)
+        {
+            var value = HasHardKeyboard(newConfig);
+            if (value == hardKeyboard)
+            {
+                return;
+            }
+
+            hardKeyboard = value;
+            foreach (var (editText, disable) in SoftInputViews)
+            {
+                if (editText.Handle != IntPtr.Zero)
+                {
+                    editText.ShowSoftInputOnFocus = !((bool)disable && value);
+                }
+            }
+        }
+
+        public void OnLowMemory()
+        {
+        }
     }
 
     private static void UpdateSelectAllOnFocus(TextView editText, BindableObject element)
     {
         var value = GetSelectAllOnFocus(element);
         editText.SetSelectAllOnFocus(value);
+    }
+
+    // 指定の無い入力欄の色合いは変えない(null に戻すと背景色が黒くなる)
+    private static void UpdateHandleNoBorder(TextView editText, BindableObject element)
+    {
+        if (GetNoBorder(element))
+        {
+            editText.BackgroundTintList = ColorStateList.ValueOf(Android.Graphics.Color.Transparent);
+        }
+    }
+
+    // SearchView の下線は入力欄ではなく、入力欄を囲む search_plate の背景
+    private static void UpdateSearchBarNoBorder(View searchView, BindableObject element)
+    {
+        var plate = searchView.FindViewById(_Microsoft.Android.Resource.Designer.ResourceConstant.Id.search_plate);
+        if (plate is not null)
+        {
+            var value = GetNoBorder(element);
+            plate.BackgroundTintList = value ? ColorStateList.ValueOf(Android.Graphics.Color.Transparent) : null;
+        }
     }
 
     private static void UpdateInputFilter(TextView editText, BindableObject element)
@@ -81,13 +157,12 @@ public static partial class EntryOption
     private static void UpdateHandleEnterKey(EditText editText, BindableObject element)
     {
         var value = GetHandleEnterKey(element);
+
+        // Mapper再実行時の多重購読を防ぐため一度解除してから購読する
+        editText.EditorAction -= OnEditorAction;
         if (value)
         {
             editText.EditorAction += OnEditorAction;
-        }
-        else
-        {
-            editText.EditorAction -= OnEditorAction;
         }
     }
 
