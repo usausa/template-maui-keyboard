@@ -5,5 +5,6 @@ public enum ViewId
     KeyMenu,
     KeyEntry,
     KeyList,
-    KeyMisc
+    KeyMisc,
+    KeyControl
 }

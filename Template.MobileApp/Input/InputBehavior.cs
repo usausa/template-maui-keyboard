@@ -91,7 +91,9 @@ public sealed partial class InputBehavior : BehaviorBase<VisualElement>, IInputH
             return true;
         }
 
-        return (key is ShortcutKey.Up or ShortcutKey.Down) || (FindShortcutButton(AssociatedObject, key) is not null);
+        return (key is ShortcutKey.Up or ShortcutKey.Down) ||
+               (FindShortcut(AssociatedObject, key) is not null) ||
+               ((key == ShortcutKey.Escape) && (AssociatedObject is Page));
     }
 
     public bool Handle(ShortcutKey key)
@@ -118,10 +120,17 @@ public sealed partial class InputBehavior : BehaviorBase<VisualElement>, IInputH
             return ElementHelper.MoveFocus(AssociatedObject, key == ShortcutKey.Down);
         }
 
-        var button = FindShortcutButton(AssociatedObject, key);
-        if (button is not null)
+        var element = FindShortcut(AssociatedObject, key);
+        if (element is not null)
         {
-            button.SendClicked();
+            InvokeShortcut(element);
+            return true;
+        }
+
+        // 画面の Esc は Android の戻るキーと同じ
+        if ((key == ShortcutKey.Escape) && (AssociatedObject is Page page))
+        {
+            page.SendBackButtonPressed();
             return true;
         }
 
@@ -131,6 +140,29 @@ public sealed partial class InputBehavior : BehaviorBase<VisualElement>, IInputH
     public VisualElement? FindFocused() =>
         AssociatedObject is not null ? ElementHelper.FindFocused(AssociatedObject) : null;
 
-    private static Button? FindShortcutButton(VisualElement parent, ShortcutKey key) =>
-        ElementHelper.EnumerateActive<Button>(parent).FirstOrDefault(key, static (x, s) => Shortcut.GetKey(x) == s);
+    private static VisualElement? FindShortcut(VisualElement parent, ShortcutKey key) =>
+        ElementHelper.EnumerateActive<VisualElement>(parent).FirstOrDefault(key, static (x, s) => Shortcut.GetKey(x) == s);
+
+    // タッチと同じ操作をする(フォーカスは動かさない)
+    private static void InvokeShortcut(VisualElement element)
+    {
+        switch (element)
+        {
+            case IButtonController button:
+                button.SendClicked();
+                break;
+            case CheckBox checkBox:
+                checkBox.IsChecked = !checkBox.IsChecked;
+                break;
+            case Switch toggle:
+                toggle.IsToggled = !toggle.IsToggled;
+                break;
+            case RadioButton radioButton:
+                radioButton.IsChecked = true;
+                break;
+            default:
+                ElementHelper.RequestFocus(element);
+                break;
+        }
+    }
 }

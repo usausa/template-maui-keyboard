@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:s="http://smart/maui"
+             xmlns:shell="clr-namespace:Template.MobileApp.Shell"
+             xmlns:module="clr-namespace:Template.MobileApp.Modules.Key"
+             xmlns:input="clr-namespace:Template.MobileApp.Input"
+             x:Class="Template.MobileApp.Modules.Key.KeyControlView"
+             x:DataType="{x:Type module:KeyControlViewModel}"
+             s:BindingContextResolver.Type="{x:Type module:KeyControlViewModel}"
+             shell:ShellProperty.Title="Control"
+             shell:ShellProperty.Function1Text="Back"
+             shell:ShellProperty.Function1Enabled="True">
+
+    <Grid Style="{StaticResource MenuGrid}"
+          RowDefinitions="*,*,*,*,*,*,*,*,*"
+          RadioButtonGroup.GroupName="Radio"
+          RadioButtonGroup.SelectedValue="{Binding RadioValue}">
+        <HorizontalStackLayout Grid.Row="0"
+                               Style="{StaticResource ToggleLayout}">
+            <CheckBox IsChecked="{Binding CheckA}"
+                      input:Shortcut.Key="Num1" />
+            <Label Style="{StaticResource ToggleLabel}"
+                   Text="1.Check A" />
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Grid.Row="1"
+                               Style="{StaticResource ToggleLayout}">
+            <CheckBox IsChecked="{Binding CheckB}"
+                      input:Shortcut.Key="Num2" />
+            <Label Style="{StaticResource ToggleLabel}"
+                   Text="2.Check B" />
+        </HorizontalStackLayout>
+        <Grid Grid.Row="2"
+              ColumnDefinitions="*,Auto">
+            <Label Grid.Column="0"
+                   Style="{StaticResource ToggleLabel}"
+                   Text="3.Switch" />
+            <Switch Grid.Column="1"
+                    IsToggled="{Binding SwitchOn}"
+                    input:Shortcut.Key="Num3" />
+        </Grid>
+        <RadioButton Grid.Row="3"
+                     Style="{StaticResource ToggleRadioButton}"
+                     input:Shortcut.Key="Num4"
+                     Value="A"
+                     Content="4.Radio A" />
+        <RadioButton Grid.Row="4"
+                     Style="{StaticResource ToggleRadioButton}"
+                     input:Shortcut.Key="Num5"
+                     Value="B"
+                     Content="5.Radio B" />
+        <RadioButton Grid.Row="5"
+                     Style="{StaticResource ToggleRadioButton}"
+                     input:Shortcut.Key="Num6"
+                     Value="C"
+                     Content="6.Radio C" />
+    </Grid>
+
+</ContentView>

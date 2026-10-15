@@ -769,6 +769,30 @@
     </Style>
 
     <!-- ================================================================================ -->
+    <!-- Toggle -->
+    <!-- ================================================================================ -->
+
+    <Style x:Key="ToggleLayout"
+           TargetType="HorizontalStackLayout">
+        <Setter Property="Spacing" Value="6" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <Style x:Key="ToggleLabel"
+           TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource SecondaryTextColor}" />
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <Style x:Key="ToggleRadioButton"
+           TargetType="RadioButton">
+        <Setter Property="TextColor" Value="{StaticResource SecondaryTextColor}" />
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <!-- ================================================================================ -->
     <!-- CollectionView -->
     <!-- ================================================================================ -->
 
