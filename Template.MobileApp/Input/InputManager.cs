@@ -14,6 +14,8 @@ public sealed class InputManager
 
     public void PopHandler(IInputHandler handler) => handlers.Remove(handler);
 
+    public bool IsBusy => (handlers.Count > 0) && handlers[^1].IsBusy;
+
     public bool CanProcess(ShortcutKey key) => (handlers.Count > 0) && handlers[^1].CanHandle(key);
 
     public bool Process(ShortcutKey key) => (handlers.Count > 0) && handlers[^1].Handle(key);

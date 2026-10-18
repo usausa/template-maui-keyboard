@@ -3,6 +3,7 @@ namespace Template.MobileApp.Behaviors;
 using Smart.Maui.Interactivity;
 
 using Template.MobileApp.Helpers;
+using Template.MobileApp.Input;
 using Template.MobileApp.Messaging;
 
 public static class EntryBind
@@ -90,7 +91,8 @@ public static class EntryBind
 
         private void BindableOnCompleted(object? sender, EventArgs e)
         {
-            if (controller is null)
+            // 処理中は、確定のコマンドも次の欄への移動もしない(IME の確定やソフトキーボードのボタンからも来る)
+            if ((controller is null) || InputManager.Default.IsBusy)
             {
                 return;
             }

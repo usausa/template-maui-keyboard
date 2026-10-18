@@ -12,6 +12,9 @@ public sealed class KeyInputDriver
 {
     private readonly HashSet<Keycode> consumedKeys = [];
 
+    // 処理中に押したキー(離した時も捨てる)
+    private readonly HashSet<Keycode> discardedKeys = [];
+
     public bool Process(KeyEvent e, Window window)
     {
         var entry = KeyMap.Find(e.KeyCode);
@@ -23,6 +26,12 @@ public sealed class KeyInputDriver
         // 押した時に受け取ったキーは、離した時も Android に渡さない
         if (e.Action == KeyEventActions.Up)
         {
+            if (discardedKeys.Remove(e.KeyCode))
+            {
+                consumedKeys.Remove(e.KeyCode);
+                return true;
+            }
+
             if (!consumedKeys.Remove(e.KeyCode))
             {
                 return false;
@@ -40,6 +49,16 @@ public sealed class KeyInputDriver
         {
             return false;
         }
+
+        // 処理中は、入力欄やコントロールにも渡さずに捨てる
+        if (InputManager.Default.IsBusy)
+        {
+            discardedKeys.Add(e.KeyCode);
+            return true;
+        }
+
+        // 処理が終わった後のキーは受け付ける(押し続けている途中も)
+        discardedKeys.Remove(e.KeyCode);
 
         var focused = window.CurrentFocus;
         var route = ResolveRoute(entry, focused);

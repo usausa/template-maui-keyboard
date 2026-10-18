@@ -22,6 +22,9 @@ public sealed partial class InputBehavior : BehaviorBase<VisualElement>, IInputH
         set => SetValue(IsBusyProperty, value);
     }
 
+    // 処理中と閉じている途中は、キーを捨てる
+    bool IInputHandler.IsBusy => IsBusy || closing;
+
     protected override void OnAttachedTo(VisualElement bindable)
     {
         base.OnAttachedTo(bindable);

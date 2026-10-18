@@ -11,7 +11,7 @@ MainActivity.DispatchKeyEvent / ポップアップのダイアログの OnKeyLis
   └─ KeyInputDriver ……… KeyMap で端末のキーを ShortcutKey に変える。処理しないキーは Android へ
        └─ InputManager ……… いちばん上のハンドラー(画面か、開いているポップアップ)へ配る
             └─ InputBehavior
-                 ├─ ① 処理中(BusyState)の間は捨てる
+                 ├─ ① 処理中(BusyState)の間は捨てる。入力欄・コントロールに渡すキーも、KeyInputDriver が捨てる
                  ├─ ② フォーカスのある要素の IShortcutBehavior(CollectionViewShortcutBehavior など)
                  ├─ ③ 上下左右 → フォーカスの移動(XAML に書いた順)
                  ├─ ④ Shortcut.Key が一致する要素 → タッチと同じ操作
@@ -104,6 +104,8 @@ MainActivity.DispatchKeyEvent / ポップアップのダイアログの OnKeyLis
 ### 入力欄
 
 Enter で `EntryController` のコマンドを呼び、`Handled` でなければ次の欄へ移る。`Focus()` でその欄へフォーカスを置く。ハードキーボードがある間は、入力欄にフォーカスがあってもソフトキーボードを出さない(`InputEntry` のスタイル。フォーカス済みの欄への `Focus()` でも出さない)。出す時は `ShowSoftInputAsync()` を呼ぶ。
+
+処理中(BusyState)は、入力欄へのキーと Enter の確定(次の欄への移動)も受け付けない。ただし、IME が先に受け取るキー(Gboard の日本語での数字の組み立てと、その確定)はアプリのキーの処理を通らないので、処理中でも止められない。
 
 ```xml
 <Entry Style="{StaticResource InputEntry}"
