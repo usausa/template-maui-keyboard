@@ -2,7 +2,8 @@
 
 English | [日本語](README.ja.md)
 
-A MAUI template for Android apps operated only with physical keys (digits, arrows, Enter, Esc, F1 to F4, and so on). For devices with physical keys.
+A MAUI template for Android apps operated only with physical keys (digits, arrows, Enter, Esc, F1 to F4, and so on).  
+For devices with physical keys.
 
 <img width="40%" src="Document/Images/HT.jpg" />
 
@@ -45,7 +46,8 @@ MainActivity.DispatchKeyEvent / OnKeyListener of the popup dialog
 
 ### Number keys and F keys
 
-An element with `Shortcut.Key` performs the same action as a touch when that key is pressed (presses a Button, toggles a CheckBox or Switch, selects a RadioButton, and puts focus on other elements). F1 to F4 are the function buttons at the bottom of the screen (`ShellProperty.Function1Text`, etc.).
+An element with `Shortcut.Key` performs the same action as a touch when that key is pressed (presses a Button, toggles a CheckBox or Switch, selects a RadioButton, and puts focus on other elements).  
+F1 to F4 are the function buttons at the bottom of the screen (`ShellProperty.Function1Text`, etc.).
 
 ```xml
 <Button Style="{StaticResource MenuButton}"
@@ -57,7 +59,8 @@ An element with `Shortcut.Key` performs the same action as a touch when that key
 
 ### Focus movement
 
-Up/Down/Left/Right move the focus to the previous or next element in the order written in XAML. The range is limited to the screen, and the focus stops at the ends.
+Up/Down/Left/Right move the focus to the previous or next element in the order written in XAML.  
+The range is limited to the screen, and the focus stops at the ends.
 
 | Attached property | Set on | Behavior |
 |---|---|---|
@@ -74,7 +77,9 @@ Up/Down/Left/Right move the focus to the previous or next element in the order w
 
 ### Lists
 
-Up/Down select a row, and from the first or last row the focus moves out of the list. The `KeyCode` key passes the selected row to `Command`. `SelectByNumberKey` selects rows 1 to 9 with keys 1 to 9.
+Up/Down select a row, and from the first or last row the focus moves out of the list.  
+The `KeyCode` key passes the selected row to `Command`.  
+`SelectByNumberKey` selects rows 1 to 9 with keys 1 to 9.
 
 ```xml
 <CollectionView ItemsSource="{Binding Items}"
@@ -89,9 +94,14 @@ Up/Down select a row, and from the first or last row the focus moves out of the 
 
 ### Input fields
 
-Enter calls the command of `EntryController` and, unless `Handled`, moves to the next field. `Focus()` puts the focus on that field. While a hardware keyboard is present, the soft keyboard does not appear even when an input field has focus (the `InputEntry` style. It does not appear on `Focus()` to an already focused field either). To show it, call `ShowSoftInputAsync()`.
+Enter calls the command of `EntryController` and, unless `Handled`, moves to the next field.  
+`Focus()` puts the focus on that field.  
+While a hardware keyboard is present, the soft keyboard does not appear even when an input field has focus (the `InputEntry` style.  
+It does not appear on `Focus()` to an already focused field either).  
+To show it, call `ShowSoftInputAsync()`.
 
-While busy (BusyState), keys for input fields and Enter confirmation (moving to the next field) are not accepted either. However, keys that the IME receives first (composing digits in Gboard's Japanese input, and committing them) do not go through the app's key handling, so they cannot be stopped even while busy.
+While busy (BusyState), keys for input fields and Enter confirmation (moving to the next field) are not accepted either.  
+However, keys that the IME receives first (composing digits in Gboard's Japanese input, and committing them) do not go through the app's key handling, so they cannot be stopped even while busy.
 
 ```xml
 <Entry Style="{StaticResource InputEntry}"
@@ -109,7 +119,10 @@ private void Input1Complete(EntryCompleteEvent ice)
 
 ### Input validation
 
-Add DataAnnotations attributes to `EntryController` properties, and `ValidateInputsAsync` checks them in the order of the given names. It shows the message of the first error with Information and moves the focus to that input field. Errors are stored in the VM's `Errors`. The VM needs `[GenerateAccessor]`.
+Add DataAnnotations attributes to `EntryController` properties, and `ValidateInputsAsync` checks them in the order of the given names.  
+It shows the message of the first error with Information and moves the focus to that input field.  
+Errors are stored in the VM's `Errors`.  
+The VM needs `[GenerateAccessor]`.
 
 ```csharp
 [GenerateAccessor]
@@ -147,7 +160,8 @@ public sealed partial class KeyEntryViewModel : AppViewModelBase
 - DatePicker, TimePicker: Enter opens the dialog, and a single Esc cancels it
 - When Left/Right is held down, the movement stops at the end of the input field or of the control that was handling the key
 
-The color while focused is set by the styles in Styles.xaml. Controls with a white background use `SelectFocusColor` (`InputEntry`, `InputEditor`, `InputPicker`, `InputDatePicker`, `InputTimePicker`, `ToggleCheckBox`, `ToggleSwitch`, `ToggleRadioButton`, `InputSlider`, `InputStepper`), and colored buttons use the Focused color of each style.
+The color while focused is set by the styles in Styles.xaml.  
+Controls with a white background use `SelectFocusColor` (`InputEntry`, `InputEditor`, `InputPicker`, `InputDatePicker`, `InputTimePicker`, `ToggleCheckBox`, `ToggleSwitch`, `ToggleRadioButton`, `InputSlider`, `InputStepper`), and colored buttons use the Focused color of each style.
 
 ## 🔢 Key map
 
@@ -165,7 +179,8 @@ Implementation example in this template (`Platforms/Android/KeyMap.cs`).
 | 0 to 9, numpad 0 to 9 | Num0 to Num9 | Release | Input field |
 | F1 to F4 | Function1 to Function4 | Release | App |
 
-Even outside input fields, the focused control handles Left/Right first (such as Slider and Stepper values), and the app moves the focus when the control does not handle them. Keys not in the table and keys the app does not handle go to Android.
+Even outside input fields, the focused control handles Left/Right first (such as Slider and Stepper values), and the app moves the focus when the control does not handle them.  
+Keys not in the table and keys the app does not handle go to Android.
 
 ## 📱 Sample screens
 
@@ -181,17 +196,15 @@ On KeyMenu, pressing Back (BACK, Esc, F1) asks for confirmation and then moves t
 
 ## 🔍 How to verify
 
-Connect a USB or Bluetooth keyboard to the device. Without one, send keys from a PC with the Keypad Simulator or adb.
+Connect a USB or Bluetooth keyboard to the device.  
+Without one, send keys from a PC with the Keypad Simulator or adb.
 
 ### Keypad Simulator
 
-A WPF tool in `tools/Template.Tools.KeypadSimulator`. It sends the keys of a keypad with adb to a device connected for USB debugging.
+A WPF tool in `tools/Template.Tools.KeypadSimulator`.  
+It sends the keys of a keypad with adb to a device connected for USB debugging.
 
 <img width="40%" src="Document/Images/KeypadSimulator.png" />
-
-```
-dotnet run --project tools/Template.Tools.KeypadSimulator
-```
 
 | Item | Contents |
 |---|---|
@@ -206,7 +219,8 @@ dotnet run --project tools/Template.Tools.KeypadSimulator
 
 ### adb
 
-Keys can also be sent with adb (they arrive from a virtual keyboard, so the soft keyboard may appear and compose digits. Sending Tab in an input field makes Gboard show the soft keyboard by itself).
+Keys can also be sent with adb (they arrive from a virtual keyboard, so the soft keyboard may appear and compose digits.  
+Sending Tab in an input field makes Gboard show the soft keyboard by itself).
 
 ```
 adb shell input keyevent KEYCODE_1

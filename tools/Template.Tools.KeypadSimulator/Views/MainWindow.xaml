@@ -22,6 +22,7 @@
                  behaviors:PcKeyboard.ReleaseCommand="{Binding PcKeyUpCommand}"
                  Title="Keypad Simulator"
                  Icon="../App.ico"
+                 IconScalingMode="NoScaleSmallerFrame"
                  Topmost="{Binding Topmost}"
                  controlzEx:WindowBackdropManager.BackdropType="None">
 

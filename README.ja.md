@@ -2,7 +2,8 @@
 
 [English](README.md) | 日本語
 
-物理キー(数字・矢印・Enter・Esc・F1〜F4 など)だけで操作する Android アプリの MAUI テンプレート。物理キー付きの端末向け。
+物理キー(数字・矢印・Enter・Esc・F1〜F4 など)だけで操作する Android アプリの MAUI テンプレート。  
+物理キー付きの端末向け。
 
 <img width="40%" src="Document/Images/HT.jpg" />
 
@@ -45,7 +46,8 @@ MainActivity.DispatchKeyEvent / ポップアップのダイアログの OnKeyLis
 
 ### 数字キー・F キー
 
-`Shortcut.Key` を付けた要素は、そのキーでタッチと同じ操作をする(Button は押す、CheckBox・Switch は切り替える、RadioButton は選ぶ、ほかの要素はフォーカスを置く)。F1〜F4 は画面の下の機能ボタン(`ShellProperty.Function1Text` など)。
+`Shortcut.Key` を付けた要素は、そのキーでタッチと同じ操作をする(Button は押す、CheckBox・Switch は切り替える、RadioButton は選ぶ、ほかの要素はフォーカスを置く)。  
+F1〜F4 は画面の下の機能ボタン(`ShellProperty.Function1Text` など)。
 
 ```xml
 <Button Style="{StaticResource MenuButton}"
@@ -57,7 +59,8 @@ MainActivity.DispatchKeyEvent / ポップアップのダイアログの OnKeyLis
 
 ### フォーカスの移動
 
-上下左右で XAML に書いた順に前後へ移る。範囲は画面の中だけで、端では止まる。
+上下左右で XAML に書いた順に前後へ移る。  
+範囲は画面の中だけで、端では止まる。
 
 | 添付プロパティ | 付ける所 | 動き |
 |---|---|---|
@@ -74,7 +77,9 @@ MainActivity.DispatchKeyEvent / ポップアップのダイアログの OnKeyLis
 
 ### 一覧
 
-上下で行を選び、先頭・最後の行では一覧の外へ移る。`KeyCode` のキーで選んだ行を `Command` に渡す。`SelectByNumberKey` は 1〜9 キーで 1〜9 行目を選ぶ。
+上下で行を選び、先頭・最後の行では一覧の外へ移る。  
+`KeyCode` のキーで選んだ行を `Command` に渡す。  
+`SelectByNumberKey` は 1〜9 キーで 1〜9 行目を選ぶ。
 
 ```xml
 <CollectionView ItemsSource="{Binding Items}"
@@ -89,9 +94,14 @@ MainActivity.DispatchKeyEvent / ポップアップのダイアログの OnKeyLis
 
 ### 入力欄
 
-Enter で `EntryController` のコマンドを呼び、`Handled` でなければ次の欄へ移る。`Focus()` でその欄へフォーカスを置く。ハードキーボードがある間は、入力欄にフォーカスがあってもソフトキーボードを出さない(`InputEntry` のスタイル。フォーカス済みの欄への `Focus()` でも出さない)。出す時は `ShowSoftInputAsync()` を呼ぶ。
+Enter で `EntryController` のコマンドを呼び、`Handled` でなければ次の欄へ移る。  
+`Focus()` でその欄へフォーカスを置く。  
+ハードキーボードがある間は、入力欄にフォーカスがあってもソフトキーボードを出さない(`InputEntry` のスタイル。  
+フォーカス済みの欄への `Focus()` でも出さない)。  
+出す時は `ShowSoftInputAsync()` を呼ぶ。
 
-処理中(BusyState)は、入力欄へのキーと Enter の確定(次の欄への移動)も受け付けない。ただし、IME が先に受け取るキー(Gboard の日本語での数字の組み立てと、その確定)はアプリのキーの処理を通らないので、処理中でも止められない。
+処理中(BusyState)は、入力欄へのキーと Enter の確定(次の欄への移動)も受け付けない。  
+ただし、IME が先に受け取るキー(Gboard の日本語での数字の組み立てと、その確定)はアプリのキーの処理を通らないので、処理中でも止められない。
 
 ```xml
 <Entry Style="{StaticResource InputEntry}"
@@ -109,7 +119,10 @@ private void Input1Complete(EntryCompleteEvent ice)
 
 ### 入力の検証
 
-`EntryController` のプロパティに DataAnnotations の属性を付け、`ValidateInputsAsync` で名前の順に確かめる。最初のエラーのメッセージを Information で出し、その入力欄へフォーカスを移す。エラーは VM の `Errors` に入る。VM には `[GenerateAccessor]` が要る。
+`EntryController` のプロパティに DataAnnotations の属性を付け、`ValidateInputsAsync` で名前の順に確かめる。  
+最初のエラーのメッセージを Information で出し、その入力欄へフォーカスを移す。  
+エラーは VM の `Errors` に入る。  
+VM には `[GenerateAccessor]` が要る。
 
 ```csharp
 [GenerateAccessor]
@@ -147,7 +160,8 @@ MauiProgram の `ConfigureControlKeyHandling()` で次のように扱う。
 - DatePicker・TimePicker: Enter でダイアログを開き、Esc 1 回でキャンセルする
 - 左右を押し続けた時は、入力欄やキーを処理していたコントロールの端で止まる
 
-フォーカスのある間の色は Styles.xaml のスタイルで付ける。白地のコントロールは `SelectFocusColor`(`InputEntry`・`InputEditor`・`InputPicker`・`InputDatePicker`・`InputTimePicker`・`ToggleCheckBox`・`ToggleSwitch`・`ToggleRadioButton`・`InputSlider`・`InputStepper`)、色付きのボタンは各スタイルの Focused の色。
+フォーカスのある間の色は Styles.xaml のスタイルで付ける。  
+白地のコントロールは `SelectFocusColor`(`InputEntry`・`InputEditor`・`InputPicker`・`InputDatePicker`・`InputTimePicker`・`ToggleCheckBox`・`ToggleSwitch`・`ToggleRadioButton`・`InputSlider`・`InputStepper`)、色付きのボタンは各スタイルの Focused の色。
 
 ## 🔢 キーの対応表
 
@@ -165,7 +179,8 @@ MauiProgram の `ConfigureControlKeyHandling()` で次のように扱う。
 | 0〜9・テンキーの 0〜9 | Num0〜Num9 | 離した時 | 入力欄 |
 | F1〜F4 | Function1〜Function4 | 離した時 | アプリ |
 
-左右は入力欄の外でもフォーカスのあるコントロールが先に処理し(Slider・Stepper の値など)、処理しない時にアプリがフォーカスを移す。表に無いキーとアプリで処理しなかったキーは Android へ渡る。
+左右は入力欄の外でもフォーカスのあるコントロールが先に処理し(Slider・Stepper の値など)、処理しない時にアプリがフォーカスを移す。  
+表に無いキーとアプリで処理しなかったキーは Android へ渡る。
 
 ## 📱 見本の画面
 
@@ -181,17 +196,15 @@ KeyMenu で戻る(BACK・Esc・F1)を押すと、確かめてからアプリを�
 
 ## 🔍 確かめ方
 
-USB か Bluetooth のキーボードを端末につなぐ。無い時は、PC からキーパッドの模擬ツールか adb でキーを送る。
+USB か Bluetooth のキーボードを端末につなぐ。  
+無い時は、PC からキーパッドの模擬ツールか adb でキーを送る。
 
 ### キーパッドの模擬ツール
 
-`tools/Template.Tools.KeypadSimulator` の WPF のツール。USB デバッグでつないだ端末へ、キーパッドのキーを adb で送る。
+`tools/Template.Tools.KeypadSimulator` の WPF のツール。  
+USB デバッグでつないだ端末へ、キーパッドのキーを adb で送る。
 
 <img width="40%" src="Document/Images/KeypadSimulator.png" />
-
-```
-dotnet run --project tools/Template.Tools.KeypadSimulator
-```
 
 | 項目 | 内容 |
 |---|---|
@@ -206,7 +219,8 @@ dotnet run --project tools/Template.Tools.KeypadSimulator
 
 ### adb
 
-adb でも送れる(仮想のキーボードとして届くので、ソフトキーボードが出て数字を組み立てることがある。入力欄で Tab を送ると、Gboard が自分でソフトキーボードを出す)。
+adb でも送れる(仮想のキーボードとして届くので、ソフトキーボードが出て数字を組み立てることがある。  
+入力欄で Tab を送ると、Gboard が自分でソフトキーボードを出す)。
 
 ```
 adb shell input keyevent KEYCODE_1
