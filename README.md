@@ -1,11 +1,22 @@
-# template-maui-keyboard
+# Template project for MAUI with physical keys
 
 English | [日本語](README.ja.md)
 
-A MAUI template for Android apps operated only with physical keys (digits, arrows, Enter, Esc, F1 to F4, and so on).  
+Template project for MAUI apps operated only with physical keys (digits, arrows, Enter, Esc, F1 to F4, and so on).  
 For devices with physical keys.
 
 <img width="40%" src="Document/Images/HT.jpg" />
+
+## ✨ Features
+
+- Button shortcuts with number keys and F keys
+- Complete focus movement with Up/Down/Left/Right
+- Lists operated by keys
+- Input fields for hardware keyboards
+- Focus on the first field with a validation error
+- Dialogs, popups, and controls operated only by keys
+- Keys discarded while busy
+- Keypad Simulator (sends physical keys with adb)
 
 ## 🧩 Classes
 

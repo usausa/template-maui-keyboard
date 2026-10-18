@@ -1,11 +1,22 @@
-# template-maui-keyboard
+# Template project for MAUI with physical keys
 
 [English](README.md) | 日本語
 
-物理キー(数字・矢印・Enter・Esc・F1〜F4 など)だけで操作する Android アプリの MAUI テンプレート。  
+物理キー(数字・矢印・Enter・Esc・F1〜F4 など)だけで操作する Android アプリの MAUI のテンプレートプロジェクト。  
 物理キー付きの端末向け。
 
 <img width="40%" src="Document/Images/HT.jpg" />
+
+## ✨ 主な機能
+
+- 数字キー・F キーでのボタンのショートカット
+- 上下左右キーによる完全なフォーカスの移動
+- キーで操作する一覧
+- ハードキーボード向けの入力欄
+- 入力の検証で最初のエラーの欄へフォーカス
+- キーだけで操作するダイアログ・ポップアップ・コントロール
+- 処理中のキーを捨てる
+- キーパッドの模擬ツール(adb で物理キーを送る)
 
 ## 🧩 クラス
 
