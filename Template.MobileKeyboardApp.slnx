@@ -9,8 +9,12 @@
     <File Path="Directory.Build.targets" />
     <File Path="LICENSE" />
     <File Path="README.md" />
+    <File Path="README.ja.md" />
     <File Path="Settings.XamlStyler" />
-    <File Path="Template.MobileBlazorApp.sln.DotSettings" />
+    <File Path="Template.MobileKeyboardApp.sln.DotSettings" />
+  </Folder>
+  <Folder Name="/Tools/">
+    <Project Path="tools/Template.Tools.KeypadSimulator/Template.Tools.KeypadSimulator.csproj" />
   </Folder>
   <Project Path="Template.MobileApp/Template.MobileApp.csproj" DefaultStartup="true">
     <Deploy />

@@ -88,7 +88,7 @@
             <Button Grid.Row="3" Grid.Column="0"
                     Style="{StaticResource InputCommandButton}"
                     Command="{Binding ClearCommand}"
-                    input:Shortcut.Key="Clear"
+                    input:Shortcut.Key="Del"
                     Text="AC" />
             <Button Grid.Row="3" Grid.Column="1"
                     Style="{StaticResource InputTextButton}"

@@ -1,0 +1,210 @@
+<mah:MetroWindow xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:s="http://smart/windows"
+                 xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                 xmlns:behaviors="clr-namespace:Template.Tools.KeypadSimulator.Behaviors"
+                 xmlns:models="clr-namespace:Template.Tools.KeypadSimulator.Models"
+                 xmlns:views="clr-namespace:Template.Tools.KeypadSimulator.Views"
+                 xmlns:controlzEx="urn:controlzex"
+                 mc:Ignorable="d"
+                 x:Class="Template.Tools.KeypadSimulator.Views.MainWindow"
+                 s:DataContextResolver.Type="{x:Type views:MainWindowViewModel}"
+                 d:DataContext="{d:DesignInstance Type={x:Type views:MainWindowViewModel}}"
+                 Width="380"
+                 ResizeMode="CanMinimize"
+                 SizeToContent="Height"
+                 ShowIconOnTitleBar="True" WindowTransitionsEnabled="False"
+                 behaviors:PcKeyboard.PressCommand="{Binding PcKeyDownCommand}"
+                 behaviors:PcKeyboard.ReleaseCommand="{Binding PcKeyUpCommand}"
+                 Title="Keypad Simulator"
+                 Icon="../App.ico"
+                 Topmost="{Binding Topmost}"
+                 controlzEx:WindowBackdropManager.BackdropType="None">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding RefreshCommand}" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Deactivated">
+            <i:InvokeCommandAction Command="{Binding ReleaseAllCommand}" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <s:CancelEventAction Cancel="{Binding BusyState.IsBusy}" />
+            <i:CallMethodAction IsEnabled="{Binding BusyState.IsBusy, Converter={StaticResource ReverseConverter}}"
+                                MethodName="Save"
+                                TargetObject="{Binding WindowManager}" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closed">
+            <s:DataContextDisposeAction />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <mah:MetroWindow.RightWindowCommands>
+        <mah:WindowCommands>
+            <ToggleButton IsChecked="{Binding Topmost}"
+                          ToolTip="Topmost">
+                <iconPacks:PackIconFontAwesome Width="14" Height="14"
+                                               Kind="ThumbtackSolid" />
+            </ToggleButton>
+        </mah:WindowCommands>
+    </mah:MetroWindow.RightWindowCommands>
+
+    <!-- Content -->
+    <DockPanel>
+
+        <!-- Header -->
+        <StackPanel DockPanel.Dock="Top"
+                    Margin="10,6">
+            <DockPanel Style="{StaticResource HeaderRow}">
+                <TextBlock Style="{StaticResource HeaderLabel}"
+                           Text="Device" />
+                <Button DockPanel.Dock="Right"
+                        Width="32" Height="28"
+                        Margin="6,0,0,0"
+                        Command="{Binding RefreshCommand}"
+                        ToolTip="Refresh">
+                    <iconPacks:PackIconFontAwesome Width="12" Height="12"
+                                                   Kind="ArrowsRotateSolid" />
+                </Button>
+                <ComboBox VerticalAlignment="Center"
+                          ItemsSource="{Binding Devices}"
+                          SelectedItem="{Binding SelectedDevice}"
+                          IsEnabled="{Binding IsConnected, Converter={StaticResource ReverseConverter}}"
+                          DisplayMemberPath="Display" />
+            </DockPanel>
+            <DockPanel Style="{StaticResource HeaderRow}">
+                <TextBlock Style="{StaticResource HeaderLabel}"
+                           Text="Mode" />
+                <Button DockPanel.Dock="Right"
+                        Width="96" Height="28"
+                        Command="{Binding ConnectCommand}">
+                    <Button.Style>
+                        <Style TargetType="Button"
+                               BasedOn="{StaticResource {x:Type Button}}">
+                            <Setter Property="Content" Value="Connect" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsConnected}"
+                                             Value="True">
+                                    <Setter Property="Content" Value="Disconnect" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center">
+                    <RadioButton Margin="0,0,16,0"
+                                 IsChecked="{Binding IsHardware}"
+                                 Content="Hardware" />
+                    <RadioButton IsChecked="{Binding IsInput}"
+                                 Content="Input" />
+                </StackPanel>
+            </DockPanel>
+            <DockPanel Style="{StaticResource HeaderRow}">
+                <TextBlock Style="{StaticResource HeaderLabel}"
+                           Text="Keyboard" />
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            IsEnabled="{Binding IsHardware}">
+                    <RadioButton Margin="0,0,16,0"
+                                 IsChecked="{Binding IsAlphabetic}"
+                                 Content="Alphabetic" />
+                    <RadioButton IsChecked="{Binding IsNumeric}"
+                                 Content="Numeric" />
+                </StackPanel>
+            </DockPanel>
+            <DockPanel Style="{StaticResource HeaderRow}">
+                <TextBlock Style="{StaticResource HeaderLabel}"
+                           Text="Options" />
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center">
+                    <CheckBox Margin="0,0,16,0"
+                              IsChecked="{Binding PcKeys}"
+                              Content="PC keys" />
+                    <CheckBox IsChecked="{Binding Numpad}"
+                              Content="Numpad" />
+                </StackPanel>
+            </DockPanel>
+        </StackPanel>
+
+        <!-- Status -->
+        <DockPanel DockPanel.Dock="Bottom"
+                   Margin="10,4">
+            <TextBlock DockPanel.Dock="Right"
+                       Margin="8,0,0,0"
+                       Text="{Binding LastKey}" />
+            <TextBlock TextTrimming="CharacterEllipsis"
+                       Text="{Binding Status}" />
+        </DockPanel>
+
+        <!-- Keypad -->
+        <Border Padding="13,11,13,5"
+                Background="{StaticResource KeypadBodyBrush}">
+            <StackPanel>
+                <UniformGrid Columns="4"
+                             Margin="0,0,0,8">
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.F1}" />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.F2}" />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.F3}" />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.F4}" />
+                </UniformGrid>
+                <UniformGrid Columns="3"
+                             Margin="0,0,0,8">
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.Escape}" />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.Up}" />
+                    <Border />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.Left}" />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.Center}" />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.Right}" />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.Del}" />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.Down}" />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.Enter}" />
+                </UniformGrid>
+                <UniformGrid Columns="3">
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.Num1}" />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.Num2}" />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.Num3}" />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.Num4}" />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.Num5}" />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.Num6}" />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.Num7}" />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.Num8}" />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.Num9}" />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.Minus}" />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.Num0}" />
+                    <Button Style="{StaticResource KeypadKey}"
+                            behaviors:KeyPress.Key="{x:Static models:KeypadKeys.Period}" />
+                </UniformGrid>
+            </StackPanel>
+        </Border>
+
+    </DockPanel>
+
+</mah:MetroWindow>

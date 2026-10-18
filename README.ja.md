@@ -24,7 +24,7 @@
 | `ElementHelper` | Helpers | フォーカスの移動と置き方 |
 | `NavigationFocusPlugin` | Extender | 画面の既定のフォーカスと、戻った時のフォーカスの戻し |
 | `PopupFocusPlugin` / `PopupInputPlugin` | Extender | ポップアップの既定のフォーカスと閉じた後の戻し / ポップアップにキーの処理を付ける |
-| `KeypadDialog` | Components | `IDialog`。既定のボタンにフォーカス、Esc・クリアでキャンセル、Esc で消えない Indicator |
+| `KeypadDialog` | Components | `IDialog`。既定のボタンにフォーカス、Esc・DEL でキャンセル、Esc で消えない Indicator |
 | `ValidateInputsAsync` | Modules(AppViewModelBase) | 入力欄の検証と、エラーの後のフォーカス |
 
 ## ⌨️ キーの流れ
@@ -134,7 +134,7 @@ public sealed partial class KeyEntryViewModel : AppViewModelBase
 
 ### ダイアログとポップアップ
 
-- `IDialog`(`KeypadDialog`): 既定のボタン(Confirm は Cancel)にフォーカスを置き、Esc・クリアでキャンセルする(Prompt のクリアは文字を消す)。閉じた後は開く前の要素にフォーカスが戻る(タッチで閉じた時は戻らない)。Prompt も、ハードキーボードがある間はソフトキーボードを出さない
+- `IDialog`(`KeypadDialog`): 既定のボタン(Confirm は Cancel)にフォーカスを置き、Esc・DEL でキャンセルする(Prompt の DEL は文字を消す)。閉じた後は開く前の要素にフォーカスが戻る(タッチで閉じた時は戻らない)。Prompt も、ハードキーボードがある間はソフトキーボードを出さない
 - ポップアップ: 既定のフォーカスは `Focus.Default` の要素。Esc でキャンセルして閉じる(結果は無し)。閉じた後のフォーカスはダイアログと同じ
 - 処理中(BusyState)の間はキーを捨てる。`Indicator` は Esc で消えない
 
@@ -159,7 +159,7 @@ MauiProgram の `ConfigureControlKeyHandling()` で次のように扱う。
 | ← → | Left / Right | 押した時(押し続けると繰り返す) | 入力欄が先(カーソルの移動)。端ではアプリ |
 | Enter・テンキーの Enter・DPAD の中央 | Enter | 離した時 | 入力欄 |
 | Esc | Escape | 離した時 | アプリ |
-| Backspace・Clear | Clear | 離した時 | 入力欄 |
+| DEL(Backspace) | Del | 離した時 | 入力欄 |
 | -・テンキーの - | Minus | 離した時 | 入力欄 |
 | .・テンキーの . | Period | 離した時 | 入力欄 |
 | 0〜9・テンキーの 0〜9 | Num0〜Num9 | 離した時 | 入力欄 |
@@ -181,7 +181,32 @@ KeyMenu で戻る(BACK・Esc・F1)を押すと、確かめてからアプリを�
 
 ## 🔍 確かめ方
 
-USB か Bluetooth のキーボードを端末につなぐ。adb でも送れる(仮想のキーボードとして届くので、ソフトキーボードが出て数字を組み立てることがある。入力欄で Tab を送ると、Gboard が自分でソフトキーボードを出す)。
+USB か Bluetooth のキーボードを端末につなぐ。無い時は、PC からキーパッドの模擬ツールか adb でキーを送る。
+
+### キーパッドの模擬ツール
+
+`tools/Template.Tools.KeypadSimulator` の WPF のツール。USB デバッグでつないだ端末へ、キーパッドのキーを adb で送る。
+
+<img width="40%" src="Document/Images/KeypadSimulator.png" />
+
+```
+dotnet run --project tools/Template.Tools.KeypadSimulator
+```
+
+| 項目 | 内容 |
+|---|---|
+| Device | `adb devices -l` の端末。adb は appsettings.json の `Simulator:AdbPath`・`ANDROID_HOME`・`ANDROID_SDK_ROOT`・既定の SDK のフォルダ・PATH の順に探す |
+| Mode | Hardware: `uinput` で仮想の USB キーボードを登録して送る。端末からは物理キーボードに見え、押し続けると端末がキーを繰り返す。Input: `input keyevent` で送る。物理キーボードは無いままなので、ソフトキーボードと IME が先にキーを取ることがある |
+| Keyboard | Hardware の時の種類。Alphabetic: 端末の構成が `qwerty` になり、`HardKeyboard` は「あり」。Numeric: 構成は `nokeys` のままで、`HardKeyboard` は「無し」 |
+| Options | PC keys: 窓にフォーカスがある間、PC の数字・テンキー・矢印・Enter・Esc・Backspace・Delete・F1〜F4・-・. を同じキーとして送る。Numpad: 数字・ENT・-・. をテンキーのキーとして送る(PC のテンキーはいつもテンキーのキー) |
+| 📌 | 常に手前に表示 |
+
+- Connect で送り始める。Disconnect かツールを閉じると、仮想のキーボードが消える
+- 端末・送り方・オプション・窓の位置は、次の起動に残る
+
+### adb
+
+adb でも送れる(仮想のキーボードとして届くので、ソフトキーボードが出て数字を組み立てることがある。入力欄で Tab を送ると、Gboard が自分でソフトキーボードを出す)。
 
 ```
 adb shell input keyevent KEYCODE_1

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Template.Tools.KeypadSimulator": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

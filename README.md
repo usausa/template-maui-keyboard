@@ -24,7 +24,7 @@ A MAUI template for Android apps operated only with physical keys (digits, arrow
 | `ElementHelper` | Helpers | Moving and placing focus |
 | `NavigationFocusPlugin` | Extender | Default focus of a screen, and focus restoration when navigating back |
 | `PopupFocusPlugin` / `PopupInputPlugin` | Extender | Default focus of a popup and focus restoration after it closes / Adds key handling to popups |
-| `KeypadDialog` | Components | `IDialog`. Focus on the default button, cancel with Esc or Clear, an Indicator that Esc does not dismiss |
+| `KeypadDialog` | Components | `IDialog`. Focus on the default button, cancel with Esc or DEL, an Indicator that Esc does not dismiss |
 | `ValidateInputsAsync` | Modules (AppViewModelBase) | Input field validation, and focus after an error |
 
 ## ⌨️ Key flow
@@ -134,7 +134,7 @@ public sealed partial class KeyEntryViewModel : AppViewModelBase
 
 ### Dialogs and popups
 
-- `IDialog` (`KeypadDialog`): Puts the focus on the default button (Cancel for Confirm), and cancels with Esc or Clear (Clear in Prompt deletes characters). After closing, the focus returns to the element that had it before opening (not when closed by touch). Prompt also does not show the soft keyboard while a hardware keyboard is present
+- `IDialog` (`KeypadDialog`): Puts the focus on the default button (Cancel for Confirm), and cancels with Esc or DEL (DEL in Prompt deletes characters). After closing, the focus returns to the element that had it before opening (not when closed by touch). Prompt also does not show the soft keyboard while a hardware keyboard is present
 - Popups: The default focus is the element with `Focus.Default`. Esc cancels and closes the popup (no result). The focus after closing works the same as for dialogs
 - While busy (BusyState), keys are discarded. Esc does not dismiss `Indicator`
 
@@ -159,7 +159,7 @@ Implementation example in this template (`Platforms/Android/KeyMap.cs`).
 | ← → | Left / Right | Press (repeats while held) | Input field first (cursor movement). App at the ends |
 | Enter, numpad Enter, DPAD center | Enter | Release | Input field |
 | Esc | Escape | Release | App |
-| Backspace, Clear | Clear | Release | Input field |
+| DEL (Backspace) | Del | Release | Input field |
 | -, numpad - | Minus | Release | Input field |
 | ., numpad . | Period | Release | Input field |
 | 0 to 9, numpad 0 to 9 | Num0 to Num9 | Release | Input field |
@@ -181,7 +181,32 @@ On KeyMenu, pressing Back (BACK, Esc, F1) asks for confirmation and then moves t
 
 ## 🔍 How to verify
 
-Connect a USB or Bluetooth keyboard to the device. Keys can also be sent with adb (they arrive from a virtual keyboard, so the soft keyboard may appear and compose digits. Sending Tab in an input field makes Gboard show the soft keyboard by itself).
+Connect a USB or Bluetooth keyboard to the device. Without one, send keys from a PC with the Keypad Simulator or adb.
+
+### Keypad Simulator
+
+A WPF tool in `tools/Template.Tools.KeypadSimulator`. It sends the keys of a keypad with adb to a device connected for USB debugging.
+
+<img width="40%" src="Document/Images/KeypadSimulator.png" />
+
+```
+dotnet run --project tools/Template.Tools.KeypadSimulator
+```
+
+| Item | Contents |
+|---|---|
+| Device | Devices from `adb devices -l`. adb is searched for in `Simulator:AdbPath` of appsettings.json, `ANDROID_HOME`, `ANDROID_SDK_ROOT`, the default SDK folders, and PATH, in this order |
+| Mode | Hardware: Registers a virtual USB keyboard with `uinput`. The device sees a hardware keyboard and repeats a key while it is held. Input: Sends `input keyevent`. The device has no hardware keyboard, so the soft keyboard and the IME may take keys first |
+| Keyboard | Keyboard type for Hardware. Alphabetic: The device configuration becomes `qwerty`, and `HardKeyboard` is true. Numeric: The configuration stays `nokeys`, and `HardKeyboard` is false |
+| Options | PC keys: While the window has focus, the PC's digits, numpad, arrows, Enter, Esc, Backspace, Delete, F1 to F4, - and . are sent as the same keys. Numpad: Digits, ENT, - and . are sent as numpad keys (the PC's numpad keys always are) |
+| 📌 | Keeps the window on top |
+
+- Connect starts sending. Disconnect or closing the tool removes the virtual keyboard
+- The device, mode, options, and window position are kept for the next start
+
+### adb
+
+Keys can also be sent with adb (they arrive from a virtual keyboard, so the soft keyboard may appear and compose digits. Sending Tab in an input field makes Gboard show the soft keyboard by itself).
 
 ```
 adb shell input keyevent KEYCODE_1

@@ -1,0 +1,211 @@
+{
+  "AttributesTolerance": 1,
+  "KeepFirstAttributeOnSameLine": true,
+  "MaxAttributeCharactersPerLine": 0,
+  "MaxAttributesPerLine": 4,
+  "NewlineExemptionElements": "
+    RadialGradientBrush, GradientStop, LinearGradientBrush,
+    ScaleTransform, SkewTransform, RotateTransform, TranslateTransform,
+    Trigger, Condition, Setter",
+  "SeparateByGroups": true,
+  "AttributeIndentation": 0,
+  "AttributeIndentationStyle": 1,
+  "RemoveDesignTimeReferences": false,
+  "EnableAttributeReordering": true,
+  "AttributeOrderingRuleGroups": [
+    "xmlns",
+    "xmlns:x",
+    "xmlns:d",
+    "xmlns:mc",
+
+    "xmlns:s",
+    "xmlns:navigation",
+
+    "xmlns:i",
+
+    "xmlns:mah",
+    "xmlns:iconPacks",
+
+    "xmlns:fonts",
+    "xmlns:strings",
+
+    "xmlns:application",
+    "xmlns:shell",
+    "xmlns:diagnostics",
+
+    "xmlns:animations",
+    "xmlns:behaviors",
+    "xmlns:controls",
+    "xmlns:converters",
+    "xmlns:effects",
+    "xmlns:markup",
+
+    "xmlns:domain",
+    "xmlns:enums",
+    "xmlns:logic",
+    "xmlns:helpers",
+
+    "xmlns:components",
+    "xmlns:services",
+
+    "xmlns:state",
+
+    "xmlns:models",
+    "xmlns:entity",
+
+    "xmlns:views",
+    "xmlns:modules",
+    "xmlns:module",
+
+    "xmlns:*",
+
+    "mc:Ignorable, d:IsDataSource, d:LayoutOverrides, d:IsStaticText",
+
+    "x:TypeArguments",
+    "x:Class",
+    "x:Type",
+    "x:Key, Key",
+    "x:Name, Name",
+    "x:Uid, Uid",
+
+    "s:Behavior.Key",
+
+    "TargetType, BasedOn",
+
+    "TargetName",
+    "Property",
+
+    "Grid.Row, Grid.RowSpan, Grid.Column, Grid.ColumnSpan",
+    "Canvas.Left, Canvas.Top, Canvas.Right, Canvas.Bottom",
+    "DockPanel.Dock",
+
+    "s:DataContextResolver.*",
+    "DataContext",
+    "d:DataContext",
+
+    "Style",
+
+    "RowDefinitions",
+    "ColumnDefinitions",
+    "Rows, Columns",
+    "Width, Height, MinWidth, MinHeight, MaxWidth, MaxHeight",
+    "d:DesignWidth, d:DesignHeight",
+    "ResizeMode",
+    "WindowStartupLocation, SizeToContent, ShowInTaskbar",
+    "ShowIconOnTitleBar, WindowTransitionsEnabled",
+
+    "controls:*",
+    "behaviors:*",
+    "s:*",
+    "navigation:*",
+    "effects:*",
+
+    "Orientation",
+    "Margin, Padding",
+    "HorizontalAlignment, VerticalAlignment",
+    "TextAlignment, HorizontalContentAlignment, VerticalContentAlignment, Panel.ZIndex",
+    "TextWrapping, TextTrimming",
+
+    "ItemsSource",
+    "ItemTemplate",
+    "SelectedItem",
+    "SelectionMode",
+    "HorizontalScrollBarVisibility, VerticalScrollBarVisibility",
+    "Source",
+    "Offset",
+
+    "Command, CommandParameter",
+    "IsDefault, IsCancel",
+
+    "IsEnabled",
+    "IsChecked",
+    "IsOpen",
+    "IsIndeterminate",
+    "Visibility",
+    "IsHitTestVisible",
+    "Focusable, IsTabStop, TabIndex",
+    "Cursor",
+
+    "Binding",
+    "Path, Converter, StringFormat, TargetNullValue",
+    "ResourceKey",
+    "Value",
+    "Minimum, Maximum",
+    "StartPoint, EndPoint",
+
+    "Title",
+    "Icon",
+    "Text",
+    "Content",
+    "ImageSource",
+
+    "FontFamily, FontSize, FontWeight, FontStyle",
+    "Color, Background, BackgroundColor, Foreground",
+    "Brush",
+    "Data, Points",
+    "Stretch",
+    "Fill",
+    "Opacity",
+    "RenderTransform, RenderTransformOrigin",
+    "ClipToBounds",
+    "Stroke, StrokeThickness",
+    "StrokeDashArray, StrokeStartLineCap, StrokeEndLineCap, StrokeLineJoin",
+    "BorderBrush, BorderThickness, CornerRadius",
+    "Radius",
+    "RadiusX, RadiusY",
+
+    "Storyboard.*, From, To, Duration",
+
+    "InputScope",
+
+    "Speed",
+    "GaugeWidth",
+
+    "OnContent, OffContent",
+
+    "ToolTip",
+
+    "*",
+    "*:*",
+
+    "Click",
+
+    "TrueValue",
+    "FalseValue",
+    "HandleEmptyString",
+    "NullValue",
+    "NonNullValue",
+    "DefaultValue",
+    "Plural, Singular"
+  ],
+  "FirstLineAttributes": "",
+  "OrderAttributesByName": true,
+  "PutEndingBracketOnNewLine": false,
+  "RemoveEndingTagOfEmptyElement": true,
+  "SpaceBeforeClosingSlash": true,
+  "RootElementLineBreakRule": 0,
+  "ReorderVSM": 1,
+  "ReorderGridChildren": false,
+  "ReorderCanvasChildren": false,
+  "ReorderSetters": 0,
+  "FormatMarkupExtension": true,
+  "NoNewLineMarkupExtensions": "
+    Binding, TemplateBinding,
+    iconPacks:FontAwesome,
+    s:BoolToBrush, s:BoolToColor, s:BoolToText, s:BoolToVisibility,
+    s:ColorBlend,
+    s:CompareToBool, s:CompareToBrush, s:CompareToColor, s:CompareToText, s:CompareToVisibility,
+    s:ContainsToBool, s:ContainsToBrush, s:ContainsToColor, s:ContainsToText, s:ContainsToVisibility,
+    s:FontImage, s:ImageResource,
+    s:IntToBool,
+    s:NullToBool, s:NullToBrush, s:NullToColor, s:NullToText, s:NullToVisibility,
+    s:TextReplace, s:TextToBool",
+  "ThicknessSeparator": 2,
+  "ThicknessAttributes": "
+    Margin, Padding,
+    BorderThickness,
+    ThumbnailClipMargin",
+  "FormatOnSave": true,
+  "CommentPadding": 1,
+  "IndentSize": 4
+}

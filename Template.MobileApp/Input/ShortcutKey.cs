@@ -11,7 +11,7 @@ public enum ShortcutKey
 
     Enter,
     Escape,
-    Clear,
+    Del,
 
     Minus,
     Period,
