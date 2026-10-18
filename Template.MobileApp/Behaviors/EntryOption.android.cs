@@ -1,7 +1,5 @@
 namespace Template.MobileApp.Behaviors;
 
-using Android.App;
-using Android.Content;
 using Android.Content.Res;
 using Android.Text;
 using Android.Views;
@@ -11,16 +9,10 @@ using Java.Lang;
 
 using Microsoft.Maui.Handlers;
 
-using KeyboardType = Android.Content.Res.KeyboardType;
-
 public static partial class EntryOption
 {
     // DisableShowSoftInputOnFocus の入力欄(ハードキーボードの有無が変わった時に設定し直す)
     private static readonly ConditionalWeakTable<TextView, object> SoftInputViews = [];
-
-    private static readonly KeyboardCallbacks KeyboardChanged = new();
-
-    private static bool hardKeyboard;
 
     public static partial void UseCustomMapper(BehaviorOptions options)
     {
@@ -34,11 +26,25 @@ public static partial class EntryOption
         // DisableShowSoftInputOnFocus
         if (options.DisableShowSoftInputOnFocus)
         {
-            hardKeyboard = HasHardKeyboard(Application.Context.Resources!.Configuration!);
-            Application.Context.RegisterComponentCallbacks(KeyboardChanged);
+            HardKeyboard.Start();
+            HardKeyboard.Changed += OnHardKeyboardChanged;
 
             EntryHandler.Mapper.AppendToMapping(DisableShowSoftInputOnFocusProperty.PropertyName, static (handler, _) => UpdateDisableShowSoftInputOnFocus(handler.PlatformView, (Entry)handler.VirtualView));
             EditorHandler.Mapper.AppendToMapping(DisableShowSoftInputOnFocusProperty.PropertyName, static (handler, _) => UpdateDisableShowSoftInputOnFocus(handler.PlatformView, (Editor)handler.VirtualView));
+            EntryHandler.CommandMapper.ModifyMapping(nameof(IEntry.Focus), static (handler, view, args, next) =>
+            {
+                if (!SuppressFocusSoftInput(handler.PlatformView, view, args))
+                {
+                    next?.Invoke(handler, view, args);
+                }
+            });
+            EditorHandler.CommandMapper.ModifyMapping(nameof(IEditor.Focus), static (handler, view, args, next) =>
+            {
+                if (!SuppressFocusSoftInput(handler.PlatformView, view, args))
+                {
+                    next?.Invoke(handler, view, args);
+                }
+            });
         }
 
         // SelectAllOnFocus
@@ -72,35 +78,30 @@ public static partial class EntryOption
     {
         var value = GetDisableShowSoftInputOnFocus(element);
         SoftInputViews.AddOrUpdate(editText, value);
-        editText.ShowSoftInputOnFocus = !(value && hardKeyboard);
+        editText.ShowSoftInputOnFocus = !(value && HardKeyboard.SuppressSoftInput);
     }
 
-    private static bool HasHardKeyboard(Configuration configuration) =>
-        (configuration.Keyboard != KeyboardType.Nokeys) && (configuration.HardKeyboardHidden != HardKeyboardHidden.Yes);
-
-    private sealed class KeyboardCallbacks : Object, IComponentCallbacks
+    private static void OnHardKeyboardChanged(object? sender, EventArgs e)
     {
-        public void OnConfigurationChanged(Configuration newConfig)
+        foreach (var (editText, disable) in SoftInputViews)
         {
-            var value = HasHardKeyboard(newConfig);
-            if (value == hardKeyboard)
+            if (editText.Handle != IntPtr.Zero)
             {
-                return;
-            }
-
-            hardKeyboard = value;
-            foreach (var (editText, disable) in SoftInputViews)
-            {
-                if (editText.Handle != IntPtr.Zero)
-                {
-                    editText.ShowSoftInputOnFocus = !((bool)disable && value);
-                }
+                editText.ShowSoftInputOnFocus = !((bool)disable && HardKeyboard.SuppressSoftInput);
             }
         }
+    }
 
-        public void OnLowMemory()
+    // フォーカス済みの入力欄への Focus() は MAUI が ShowSoftInputOnFocus を見ずにソフトキーボードを出すので、元の処理を通さない
+    private static bool SuppressFocusSoftInput(TextView editText, IView view, object? args)
+    {
+        if ((args is not FocusRequest request) || !view.IsFocused || editText.ShowSoftInputOnFocus)
         {
+            return false;
         }
+
+        request.TrySetResult(true);
+        return true;
     }
 
     private static void UpdateSelectAllOnFocus(TextView editText, BindableObject element)

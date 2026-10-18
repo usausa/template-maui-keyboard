@@ -88,7 +88,7 @@ public sealed partial class InputBehavior : BehaviorBase<VisualElement>, IInputH
         }
 
         var focused = FindFocused();
-        if ((focused is not null) && focused.Behaviors.OfType<IShortcutBehavior>().Any(x => x.CanHandle(key)))
+        if ((focused is not null) && AnyShortcutBehavior(focused, key, static (x, s) => x.CanHandle(s)))
         {
             return true;
         }
@@ -112,7 +112,7 @@ public sealed partial class InputBehavior : BehaviorBase<VisualElement>, IInputH
         }
 
         var focused = FindFocused();
-        if ((focused is not null) && focused.Behaviors.OfType<IShortcutBehavior>().Any(x => x.Handle(key)))
+        if ((focused is not null) && AnyShortcutBehavior(focused, key, static (x, s) => x.Handle(s)))
         {
             return true;
         }
@@ -152,8 +152,24 @@ public sealed partial class InputBehavior : BehaviorBase<VisualElement>, IInputH
     public VisualElement? FindFocused() =>
         AssociatedObject is not null ? ElementHelper.FindFocused(AssociatedObject) : null;
 
+    // フォーカスのある要素の IShortcutBehavior を順に見て、条件を満たしたら止める
+    private static bool AnyShortcutBehavior(VisualElement element, ShortcutKey key, Func<IShortcutBehavior, ShortcutKey, bool> predicate)
+    {
+        var behaviors = element.Behaviors;
+        // ReSharper disable once ForCanBeConvertedToForeach
+        for (var i = 0; i < behaviors.Count; i++)
+        {
+            if ((behaviors[i] is IShortcutBehavior behavior) && predicate(behavior, key))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private static VisualElement? FindShortcut(VisualElement parent, ShortcutKey key) =>
-        ElementHelper.EnumerateActive<VisualElement>(parent).FirstOrDefault(key, static (x, s) => Shortcut.GetKey(x) == s);
+        ElementHelper.FindActive(parent, key, static (x, s) => Shortcut.GetKey(x) == s);
 
     // タッチと同じ操作をする(フォーカスは動かさない)
     private static void InvokeShortcut(VisualElement element)

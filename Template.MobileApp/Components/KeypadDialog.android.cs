@@ -313,7 +313,8 @@ public sealed partial class KeypadDialog
             {
                 Hint = placeHolder,
                 Text = defaultValue,
-                InputType = ResolveInputType(parameter)
+                InputType = ResolveInputType(parameter),
+                ShowSoftInputOnFocus = !HardKeyboard.SuppressSoftInput
             };
             input = editText;
 
@@ -342,7 +343,7 @@ public sealed partial class KeypadDialog
                 .SetPositiveButton(ok, (_, _) => result.TrySetResult(new PromptResult(true, editText.Text!)))
                 .SetNegativeButton(cancel, (_, _) => result.TrySetResult(PromptResult.Cancel))
                 .Create();
-            alertDialog.Window!.SetSoftInputMode(SoftInput.StateVisible);
+            alertDialog.Window!.SetSoftInputMode(HardKeyboard.SuppressSoftInput ? SoftInput.StateHidden : SoftInput.StateVisible);
             Show(alertDialog);
 
             editText.RequestFocus();
