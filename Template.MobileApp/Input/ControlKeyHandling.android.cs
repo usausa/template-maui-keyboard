@@ -14,6 +14,10 @@ using TimePicker = Microsoft.Maui.Controls.TimePicker;
 
 public static partial class ControlKeyHandling
 {
+    //--------------------------------------------------------------------------------
+    // Configure
+    //--------------------------------------------------------------------------------
+
     private static partial void ConfigurePlatform(MauiAppBuilder builder)
     {
         SliderHandler.Mapper.AppendToMapping(nameof(ControlKeyHandling), static (handler, _) => handler.PlatformView.SetOnKeyListener(SliderKeyListener.Instance));
@@ -27,11 +31,10 @@ public static partial class ControlKeyHandling
         });
     }
 
-    // ------------------------------------------------------------
+    //--------------------------------------------------------------------------------
     // Slider
-    // ------------------------------------------------------------
+    //--------------------------------------------------------------------------------
 
-    // 左右キーの 1 回の量を端までに抑える(MAUI の SeekBar の最大値は int.MaxValue で、端を越える加算があふれて反対の端へ戻る)
     private sealed class SliderKeyListener : Java.Lang.Object, View.IOnKeyListener
     {
         public static SliderKeyListener Instance { get; } = new();
@@ -47,16 +50,14 @@ public static partial class ControlKeyHandling
                     : Math.Min(step, seekBar.Progress - seekBar.Min);
             }
 
-            // 値は SeekBar のキーの処理で変える(MAUI はキーやタッチで変わった値だけを受け取る)
             return false;
         }
     }
 
-    // ------------------------------------------------------------
+    //--------------------------------------------------------------------------------
     // Stepper
-    // ------------------------------------------------------------
+    //--------------------------------------------------------------------------------
 
-    // 中のボタンではなく Stepper 全体にフォーカスを置き、左キーで減らす側、右キーで増やす側のボタンを押す
     private static void UpdateStepper(ViewGroup stepper)
     {
         stepper.DescendantFocusability = DescendantFocusability.BlockDescendants;
@@ -67,7 +68,6 @@ public static partial class ControlKeyHandling
     {
         public static StepperKeyListener Instance { get; } = new();
 
-        // 押すボタンが無効(値が端)の時は処理せず、隣のコントロールへ移す
         public bool OnKey(View? v, Keycode keyCode, KeyEvent? e)
         {
             if ((e?.Action != KeyEventActions.Down) || (v is not ViewGroup { ChildCount: 2 } stepper) || (keyCode is not (Keycode.DpadLeft or Keycode.DpadRight)))
@@ -86,18 +86,16 @@ public static partial class ControlKeyHandling
         }
     }
 
-    // ------------------------------------------------------------
+    //--------------------------------------------------------------------------------
     // DatePicker / TimePicker
-    // ------------------------------------------------------------
+    //--------------------------------------------------------------------------------
 
-    // 日付・時刻のダイアログは Esc 1 回でキャンセルして閉じる(Android の既定では 1 回目はダイアログの中のフォーカスを外す)
     internal static void HandleCancelKey(Dialog dialog) => dialog.SetOnKeyListener(DialogCancelKeyListener.Instance);
 
     private sealed class DialogCancelKeyListener : Java.Lang.Object, IDialogInterfaceOnKeyListener
     {
         public static DialogCancelKeyListener Instance { get; } = new();
 
-        // Esc は押した時から受け取り、離した時にキャンセルする
         public bool OnKey(IDialogInterface? dialog, Keycode keyCode, KeyEvent? e)
         {
             if (keyCode != Keycode.Escape)
@@ -114,11 +112,10 @@ public static partial class ControlKeyHandling
         }
     }
 
-    // ------------------------------------------------------------
+    //--------------------------------------------------------------------------------
     // Focus
-    // ------------------------------------------------------------
+    //--------------------------------------------------------------------------------
 
-    // Focus.DefaultHighlight を指定したコントロールだけ切り替える(入力欄はもともと重ねない)
     private static void UpdateDefaultHighlight(IViewHandler handler, IView view)
     {
         if ((view is BindableObject bindable) && bindable.IsSet(Focus.DefaultHighlightProperty) && (handler.PlatformView is View platformView))

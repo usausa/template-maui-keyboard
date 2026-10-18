@@ -8,6 +8,10 @@ using Smart.Maui.Interactivity;
 
 public sealed class ShortcutBehavior : BehaviorBase<Element>, IShortcutBehavior
 {
+    //--------------------------------------------------------------------------------
+    // Property
+    //--------------------------------------------------------------------------------
+
     public static readonly BindableProperty KeyCodeProperty = BindableProperty.Create(
         nameof(KeyCode),
         typeof(ShortcutKey),
@@ -73,6 +77,10 @@ public sealed class ShortcutBehavior : BehaviorBase<Element>, IShortcutBehavior
         get => GetValue(ConverterParameterProperty);
         set => SetValue(ConverterParameterProperty, value);
     }
+
+    //--------------------------------------------------------------------------------
+    // Shortcut
+    //--------------------------------------------------------------------------------
 
     public bool CanHandle(ShortcutKey key) =>
         (KeyCode == key) && (AssociatedObject is not null) && (Command is not null);

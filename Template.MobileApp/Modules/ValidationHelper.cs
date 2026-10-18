@@ -25,7 +25,6 @@ internal static class ValidationHelper
         };
         validationResults ??= [];
 
-        // 入力欄(EntryController)は、プロパティの属性でその Text を確かめる
         var valid = value is EntryController input
             ? Validator.TryValidateValue(input.Text ?? string.Empty, context, validationResults, target.GetType().GetProperty(name)!.GetCustomAttributes<ValidationAttribute>())
             : Validator.TryValidateProperty(value, context, validationResults);
@@ -37,7 +36,6 @@ internal static class ValidationHelper
         validationResults.Clear();
     }
 
-    // 名前の順に確かめ、最初のエラーのメッセージを出してから、その入力欄(EntryController)へフォーカスを移す
     public static async ValueTask<bool> ValidateInputsAsync(object target, ErrorInfo errors, IDialog dialog, string[] names)
     {
         foreach (var name in names)

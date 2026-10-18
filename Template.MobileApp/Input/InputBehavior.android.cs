@@ -9,6 +9,10 @@ using CommunityToolkit.Maui.Views;
 
 public sealed partial class InputBehavior
 {
+    //--------------------------------------------------------------------------------
+    // Popup
+    //--------------------------------------------------------------------------------
+
     private static readonly ConditionalWeakTable<Window, DialogKeyListener> KeyListeners = [];
 
     private static partial void AttachPlatformKeyListener(Popup popup)
@@ -18,7 +22,6 @@ public sealed partial class InputBehavior
             return;
         }
 
-        // MAUI はモーダルのページを DialogFragment のダイアログに表示する
         var root = view.RootView;
         foreach (var fragment in activity.SupportFragmentManager.Fragments)
         {
@@ -29,6 +32,10 @@ public sealed partial class InputBehavior
             }
         }
     }
+
+    //--------------------------------------------------------------------------------
+    // Key Listener
+    //--------------------------------------------------------------------------------
 
     private sealed class DialogKeyListener : Java.Lang.Object, IDialogInterfaceOnKeyListener
     {

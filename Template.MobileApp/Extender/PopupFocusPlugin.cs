@@ -30,7 +30,6 @@ public sealed class PopupFocusPlugin : IPopupPlugin
         }
     }
 
-    // キーで閉じた時は開く前の要素へ戻す(タッチで閉じた時は IDialog と同じく戻さない)
     public void OnClosed(ContentView view)
     {
         if (focusBackup.Remove(view, out var focused) && !ElementHelper.IsInTouchMode(focused))

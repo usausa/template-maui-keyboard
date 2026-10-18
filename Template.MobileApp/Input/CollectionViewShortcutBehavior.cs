@@ -4,6 +4,10 @@ using Smart.Maui.Interactivity;
 
 public sealed partial class CollectionViewShortcutBehavior : BehaviorBase<CollectionView>, IShortcutBehavior
 {
+    //--------------------------------------------------------------------------------
+    // Property
+    //--------------------------------------------------------------------------------
+
     public static readonly BindableProperty KeyCodeProperty = BindableProperty.Create(
         nameof(KeyCode),
         typeof(ShortcutKey),
@@ -32,12 +36,15 @@ public sealed partial class CollectionViewShortcutBehavior : BehaviorBase<Collec
         set => SetValue(CommandProperty, value);
     }
 
-    // 数字キーの 1〜9 で 1〜9 行目を選ぶ
     public bool SelectByNumberKey
     {
         get => (bool)GetValue(SelectByNumberKeyProperty);
         set => SetValue(SelectByNumberKeyProperty, value);
     }
+
+    //--------------------------------------------------------------------------------
+    // Lifecycle
+    //--------------------------------------------------------------------------------
 
     protected override void OnAttachedTo(CollectionView bindable)
     {
@@ -59,10 +66,8 @@ public sealed partial class CollectionViewShortcutBehavior : BehaviorBase<Collec
         UpdatePlatformFocus((CollectionView)sender!);
     }
 
-    // 行ではなく一覧にフォーカスを置き、行はこの Behavior で選ぶ
     private static partial void UpdatePlatformFocus(CollectionView view);
 
-    // フォーカスが来た時にどの行も選ばれていなければ、先頭の行を選ぶ
     private void BindableOnFocused(object? sender, FocusEventArgs e)
     {
         if ((AssociatedObject is { SelectedItem: null } view) && (view.ItemsSource is IList { Count: > 0 } items))
@@ -70,6 +75,10 @@ public sealed partial class CollectionViewShortcutBehavior : BehaviorBase<Collec
             Select(view, items, 0);
         }
     }
+
+    //--------------------------------------------------------------------------------
+    // Shortcut
+    //--------------------------------------------------------------------------------
 
     public bool CanHandle(ShortcutKey key)
     {
@@ -93,7 +102,6 @@ public sealed partial class CollectionViewShortcutBehavior : BehaviorBase<Collec
             return false;
         }
 
-        // 端の行では処理せず、一覧の外へフォーカスを移す
         if (key is ShortcutKey.Up or ShortcutKey.Down)
         {
             var index = ResolveNextIndex(view, items, key);
@@ -106,7 +114,6 @@ public sealed partial class CollectionViewShortcutBehavior : BehaviorBase<Collec
             return true;
         }
 
-        // 行の無い番号では何もしない(画面のショートカットには回さない)
         if (IsNumberKey(key))
         {
             var number = key - ShortcutKey.Num1;
@@ -131,6 +138,10 @@ public sealed partial class CollectionViewShortcutBehavior : BehaviorBase<Collec
 
         return true;
     }
+
+    //--------------------------------------------------------------------------------
+    // Helper
+    //--------------------------------------------------------------------------------
 
     private bool IsNumberKey(ShortcutKey key) =>
         SelectByNumberKey && (key >= ShortcutKey.Num1) && (key <= ShortcutKey.Num9);

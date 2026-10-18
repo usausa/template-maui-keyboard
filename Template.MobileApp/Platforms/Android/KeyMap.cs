@@ -8,19 +8,14 @@ using Template.MobileApp.Input;
 
 public enum KeyTrigger
 {
-    // 押した時(押し続けると繰り返す)
     Press,
-    // 離した時
     Release
 }
 
 public enum KeyRoute
 {
-    // アプリで処理する
     Handler,
-    // 入力欄にフォーカスがある時は入力欄に渡す
     Editor,
-    // フォーカスのあるコントロールが先に処理し(入力欄の中のカーソルの移動など)、処理しなければアプリで処理する
     View
 }
 
@@ -28,7 +23,6 @@ public sealed record KeyMapEntry(ShortcutKey Key, KeyTrigger Trigger, KeyRoute R
 
 public static class KeyMap
 {
-    // 端末のキーコード → 論理のキー
     private static readonly Dictionary<Keycode, KeyMapEntry> Entries = new()
     {
         [Keycode.DpadUp] = new(ShortcutKey.Up, KeyTrigger.Press, KeyRoute.Handler),

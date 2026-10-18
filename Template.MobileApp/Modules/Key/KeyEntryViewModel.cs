@@ -5,7 +5,11 @@ using System.Diagnostics;
 [GenerateAccessor]
 public sealed partial class KeyEntryViewModel : AppViewModelBase
 {
+    // Field
+
     private readonly IDialog dialog;
+
+    // Property
 
     [Required(ErrorMessage = "Input1 is required")]
     public EntryController Input1 { get; }
@@ -90,7 +94,6 @@ public sealed partial class KeyEntryViewModel : AppViewModelBase
             Input3.Text = string.Empty;
             Input1.Focus();
 
-            // Input1 に戻したので、次の欄へは移さない
             ice.Handled = true;
         }
     }

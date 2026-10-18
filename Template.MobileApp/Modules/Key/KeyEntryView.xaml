@@ -18,6 +18,7 @@
              shell:ShellProperty.Function3Enabled="True"
              shell:ShellProperty.Function4Enabled="True">
 
+    <!-- Content -->
     <VerticalStackLayout Style="{StaticResource FillVerticalStack}">
         <Entry Style="{StaticResource InputEntry}"
                behaviors:EntryBind.Controller="{Binding Input1}" />

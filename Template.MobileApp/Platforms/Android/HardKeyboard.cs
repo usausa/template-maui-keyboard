@@ -10,7 +10,6 @@ using Java.Lang;
 
 using KeyboardType = Android.Content.Res.KeyboardType;
 
-// ハードキーボード(キーパッドを含む)がある間、ソフトキーボードを出さない
 internal static class HardKeyboard
 {
     private static readonly KeyboardCallbacks Callbacks = new();

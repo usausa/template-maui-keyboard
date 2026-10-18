@@ -2,6 +2,8 @@ namespace Template.MobileApp.Modules.Key;
 
 public sealed partial class KeyMixedViewModel : AppViewModelBase
 {
+    // Property
+
     public IReadOnlyList<string> Items { get; } = Enumerable.Range(1, 5).Select(static x => $"Item-{x}").ToArray();
 
     [ObservableProperty]
@@ -9,6 +11,8 @@ public sealed partial class KeyMixedViewModel : AppViewModelBase
 
     [ObservableProperty]
     public partial int ButtonCount { get; set; }
+
+    // Command
 
     public IObserveCommand ButtonCommand { get; }
 

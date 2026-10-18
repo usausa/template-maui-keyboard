@@ -12,7 +12,6 @@ public sealed class KeyInputDriver
 {
     private readonly HashSet<Keycode> consumedKeys = [];
 
-    // 処理中に押したキー(離した時も捨てる)
     private readonly HashSet<Keycode> discardedKeys = [];
 
     public bool Process(KeyEvent e, Window window)
@@ -23,7 +22,7 @@ public sealed class KeyInputDriver
             return false;
         }
 
-        // 押した時に受け取ったキーは、離した時も Android に渡さない
+        // Key up
         if (e.Action == KeyEventActions.Up)
         {
             if (discardedKeys.Remove(e.KeyCode))
@@ -50,14 +49,13 @@ public sealed class KeyInputDriver
             return false;
         }
 
-        // 処理中は、入力欄やコントロールにも渡さずに捨てる
+        // Discard while busy
         if (InputManager.Default.IsBusy)
         {
             discardedKeys.Add(e.KeyCode);
             return true;
         }
 
-        // 処理が終わった後のキーは受け付ける(押し続けている途中も)
         discardedKeys.Remove(e.KeyCode);
 
         var focused = window.CurrentFocus;
@@ -69,22 +67,20 @@ public sealed class KeyInputDriver
 
         if (route == KeyRoute.View)
         {
-            // コントロールが処理するキー(入力欄の中のカーソルの移動など)はそちらを優先する
+            // Control first
             if (window.SuperDispatchKeyEvent(e))
             {
-                // 押し続けている途中からコントロールが処理した時も、離すまではコントロールに任せる
                 consumedKeys.Remove(e.KeyCode);
                 return true;
             }
 
-            // 押し続けて端に来ても、入力欄やキーを処理していたコントロール(スライダーなど)の外へは出さない
             if ((e.RepeatCount > 0) && ((focused is EditText) || !consumedKeys.Contains(e.KeyCode)))
             {
                 return true;
             }
         }
 
-        // 押し続けた時の繰り返し
+        // Repeat
         if (e.RepeatCount > 0)
         {
             if (!consumedKeys.Contains(e.KeyCode))
@@ -100,7 +96,7 @@ public sealed class KeyInputDriver
             return true;
         }
 
-        // 処理しないキーは Android に渡す
+        // Handler
         var consumed = entry.Trigger == KeyTrigger.Press
             ? InputManager.Default.Process(entry.Key)
             : InputManager.Default.CanProcess(entry.Key);
@@ -112,7 +108,6 @@ public sealed class KeyInputDriver
         return consumed;
     }
 
-    // 複数行の入力欄の中の上下は、行の移動を先にする
     private static KeyRoute ResolveRoute(KeyMapEntry entry, View? focused) =>
         (entry.Key is ShortcutKey.Up or ShortcutKey.Down) && (focused is EditText editText) && ((editText.InputType & InputTypes.TextFlagMultiLine) != 0)
             ? KeyRoute.View

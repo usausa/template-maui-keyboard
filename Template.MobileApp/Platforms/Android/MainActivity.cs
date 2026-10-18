@@ -13,8 +13,11 @@ using AndroidX.Activity;
     Theme = "@style/Maui.SplashTheme",
     MainLauncher = true,
     AlwaysRetainTaskState = true,
-    LaunchMode = LaunchMode.SingleInstance,
-    ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density | ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden | ConfigChanges.Navigation,
+    LaunchMode = LaunchMode.SingleTask,
+    LockTaskMode = "if_whitelisted",
+    ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density |
+                           ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden | ConfigChanges.Navigation | ConfigChanges.Touchscreen |
+                           ConfigChanges.Locale | ConfigChanges.LayoutDirection | ConfigChanges.FontScale | ConfigChanges.Mcc | ConfigChanges.Mnc,
     ScreenOrientation = ScreenOrientation.Portrait)]
 public sealed class MainActivity : MauiAppCompatActivity
 {
@@ -24,7 +27,7 @@ public sealed class MainActivity : MauiAppCompatActivity
 
     protected override void OnCreate(Bundle? savedInstanceState)
     {
-        // アプリ全体のオーバースクロールを無効にする
+        // Disable overscroll effect
         Theme?.ApplyStyle(_Microsoft.Android.Resource.Designer.ResourceConstant.Style.NoOverScrollTheme, true);
 
         base.OnCreate(savedInstanceState);

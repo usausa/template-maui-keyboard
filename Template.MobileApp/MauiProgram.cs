@@ -224,7 +224,6 @@ public static partial class MauiProgram
         services.AddViewModels();
 
         // MauiComponents
-        // ダイアログは物理キーの扱いを足した版を使う(AddComponentsDialog より先に登録する)
         services.AddSingleton<IDialog, KeypadDialog>();
         services.AddComponentsDialog(static c =>
         {

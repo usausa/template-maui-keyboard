@@ -15,6 +15,7 @@
              shell:ShellProperty.Function1Enabled="True"
              behaviors:Focus.Wrap="True">
 
+    <!-- Content -->
     <Grid Style="{StaticResource MenuGrid}"
           RowDefinitions="*,*,*,*,*,*,*,*,*">
         <Button Grid.Row="0"

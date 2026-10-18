@@ -33,7 +33,6 @@ public sealed partial class NavigationFocusPlugin : PluginBase
 
     public override void OnNavigatedTo(IPluginContext pluginContext, INavigationContext navigationContext, object view, object? target)
     {
-        // 前の画面のソフトキーボードが残るとキーを取られるので閉じる
         HideSoftInput();
 
         if (navigationContext.Attribute.IsRestore())

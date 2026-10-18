@@ -46,7 +46,6 @@ public sealed partial class KeypadDialog
         return await dialog.ShowAsync(defaultValue, message, title, ok, cancel, placeHolder, parameter ?? new PromptParameter()).ConfigureAwait(true);
     }
 
-    // 処理が終わるまで Esc で閉じない(Android はキャンセルできないダイアログも Esc で閉じる)
     public partial IDisposable Indicator()
     {
         var activity = ActivityResolver.CurrentActivity;
@@ -96,7 +95,6 @@ public sealed partial class KeypadDialog
         }
     }
 
-    // 閉じるキーは押した時から受け取り、Android に結果を返さずにダイアログを閉じさせない
     private abstract class KeyDialog : Java.Lang.Object, IDialogInterfaceOnKeyListener
     {
         private readonly Keycode[] dismissKeys;

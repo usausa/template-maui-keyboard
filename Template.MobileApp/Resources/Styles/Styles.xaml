@@ -893,8 +893,6 @@
         <Setter Property="VerticalOptions" Value="Center" />
     </Style>
 
-    <!-- CheckBox はチェックの間 Focused の状態へ移らないので、ここからのフォーカスの色はトリガーで付ける -->
-
     <Style x:Key="ToggleCheckBox"
            TargetType="CheckBox">
         <Setter Property="BackgroundColor" Value="Transparent" />

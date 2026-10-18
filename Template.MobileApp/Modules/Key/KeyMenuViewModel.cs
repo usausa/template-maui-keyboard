@@ -2,9 +2,17 @@ namespace Template.MobileApp.Modules.Key;
 
 public sealed class KeyMenuViewModel : AppViewModelBase
 {
+    // Field
+
     private readonly IDialog dialog;
 
+    // Command
+
     public IObserveCommand ForwardCommand { get; }
+
+    //--------------------------------------------------------------------------------
+    // Constructor
+    //--------------------------------------------------------------------------------
 
     public KeyMenuViewModel(
         IDialog dialog)
@@ -14,7 +22,10 @@ public sealed class KeyMenuViewModel : AppViewModelBase
         ForwardCommand = MakeAsyncCommand<ViewId>(x => Navigator.ForwardAsync(x));
     }
 
-    // ルートの画面の戻るは、確かめてからアプリを裏に回す(既定のボタンは Cancel)
+    //--------------------------------------------------------------------------------
+    // Navigation
+    //--------------------------------------------------------------------------------
+
     protected override async Task OnNotifyBackAsync()
     {
         if (await dialog.ConfirmAsync("Exit?"))

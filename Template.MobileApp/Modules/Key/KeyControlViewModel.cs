@@ -2,6 +2,8 @@ namespace Template.MobileApp.Modules.Key;
 
 public sealed partial class KeyControlViewModel : AppViewModelBase
 {
+    // Property
+
     [ObservableProperty]
     public partial bool CheckA { get; set; }
 

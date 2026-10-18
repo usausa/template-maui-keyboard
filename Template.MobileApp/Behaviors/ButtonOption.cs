@@ -46,9 +46,9 @@ public static partial class ButtonOption
 
     public static void SetDisableRippleEffect(BindableObject bindable, bool value) => bindable.SetValue(DisableRippleEffectProperty, value);
 
-    // ------------------------------------------------------------
+    //--------------------------------------------------------------------------------
     // Pressed
-    // ------------------------------------------------------------
+    //--------------------------------------------------------------------------------
 
     public static readonly BindableProperty IsPressedProperty = BindableProperty.CreateAttached(
         "IsPressed",

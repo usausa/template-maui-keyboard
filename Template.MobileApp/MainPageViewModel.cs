@@ -8,11 +8,15 @@ using Template.MobileApp.Shell;
 [ObservableGeneratorOption(Reactive = true, ViewModel = true)]
 public sealed class MainPageViewModel : ExtendViewModelBase, IShellControl, IAppLifecycle
 {
+    // Field
+
     private readonly IScreen screen;
 
     private bool destroying;
 
     private IDisposable? navigatingBusy;
+
+    // Shell
 
     public StartupState Startup { get; }
 
@@ -34,6 +38,8 @@ public sealed class MainPageViewModel : ExtendViewModelBase, IShellControl, IApp
     public FunctionState Function2 => Functions[1];
     public FunctionState Function3 => Functions[2];
     public FunctionState Function4 => Functions[3];
+
+    // Command
 
     public IObserveCommand Function1Command { get; }
     public IObserveCommand Function2Command { get; }

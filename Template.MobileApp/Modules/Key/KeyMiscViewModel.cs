@@ -2,8 +2,12 @@ namespace Template.MobileApp.Modules.Key;
 
 public sealed partial class KeyMiscViewModel : AppViewModelBase
 {
+    // Property
+
     [ObservableProperty]
     public partial string Result { get; set; } = "-";
+
+    // Command
 
     public IObserveCommand InformationCommand { get; }
     public IObserveCommand ConfirmCommand { get; }

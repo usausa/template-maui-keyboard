@@ -8,6 +8,10 @@ using Template.MobileApp.Messaging;
 
 public static class EntryBind
 {
+    //--------------------------------------------------------------------------------
+    // Property
+    //--------------------------------------------------------------------------------
+
     public static readonly BindableProperty ControllerProperty = BindableProperty.CreateAttached(
         "Controller",
         typeof(EntryController),
@@ -42,6 +46,10 @@ public static class EntryBind
             entry.Behaviors.Add(new EntryBindBehavior());
         }
     }
+
+    //--------------------------------------------------------------------------------
+    // Behavior
+    //--------------------------------------------------------------------------------
 
     private sealed class EntryBindBehavior : BehaviorBase<Entry>
     {
@@ -91,7 +99,6 @@ public static class EntryBind
 
         private void BindableOnCompleted(object? sender, EventArgs e)
         {
-            // 処理中は、確定のコマンドも次の欄への移動もしない(IME の確定やソフトキーボードのボタンからも来る)
             if ((controller is null) || InputManager.Default.IsBusy)
             {
                 return;

@@ -2,7 +2,15 @@ namespace Template.MobileApp.Behaviors;
 
 public static partial class EntryOption
 {
+    //--------------------------------------------------------------------------------
+    // Mapper
+    //--------------------------------------------------------------------------------
+
     public static partial void UseCustomMapper(BehaviorOptions options);
+
+    //--------------------------------------------------------------------------------
+    // Property
+    //--------------------------------------------------------------------------------
 
     // ReSharper disable InconsistentNaming
     public static readonly BindableProperty DisableShowSoftInputOnFocusProperty = BindableProperty.CreateAttached(

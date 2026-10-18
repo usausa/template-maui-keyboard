@@ -8,6 +8,10 @@ using Template.MobileApp.Helpers;
 
 public sealed partial class InputBehavior : BehaviorBase<VisualElement>, IInputHandler
 {
+    //--------------------------------------------------------------------------------
+    // Property
+    //--------------------------------------------------------------------------------
+
     public static readonly BindableProperty IsBusyProperty = BindableProperty.Create(
         nameof(IsBusy),
         typeof(bool),
@@ -22,8 +26,11 @@ public sealed partial class InputBehavior : BehaviorBase<VisualElement>, IInputH
         set => SetValue(IsBusyProperty, value);
     }
 
-    // 処理中と閉じている途中は、キーを捨てる
     bool IInputHandler.IsBusy => IsBusy || closing;
+
+    //--------------------------------------------------------------------------------
+    // Lifecycle
+    //--------------------------------------------------------------------------------
 
     protected override void OnAttachedTo(VisualElement bindable)
     {
@@ -75,8 +82,11 @@ public sealed partial class InputBehavior : BehaviorBase<VisualElement>, IInputH
         AttachPlatformKeyListener((Popup)sender!);
     }
 
-    // ポップアップは別のウィンドウなので、そのウィンドウのキーを受ける
     private static partial void AttachPlatformKeyListener(Popup popup);
+
+    //--------------------------------------------------------------------------------
+    // Input
+    //--------------------------------------------------------------------------------
 
     public bool CanHandle(ShortcutKey key)
     {
@@ -103,7 +113,7 @@ public sealed partial class InputBehavior : BehaviorBase<VisualElement>, IInputH
 
     public bool Handle(ShortcutKey key)
     {
-        // 処理中と閉じている途中のキーは捨てる
+        // Busy
         if (IsBusy || closing)
         {
             return true;
@@ -120,7 +130,7 @@ public sealed partial class InputBehavior : BehaviorBase<VisualElement>, IInputH
             return true;
         }
 
-        // 端で止める時もキーは使ったものとし、範囲の外へフォーカスを出さない
+        // Move focus
         if (key is ShortcutKey.Up or ShortcutKey.Down or ShortcutKey.Left or ShortcutKey.Right)
         {
             ElementHelper.MoveFocus(ElementHelper.ResolveScope(AssociatedObject), key is ShortcutKey.Down or ShortcutKey.Right);
@@ -134,14 +144,14 @@ public sealed partial class InputBehavior : BehaviorBase<VisualElement>, IInputH
             return true;
         }
 
-        // 画面の Esc は Android の戻るキーと同じ
+        // Back
         if ((key == ShortcutKey.Escape) && (AssociatedObject is Page page))
         {
             page.SendBackButtonPressed();
             return true;
         }
 
-        // ポップアップの Esc はキャンセルで閉じる(結果は無し)
+        // Close popup
         if ((key == ShortcutKey.Escape) && (AssociatedObject is Popup popup))
         {
             closing = true;
@@ -155,7 +165,10 @@ public sealed partial class InputBehavior : BehaviorBase<VisualElement>, IInputH
     public VisualElement? FindFocused() =>
         AssociatedObject is not null ? ElementHelper.FindFocused(AssociatedObject) : null;
 
-    // フォーカスのある要素の IShortcutBehavior を順に見て、条件を満たしたら止める
+    //--------------------------------------------------------------------------------
+    // Helper
+    //--------------------------------------------------------------------------------
+
     private static bool AnyShortcutBehavior(VisualElement element, ShortcutKey key, Func<IShortcutBehavior, ShortcutKey, bool> predicate)
     {
         var behaviors = element.Behaviors;
@@ -174,7 +187,6 @@ public sealed partial class InputBehavior : BehaviorBase<VisualElement>, IInputH
     private static VisualElement? FindShortcut(VisualElement parent, ShortcutKey key) =>
         ElementHelper.FindActive(parent, key, static (x, s) => Shortcut.GetKey(x) == s);
 
-    // タッチと同じ操作をする(フォーカスは動かさない)
     private static void InvokeShortcut(VisualElement element)
     {
         switch (element)

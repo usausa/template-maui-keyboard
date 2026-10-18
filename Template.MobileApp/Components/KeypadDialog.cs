@@ -2,7 +2,6 @@ namespace Template.MobileApp.Components;
 
 using IProgress = MauiComponents.IProgress;
 
-// MauiComponents の DialogImplementation に、物理キーで閉じた時の扱いを足した版(メッセージのダイアログ以外は元の実装に任せる)
 public sealed partial class KeypadDialog : IDialog
 {
     private readonly DialogConfig config;

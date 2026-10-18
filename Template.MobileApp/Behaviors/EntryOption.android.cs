@@ -11,8 +11,11 @@ using Microsoft.Maui.Handlers;
 
 public static partial class EntryOption
 {
-    // DisableShowSoftInputOnFocus の入力欄(ハードキーボードの有無が変わった時に設定し直す)
     private static readonly ConditionalWeakTable<TextView, object> SoftInputViews = [];
+
+    //--------------------------------------------------------------------------------
+    // Mapper
+    //--------------------------------------------------------------------------------
 
     public static partial void UseCustomMapper(BehaviorOptions options)
     {
@@ -73,7 +76,10 @@ public static partial class EntryOption
         }
     }
 
-    // ハードキーボード(キーパッドを含む)がある間だけ、フォーカスでソフトキーボードを出さない
+    //--------------------------------------------------------------------------------
+    // Handler
+    //--------------------------------------------------------------------------------
+
     private static void UpdateDisableShowSoftInputOnFocus(TextView editText, BindableObject element)
     {
         var value = GetDisableShowSoftInputOnFocus(element);
@@ -92,7 +98,6 @@ public static partial class EntryOption
         }
     }
 
-    // フォーカス済みの入力欄への Focus() は MAUI が ShowSoftInputOnFocus を見ずにソフトキーボードを出すので、元の処理を通さない
     private static bool SuppressFocusSoftInput(TextView editText, IView view, object? args)
     {
         if ((args is not FocusRequest request) || !view.IsFocused || editText.ShowSoftInputOnFocus)
@@ -110,7 +115,6 @@ public static partial class EntryOption
         editText.SetSelectAllOnFocus(value);
     }
 
-    // 指定の無い入力欄の色合いは変えない(null に戻すと背景色が黒くなる)
     private static void UpdateHandleNoBorder(TextView editText, BindableObject element)
     {
         if (GetNoBorder(element))
@@ -119,7 +123,6 @@ public static partial class EntryOption
         }
     }
 
-    // SearchView の下線は入力欄ではなく、入力欄を囲む search_plate の背景
     private static void UpdateSearchBarNoBorder(View searchView, BindableObject element)
     {
         var plate = searchView.FindViewById(_Microsoft.Android.Resource.Designer.ResourceConstant.Id.search_plate);
@@ -137,6 +140,10 @@ public static partial class EntryOption
         editText.SetFilters(rule is null ? [] : [new InputFilterInputFilter(rule)]);
 #pragma warning restore CA2000
     }
+
+    //--------------------------------------------------------------------------------
+    // Input Filter
+    //--------------------------------------------------------------------------------
 
     private sealed class InputFilterInputFilter : Object, IInputFilter
     {
@@ -158,7 +165,6 @@ public static partial class EntryOption
     {
         var value = GetHandleEnterKey(element);
 
-        // Mapper再実行時の多重購読を防ぐため一度解除してから購読する
         editText.EditorAction -= OnEditorAction;
         if (value)
         {
@@ -166,7 +172,6 @@ public static partial class EntryOption
         }
     }
 
-    // ハードキーの Enter では Android の既定の次の欄への移動をさせない(新しい Android では ActionId が ImeNull で来ない)
     private static void OnEditorAction(object? sender, TextView.EditorActionEventArgs e)
     {
         if (e.Event?.KeyCode == Keycode.Enter)
