@@ -15,9 +15,11 @@
     <!-- Content -->
     <Grid Style="{StaticResource MenuGrid}"
           RowDefinitions="Auto,*">
+
         <Label Grid.Row="0"
                Style="{StaticResource ResultLabel}"
                Text="{Binding Result, StringFormat='Result: {0}'}" />
+
         <CollectionView Grid.Row="1"
                         ItemsSource="{Binding Items}"
                         SelectionMode="Single">
@@ -35,6 +37,7 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
     </Grid>
 
 </ContentView>

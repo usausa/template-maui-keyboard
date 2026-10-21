@@ -16,6 +16,7 @@
     <ScrollView>
         <Grid Style="{StaticResource MenuGrid}"
               RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+
             <Entry Grid.Row="0"
                    Style="{StaticResource InputEntry}"
                    Placeholder="Entry" />
@@ -26,6 +27,7 @@
             <Editor Grid.Row="2"
                     Style="{StaticResource InputEditor}"
                     Placeholder="Editor" />
+
             <Picker Grid.Row="3"
                     Style="{StaticResource InputPicker}"
                     Title="Picker">
@@ -35,6 +37,7 @@
                     <x:String>Item-3</x:String>
                 </Picker.Items>
             </Picker>
+
             <Grid Grid.Row="4"
                   ColumnDefinitions="*,*">
                 <DatePicker Grid.Column="0"
@@ -42,6 +45,7 @@
                 <TimePicker Grid.Column="1"
                             Style="{StaticResource InputTimePicker}" />
             </Grid>
+
             <Grid Grid.Row="5"
                   ColumnDefinitions="*,*">
                 <HorizontalStackLayout Grid.Column="0"
@@ -57,6 +61,7 @@
                     <Switch Style="{StaticResource ToggleSwitch}" />
                 </HorizontalStackLayout>
             </Grid>
+
             <Grid Grid.Row="6"
                   ColumnDefinitions="*,*"
                   RadioButtonGroup.GroupName="Mixed">
@@ -68,6 +73,7 @@
                              Style="{StaticResource ToggleRadioButton}"
                              Content="Radio B" />
             </Grid>
+
             <Grid Grid.Row="7"
                   ColumnDefinitions="*,Auto">
                 <Slider Grid.Column="0"
@@ -77,6 +83,7 @@
                        Style="{StaticResource ToggleLabel}"
                        Text="Slider" />
             </Grid>
+
             <HorizontalStackLayout Grid.Row="8"
                                    Style="{StaticResource ToggleLayout}">
                 <Stepper Style="{StaticResource InputStepper}"
@@ -85,10 +92,12 @@
                 <Label Style="{StaticResource ToggleLabel}"
                        Text="{Binding StepperValue, StringFormat='Stepper {0}'}" />
             </HorizontalStackLayout>
+
             <Button Grid.Row="9"
                     Style="{StaticResource MenuButton}"
                     Command="{Binding ButtonCommand}"
                     Text="{Binding ButtonCount, StringFormat='Button {0}'}" />
+
             <CollectionView Grid.Row="10"
                             HeightRequest="240"
                             ItemsSource="{Binding Items}"
@@ -105,6 +114,7 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
         </Grid>
     </ScrollView>
 

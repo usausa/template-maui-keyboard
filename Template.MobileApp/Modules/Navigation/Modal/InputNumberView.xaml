@@ -117,6 +117,7 @@
                     input:Shortcut.Key="Function4"
                     ImageSource="{x:Static markup:AppIcons.Check}" />
         </Grid>
+
     </VerticalStackLayout>
 
 </mct:Popup>

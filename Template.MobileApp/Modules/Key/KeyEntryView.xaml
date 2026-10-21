@@ -20,6 +20,7 @@
 
     <!-- Content -->
     <VerticalStackLayout Style="{StaticResource FillVerticalStack}">
+
         <Entry Style="{StaticResource InputEntry}"
                behaviors:EntryBind.Controller="{Binding Input1}" />
         <Entry Style="{StaticResource InputEntry}"
@@ -28,6 +29,7 @@
                behaviors:EntryBind.Controller="{Binding Input3}" />
         <Editor Style="{StaticResource InputEditor}"
                 Text="{Binding Memo}" />
+
     </VerticalStackLayout>
 
 </ContentView>
