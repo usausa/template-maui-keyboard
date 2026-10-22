@@ -1,6 +1,6 @@
 namespace Template.MobileApp.Modules.Key;
 
-public sealed partial class KeyMiscViewModel : AppViewModelBase
+public sealed partial class KeyDialogViewModel : AppViewModelBase
 {
     // Property
 
@@ -22,7 +22,7 @@ public sealed partial class KeyMiscViewModel : AppViewModelBase
     // Constructor
     //--------------------------------------------------------------------------------
 
-    public KeyMiscViewModel(
+    public KeyDialogViewModel(
         IDialog dialog,
         IPopupNavigator popupNavigator)
     {

@@ -34,9 +34,9 @@
         <Button Grid.Row="2"
                 Style="{StaticResource MenuButton}"
                 Command="{Binding ForwardCommand}"
-                CommandParameter="{markup:ViewId KeyMisc}"
+                CommandParameter="{markup:ViewId KeyDialog}"
                 input:Shortcut.Key="Num3"
-                Text="3.Misc" />
+                Text="3.Dialog" />
         <Button Grid.Row="3"
                 Style="{StaticResource MenuButton}"
                 Command="{Binding ForwardCommand}"

@@ -5,10 +5,10 @@
              xmlns:shell="clr-namespace:Template.MobileApp.Shell"
              xmlns:module="clr-namespace:Template.MobileApp.Modules.Key"
              xmlns:input="clr-namespace:Template.MobileApp.Input"
-             x:Class="Template.MobileApp.Modules.Key.KeyMiscView"
-             x:DataType="{x:Type module:KeyMiscViewModel}"
-             s:BindingContextResolver.Type="{x:Type module:KeyMiscViewModel}"
-             shell:ShellProperty.Title="Misc"
+             x:Class="Template.MobileApp.Modules.Key.KeyDialogView"
+             x:DataType="{x:Type module:KeyDialogViewModel}"
+             s:BindingContextResolver.Type="{x:Type module:KeyDialogViewModel}"
+             shell:ShellProperty.Title="Dialog"
              shell:ShellProperty.Function1Text="Back"
              shell:ShellProperty.Function1Enabled="True">
 

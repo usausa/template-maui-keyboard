@@ -199,7 +199,7 @@ Keys not in the table and keys the app does not handle go to Android.
 |---|---|---|
 | Entry | 1 | Three input fields and a multi-line input field, Enter to advance, F2 to validate, F3 to enable/disable Input1, F4 to set a value in Input3 |
 | List | 2 | List (Up/Down, number keys, Enter) |
-| Misc | 3 | Five dialogs, a numeric popup, Indicator, Loading |
+| Dialog | 3 | Five dialogs, a numeric popup, Indicator, Loading |
 | Control | 4 | CheckBox, Switch, RadioButton (number keys, Enter) |
 | Mixed | 5 | Various controls on one screen, for verification |
 
@@ -260,7 +260,7 @@ adb shell input keyevent --longpress KEYCODE_DPAD_RIGHT
 - Setting `ShowSoftInputOnFocus` to false with `EntryOption.DisableShowSoftInputOnFocus` does not stop this call
 - `Focus()` on an already focused input field is common in this template
   - Default focus when a screen opens (`NavigationFocusPlugin`)
-  - Focus restoration after a dialog or popup closes (`FocusHelper`, `PopupFocusPlugin`)
+  - Focus restoration after a popup closes (`PopupFocusPlugin`)
   - `EntryController.Focus()`, and shortcuts to an already focused input field
 - When the soft keyboard appears on a device with a hardware keyboard, it covers the bottom of the screen, and the IME may take keys first (it composes digits as full-width characters, and F keys do not work during composition)
 
@@ -300,6 +300,45 @@ private static bool SuppressFocusSoftInput(TextView editText, IView view, object
 - SearchBar is out of scope (the AndroidX SearchView shows the soft keyboard by itself)
 - MAUI's `DisplayPromptAsync` opens with `StateVisible`. For input, use `PromptAsync` of `IDialog`
 - When updating MAUI, check whether the implementations of `InputView.MapFocus`, `InputViewExtensions.ShowKeyboardIfFocused`, and `TextViewExtensions.Focus` have changed
+
+## 📦 Adding to template-maui
+
+Files to use when adding physical key support to template-maui.  
+Copy the files in "Copy", and replace the files in "Replace" with the files of this template.  
+The files in "Merge" also contain features of template-maui, so add only the parts in the table instead of overwriting them.
+
+### Copy
+
+| File | Notes |
+|---|---|
+| `Input/` | All files |
+| `Platforms/Android/KeyInputDriver.cs` / `KeyMap.cs` / `HardKeyboard.cs` | |
+| `Components/KeypadDialog.cs` / `KeypadDialog.android.cs` | |
+| `Extender/PopupInputPlugin.cs` / `NavigationFocusPlugin.android.cs` | |
+| `Modules/Key/` | Sample screens (when needed). Also add the `Key*` values to `ViewId` and an entry to a menu |
+
+### Replace
+
+| File | Difference from template-maui |
+|---|---|
+| `Helpers/ElementHelper.cs` / `ElementHelper.android.cs` | Focus movement in the order written in XAML (Skip, Wrap, Scope), and placing the focus on controls other than input fields. The public members of template-maui remain |
+| `Extender/NavigationFocusPlugin.cs` / `PopupFocusPlugin.cs` | Closes the soft keyboard after navigation, and restores the focus after a popup closes |
+| `Behaviors/EntryBind.cs` | Ignores Enter while keys are discarded (`InputManager.IsBusy`) |
+| `Behaviors/EntryOption.android.cs` | Suppresses the soft keyboard only while a hardware keyboard is present |
+| `Modules/ValidationHelper.cs` | `ValidateInputsAsync` (input field validation, and focus after an error) |
+
+### Merge
+
+| File | What to add |
+|---|---|
+| `Behaviors/Focus.cs` | `Skip`, `Wrap`, `Scope`, and `DefaultHighlight`. Keep `FocusedStroke` and `ErrorStroke` of template-maui |
+| `Extensions.cs` | `SetDefaultFocus` of this template (skips `Focus.Skip`, and places the focus with `ElementHelper.RequestFocus`) |
+| `Platforms/Android/MainActivity.cs` | The `KeyInputDriver` field and the `DispatchKeyEvent` override |
+| `MainPage.xaml` | `InputBehavior` in the page behaviors, `Focus.Scope` on the content area, and `Shortcut.Key` (Function1 to Function4) on the F key buttons |
+| `MauiProgram.cs` | `HandleEnterKey` and `DisableShowSoftInputOnFocus` set to true, `ConfigureControlKeyHandling()`, `KeypadDialog` registered as `IDialog` before `AddComponentsDialog`, `DismissKeys` / `IgnorePromptDismissKeys` / `EnableDialogButtonFocus` of the dialog, and `AddComponentsPopupPlugin<PopupInputPlugin>()` |
+| `Modules/Navigation/Modal/InputNumberView.xaml` | `Shortcut.Key` on the keypad buttons |
+| `Resources/Styles/Styles.xaml` | The `Focused` state of the controls operated by keys, and `Focus.DefaultHighlight` |
+| `Settings.XamlStyler` | `input:*` in the attribute order |
 
 ## 🔗 Links
 
