@@ -26,7 +26,7 @@ For devices with physical keys.
 | `InputManager` | Input | Stacks the handlers of screens and popups, and dispatches keys to the topmost one |
 | `InputBehavior` | Input | Key handling for the screen (MainPage) and popups |
 | `Shortcut.Key` | Input | Assigns a key to an element |
-| `ShortcutBehavior` | Input | Executes a command when a key is pressed on the focused element. `ParameterProperty` reads the value with `AccessorProvider` (the types on the path need `[GenerateAccessor]` or `[GenerateAccessorFor]`) |
+| `ShortcutBehavior` | Input | Executes a command when a key is pressed on the focused element |
 | `CollectionViewShortcutBehavior` | Input | Selects a list row with Up/Down and number keys, and confirms it with a key |
 | `ControlKeyHandling` | Input | Left/Right for Slider and Stepper, Esc in date and time dialogs, `KeyFocus.DefaultHighlight` |
 | `KeyFocus` | Input | Skipped elements, wrap-around, movement range, Android's default focus color |
@@ -134,8 +134,7 @@ private void Input1Complete(EntryCompleteEvent ice)
 Add DataAnnotations attributes to `EntryController` properties, and `ValidateInputsAsync` checks them in the order of the given names.  
 It shows the message of the first error with Information and moves the focus to that input field.  
 Errors are stored in the VM's `Errors`.  
-The VM needs `[GenerateAccessor]`.  
-The attributes are read with reflection that is kept by trimming (`[DynamicallyAccessedMembers]` on the VM base classes), so it also works with AOT.
+The VM needs `[GenerateAccessor]`.
 
 ```csharp
 [GenerateAccessor]
@@ -315,7 +314,7 @@ The files in "Merge" also contain features of template-maui, so add only the par
 |---|---|
 | `Input/` | All files |
 | `Platforms/Android/KeyInputDriver.cs` / `KeyMap.cs` / `HardKeyboard.cs` | |
-| `Extender/PopupInputPlugin.cs` / `NavigationFocusPlugin.android.cs` | |
+| `Extender/PopupInputPlugin.cs` | |
 | `Modules/Key/` | Sample screens (when needed). Also add the `Key*` values to `ViewId` and an entry to a menu |
 
 ### Replace
@@ -323,7 +322,7 @@ The files in "Merge" also contain features of template-maui, so add only the par
 | File | Difference from template-maui |
 |---|---|
 | `Helpers/ElementHelper.cs` / `ElementHelper.android.cs` | Focus movement in the order written in XAML (Skip, Wrap, Scope), and placing the focus on controls other than input fields. The public members of template-maui remain |
-| `Extender/NavigationFocusPlugin.cs` / `PopupFocusPlugin.cs` | Closes the soft keyboard after navigation, and restores the focus after a popup closes |
+| `Extender/NavigationFocusPlugin.cs` / `PopupFocusPlugin.cs` | Places the restored focus also on controls other than input fields (`ElementHelper.RequestFocus`), and restores the focus after a popup closes |
 | `Behaviors/EntryBind.cs` | Ignores Enter while keys are discarded (`InputManager.IsBusy`) |
 | `Behaviors/EntryOption.android.cs` | Suppresses the soft keyboard only while a hardware keyboard is present |
 

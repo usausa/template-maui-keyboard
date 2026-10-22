@@ -1,10 +1,13 @@
 namespace Template.MobileApp.Input;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Windows.Input;
 
 using Smart.Maui.Interactivity;
 
+[RequiresUnreferencedCode("Uses reflection to read ParameterProperty by name; property metadata may be trimmed.")]
 public sealed class ShortcutBehavior : BehaviorBase<Element>, IShortcutBehavior
 {
     //--------------------------------------------------------------------------------
@@ -104,23 +107,7 @@ public sealed class ShortcutBehavior : BehaviorBase<Element>, IShortcutBehavior
             var property = ParameterProperty;
             if (!String.IsNullOrEmpty(property))
             {
-                object? value = AssociatedObject;
-                foreach (var part in property.Split('.'))
-                {
-                    if (value is null)
-                    {
-                        break;
-                    }
-
-                    var accessor = AccessorProvider.FindAccessor(value.GetType());
-                    if (accessor is null)
-                    {
-                        throw new InvalidOperationException($"Accessor is not supported. type=[{value.GetType()}]");
-                    }
-
-                    value = accessor.GetValue(value, part);
-                }
-
+                var value = ResolvePropertyValue(property);
                 parameter = Converter?.Convert(value, typeof(object), ConverterParameter, CultureInfo.CurrentCulture) ?? value;
             }
         }
@@ -131,5 +118,28 @@ public sealed class ShortcutBehavior : BehaviorBase<Element>, IShortcutBehavior
         }
 
         return true;
+    }
+
+    [RequiresUnreferencedCode("Uses GetRuntimeProperty to find property by name; property metadata may be trimmed.")]
+    private object? ResolvePropertyValue(string property)
+    {
+        object? value = AssociatedObject;
+        foreach (var part in property.Split('.'))
+        {
+            if (value is null)
+            {
+                break;
+            }
+
+            var pi = value.GetType().GetRuntimeProperty(part);
+            if (pi is null)
+            {
+                throw new InvalidOperationException($"Invalid property name. name=[{property}]");
+            }
+
+            value = pi.GetValue(value);
+        }
+
+        return value;
     }
 }

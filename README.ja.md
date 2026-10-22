@@ -26,7 +26,7 @@
 | `InputManager` | Input | 画面とポップアップのハンドラーを積み、いちばん上へキーを配る |
 | `InputBehavior` | Input | 画面(MainPage)とポップアップのキーの処理 |
 | `Shortcut.Key` | Input | 要素にキーを割り当てる |
-| `ShortcutBehavior` | Input | フォーカスのある要素でキーを押した時に、コマンドを実行する。`ParameterProperty` は `AccessorProvider` で値を読む(パスの型に `[GenerateAccessor]`・`[GenerateAccessorFor]` が要る) |
+| `ShortcutBehavior` | Input | フォーカスのある要素でキーを押した時に、コマンドを実行する |
 | `CollectionViewShortcutBehavior` | Input | 一覧の行を上下・数字キーで選び、キーで決める |
 | `ControlKeyHandling` | Input | Slider・Stepper の左右、日付・時刻のダイアログの Esc、`KeyFocus.DefaultHighlight` |
 | `KeyFocus` | Input | 飛ばす要素・折り返し・移る範囲・Android の既定のフォーカスの色 |
@@ -134,8 +134,7 @@ private void Input1Complete(EntryCompleteEvent ice)
 `EntryController` のプロパティに DataAnnotations の属性を付け、`ValidateInputsAsync` で名前の順に確かめる。  
 最初のエラーのメッセージを Information で出し、その入力欄へフォーカスを移す。  
 エラーは VM の `Errors` に入る。  
-VM には `[GenerateAccessor]` が要る。  
-属性は、トリミングで消えない印(VM の基底のクラスの `[DynamicallyAccessedMembers]`)を付けた反射で読むので、AOT でも動く。
+VM には `[GenerateAccessor]` が要る。
 
 ```csharp
 [GenerateAccessor]
@@ -315,7 +314,7 @@ template-maui に物理キーの操作を足す時に使うファイルです。
 |---|---|
 | `Input/` | すべて |
 | `Platforms/Android/KeyInputDriver.cs` / `KeyMap.cs` / `HardKeyboard.cs` | |
-| `Extender/PopupInputPlugin.cs` / `NavigationFocusPlugin.android.cs` | |
+| `Extender/PopupInputPlugin.cs` | |
 | `Modules/Key/` | 見本の画面(要る時)。`ViewId` の `Key*` とメニューの項目も足す |
 
 ### 置き換え
@@ -323,7 +322,7 @@ template-maui に物理キーの操作を足す時に使うファイルです。
 | ファイル | template-maui との違い |
 |---|---|
 | `Helpers/ElementHelper.cs` / `ElementHelper.android.cs` | XAML に書いた順のフォーカスの移動(Skip・Wrap・Scope)と、入力欄以外へのフォーカスの置き方。template-maui の公開メンバーは残る |
-| `Extender/NavigationFocusPlugin.cs` / `PopupFocusPlugin.cs` | 遷移の後にソフトキーボードを閉じる、ポップアップを閉じた後にフォーカスを戻す |
+| `Extender/NavigationFocusPlugin.cs` / `PopupFocusPlugin.cs` | 戻した画面のフォーカスを入力欄以外にも置く(`ElementHelper.RequestFocus`)、ポップアップを閉じた後にフォーカスを戻す |
 | `Behaviors/EntryBind.cs` | キーを捨てている間(`InputManager.IsBusy`)は Enter を受けない |
 | `Behaviors/EntryOption.android.cs` | ハードキーボードがある間だけソフトキーボードを出さない |
 
