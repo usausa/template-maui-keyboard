@@ -37,7 +37,7 @@
 | `ElementHelper` | Helpers | フォーカスの移動と置き方 |
 | `NavigationFocusPlugin` | Extender | 画面の既定のフォーカスと、戻った時のフォーカスの戻し |
 | `PopupFocusPlugin` / `PopupInputPlugin` | Extender | ポップアップの既定のフォーカスと閉じた後の戻し / ポップアップにキーの処理を付ける |
-| `KeypadDialog` | Components | `IDialog`。既定のボタンにフォーカス、Esc・DEL でキャンセル、Esc で消えない Indicator |
+| `IDialog`(MauiComponents) | MauiProgram | ダイアログ。既定のボタンにフォーカス、Esc・DEL でキャンセル、ハードキーボードがある間は Prompt でソフトキーボードを出さない、の設定で使う |
 | `ValidateInputsAsync` | Modules(AppViewModelBase) | 入力欄の検証と、エラーの後のフォーカス |
 
 ## ⌨️ キーの流れ
@@ -134,7 +134,8 @@ private void Input1Complete(EntryCompleteEvent ice)
 `EntryController` のプロパティに DataAnnotations の属性を付け、`ValidateInputsAsync` で名前の順に確かめる。  
 最初のエラーのメッセージを Information で出し、その入力欄へフォーカスを移す。  
 エラーは VM の `Errors` に入る。  
-VM には `[GenerateAccessor]` が要る。
+VM には `[GenerateAccessor]` が要る。  
+属性は、トリミングで消えない印(VM の基底のクラスの `[DynamicallyAccessedMembers]`)を付けた反射で読むので、AOT でも動く。
 
 ```csharp
 [GenerateAccessor]
@@ -159,7 +160,7 @@ public sealed partial class KeyEntryViewModel : AppViewModelBase
 
 ### ダイアログとポップアップ
 
-- `IDialog`(`KeypadDialog`): 既定のボタン(Confirm は Cancel)にフォーカスを置き、Esc・DEL でキャンセルする(Prompt の DEL は文字を消す)。閉じた後は開く前の要素にフォーカスが戻る(タッチで閉じた時は戻らない)。Prompt も、ハードキーボードがある間はソフトキーボードを出さない
+- `IDialog`(MauiComponents): 既定のボタン(Confirm は Cancel)にフォーカスを置き、Esc・DEL でキャンセルする(Prompt の DEL は文字を消す)。閉じた後は開く前の要素にフォーカスが戻る(タッチで閉じた時は戻らない)。Prompt も、ハードキーボードがある間はソフトキーボードを出さない
 - ポップアップ: 既定のフォーカスは `Focus.Default` の要素。Esc でキャンセルして閉じる(結果は無し)。閉じた後のフォーカスはダイアログと同じ
 - 処理中(BusyState)の間はキーを捨てる。`Indicator` は Esc で消えない
 
@@ -269,7 +270,7 @@ adb shell input keyevent --longpress KEYCODE_DPAD_RIGHT
 
 - `EntryOption` が、`EntryHandler`・`EditorHandler` の Focus のコマンドを `CommandMapper.ModifyMapping` で包む(`DisableShowSoftInputOnFocus` を有効にした時)。フォーカス済み かつ `ShowSoftInputOnFocus` が false の時は、MAUI の処理を通さずに結果だけ返す。フォーカスは既にあるので、状態は変わらない。それ以外は MAUI の処理のまま
 - 包むのは `UseMauiApp` より後(`ConfigureCustomBehaviors`)。MAUI が足した `InputView.MapFocus` を外側から包むため
-- Prompt のダイアログ(`KeypadDialog`)は、ハードキーボードがある間はウィンドウを `SoftInput.StateHidden` にし、入力欄を `ShowSoftInputOnFocus = false` にする
+- Prompt のダイアログ(`IDialog` の `SuppressPromptSoftInput`)は、ハードキーボードがある間はウィンドウを `SoftInput.StateHidden` にし、入力欄を `ShowSoftInputOnFocus = false` にする
 - ハードキーボードの有無は `HardKeyboard`。つないだ時・外した時は構成の変更で受け取り、入力欄の設定を直す
 - ソフトキーボードを出す時は `ShowSoftInputAsync()` を呼ぶ(フォーカス済みなら Focus のコマンドを通らずに出す)
 
@@ -314,7 +315,6 @@ template-maui に物理キーの操作を足す時に使うファイルです。
 |---|---|
 | `Input/` | すべて |
 | `Platforms/Android/KeyInputDriver.cs` / `KeyMap.cs` / `HardKeyboard.cs` | |
-| `Components/KeypadDialog.cs` / `KeypadDialog.android.cs` | |
 | `Extender/PopupInputPlugin.cs` / `NavigationFocusPlugin.android.cs` | |
 | `Modules/Key/` | 見本の画面(要る時)。`ViewId` の `Key*` とメニューの項目も足す |
 
@@ -334,7 +334,7 @@ template-maui に物理キーの操作を足す時に使うファイルです。
 | `Extensions.cs` | このテンプレートの `SetDefaultFocus`(`KeyFocus.Skip` を飛ばし、`ElementHelper.RequestFocus` でフォーカスを置く) |
 | `Platforms/Android/MainActivity.cs` | `KeyInputDriver` のフィールドと `DispatchKeyEvent` のオーバーライド |
 | `MainPage.xaml` | ページの Behaviors の `InputBehavior`、内容の領域の `KeyFocus.Scope`、F キーのボタンの `Shortcut.Key`(Function1〜Function4) |
-| `MauiProgram.cs` | `HandleEnterKey`・`DisableShowSoftInputOnFocus` を true、`ConfigureControlKeyHandling()`、`AddComponentsDialog` の前に `KeypadDialog` を `IDialog` として登録、ダイアログの `DismissKeys`・`IgnorePromptDismissKeys`・`EnableDialogButtonFocus`、`AddComponentsPopupPlugin<PopupInputPlugin>()` |
+| `MauiProgram.cs` | `HandleEnterKey`・`DisableShowSoftInputOnFocus` を true、`ConfigureControlKeyHandling()`、ダイアログの `DismissKeys`・`IgnorePromptDismissKeys`・`EnableDialogButtonFocus`・`SuppressPromptSoftInput`、`AddComponentsPopupPlugin<PopupInputPlugin>()` |
 | `Modules/Navigation/Modal/InputNumberView.xaml` | テンキーのボタンの `Shortcut.Key` |
 | `Resources/Styles/Styles.xaml` | キーで操作する部品の `Focused` の見た目と `KeyFocus.DefaultHighlight` |
 | `Settings.XamlStyler` | 属性の並びの `input:*` |

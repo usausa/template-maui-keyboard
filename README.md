@@ -37,7 +37,7 @@ For devices with physical keys.
 | `ElementHelper` | Helpers | Moving and placing focus |
 | `NavigationFocusPlugin` | Extender | Default focus of a screen, and focus restoration when navigating back |
 | `PopupFocusPlugin` / `PopupInputPlugin` | Extender | Default focus of a popup and focus restoration after it closes / Adds key handling to popups |
-| `KeypadDialog` | Components | `IDialog`. Focus on the default button, cancel with Esc or DEL, an Indicator that Esc does not dismiss |
+| `IDialog` (MauiComponents) | MauiProgram | Dialogs. Configured to focus the default button, cancel with Esc or DEL, and not show the soft keyboard in Prompt while a hardware keyboard is present |
 | `ValidateInputsAsync` | Modules (AppViewModelBase) | Input field validation, and focus after an error |
 
 ## ⌨️ Key flow
@@ -134,7 +134,8 @@ private void Input1Complete(EntryCompleteEvent ice)
 Add DataAnnotations attributes to `EntryController` properties, and `ValidateInputsAsync` checks them in the order of the given names.  
 It shows the message of the first error with Information and moves the focus to that input field.  
 Errors are stored in the VM's `Errors`.  
-The VM needs `[GenerateAccessor]`.
+The VM needs `[GenerateAccessor]`.  
+The attributes are read with reflection that is kept by trimming (`[DynamicallyAccessedMembers]` on the VM base classes), so it also works with AOT.
 
 ```csharp
 [GenerateAccessor]
@@ -159,7 +160,7 @@ public sealed partial class KeyEntryViewModel : AppViewModelBase
 
 ### Dialogs and popups
 
-- `IDialog` (`KeypadDialog`): Puts the focus on the default button (Cancel for Confirm), and cancels with Esc or DEL (DEL in Prompt deletes characters). After closing, the focus returns to the element that had it before opening (not when closed by touch). Prompt also does not show the soft keyboard while a hardware keyboard is present
+- `IDialog` (MauiComponents): Puts the focus on the default button (Cancel for Confirm), and cancels with Esc or DEL (DEL in Prompt deletes characters). After closing, the focus returns to the element that had it before opening (not when closed by touch). Prompt also does not show the soft keyboard while a hardware keyboard is present
 - Popups: The default focus is the element with `Focus.Default`. Esc cancels and closes the popup (no result). The focus after closing works the same as for dialogs
 - While busy (BusyState), keys are discarded. Esc does not dismiss `Indicator`
 
@@ -269,7 +270,7 @@ adb shell input keyevent --longpress KEYCODE_DPAD_RIGHT
 
 - `EntryOption` wraps the Focus command of `EntryHandler` and `EditorHandler` with `CommandMapper.ModifyMapping` (when `DisableShowSoftInputOnFocus` is enabled). When the view is already focused and `ShowSoftInputOnFocus` is false, it returns only the result without going through the MAUI processing. The view already has focus, so the state does not change. Otherwise, the MAUI processing runs as is
 - The wrapping is done after `UseMauiApp` (`ConfigureCustomBehaviors`) so that it wraps `InputView.MapFocus`, added by MAUI, from the outside
-- The Prompt dialog (`KeypadDialog`) sets the window to `SoftInput.StateHidden` and the input field to `ShowSoftInputOnFocus = false` while a hardware keyboard is present
+- The Prompt dialog (`SuppressPromptSoftInput` of `IDialog`) sets the window to `SoftInput.StateHidden` and the input field to `ShowSoftInputOnFocus = false` while a hardware keyboard is present
 - `HardKeyboard` tells whether a hardware keyboard is present. Connecting and disconnecting are received as configuration changes, and the input field settings are updated
 - To show the soft keyboard, call `ShowSoftInputAsync()` (if the field is already focused, it shows the keyboard without going through the Focus command)
 
@@ -314,7 +315,6 @@ The files in "Merge" also contain features of template-maui, so add only the par
 |---|---|
 | `Input/` | All files |
 | `Platforms/Android/KeyInputDriver.cs` / `KeyMap.cs` / `HardKeyboard.cs` | |
-| `Components/KeypadDialog.cs` / `KeypadDialog.android.cs` | |
 | `Extender/PopupInputPlugin.cs` / `NavigationFocusPlugin.android.cs` | |
 | `Modules/Key/` | Sample screens (when needed). Also add the `Key*` values to `ViewId` and an entry to a menu |
 
@@ -334,7 +334,7 @@ The files in "Merge" also contain features of template-maui, so add only the par
 | `Extensions.cs` | `SetDefaultFocus` of this template (skips `KeyFocus.Skip`, and places the focus with `ElementHelper.RequestFocus`) |
 | `Platforms/Android/MainActivity.cs` | The `KeyInputDriver` field and the `DispatchKeyEvent` override |
 | `MainPage.xaml` | `InputBehavior` in the page behaviors, `KeyFocus.Scope` on the content area, and `Shortcut.Key` (Function1 to Function4) on the F key buttons |
-| `MauiProgram.cs` | `HandleEnterKey` and `DisableShowSoftInputOnFocus` set to true, `ConfigureControlKeyHandling()`, `KeypadDialog` registered as `IDialog` before `AddComponentsDialog`, `DismissKeys` / `IgnorePromptDismissKeys` / `EnableDialogButtonFocus` of the dialog, and `AddComponentsPopupPlugin<PopupInputPlugin>()` |
+| `MauiProgram.cs` | `HandleEnterKey` and `DisableShowSoftInputOnFocus` set to true, `ConfigureControlKeyHandling()`, `DismissKeys` / `IgnorePromptDismissKeys` / `EnableDialogButtonFocus` / `SuppressPromptSoftInput` of the dialog, and `AddComponentsPopupPlugin<PopupInputPlugin>()` |
 | `Modules/Navigation/Modal/InputNumberView.xaml` | `Shortcut.Key` on the keypad buttons |
 | `Resources/Styles/Styles.xaml` | The `Focused` state of the controls operated by keys, and `KeyFocus.DefaultHighlight` |
 | `Settings.XamlStyler` | `input:*` in the attribute order |

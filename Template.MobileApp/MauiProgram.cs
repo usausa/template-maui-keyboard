@@ -224,7 +224,6 @@ public static partial class MauiProgram
         services.AddViewModels();
 
         // MauiComponents
-        services.AddSingleton<IDialog, KeypadDialog>();
         services.AddComponentsDialog(static c =>
         {
             ConfigureDialogDesign(c);
@@ -233,6 +232,7 @@ public static partial class MauiProgram
             c.EnableDialogButtonFocus = true;
             c.EnablePromptEnterAction = true;
             c.EnablePromptSelectAll = true;
+            c.SuppressPromptSoftInput = static () => HardKeyboard.SuppressSoftInput;
         });
         services.AddComponentsPopup(static c => c.AutoRegister(DialogSource()));
         services.AddComponentsPopupPlugin<PopupActivationPlugin>();

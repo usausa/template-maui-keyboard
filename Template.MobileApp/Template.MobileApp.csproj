@@ -94,7 +94,7 @@
     <PackageReference Include="BunnyTail.MemberAccessor" Version="1.19.0" />
     <PackageReference Include="BunnyTail.XamlProperty.Maui" Version="1.5.0" />
     <PackageReference Include="CommunityToolkit.Maui" Version="15.0.1" />
-    <PackageReference Include="Components.Maui" Version="1.50.0" />
+    <PackageReference Include="Components.Maui" Version="1.51.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.13">
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">none</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">all</PrivateAssets>
