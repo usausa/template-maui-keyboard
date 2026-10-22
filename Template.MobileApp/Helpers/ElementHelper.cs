@@ -4,7 +4,7 @@ using CommunityToolkit.Maui.Views;
 
 using Microsoft.Maui;
 
-using Template.MobileApp.Behaviors;
+using Template.MobileApp.Input;
 
 public static partial class ElementHelper
 {
@@ -171,7 +171,7 @@ public static partial class ElementHelper
                 return !forward && (before is not null);
             }
 
-            if (Focus.GetSkip(element))
+            if (KeyFocus.GetSkip(element))
             {
                 return false;
             }
@@ -195,7 +195,7 @@ public static partial class ElementHelper
     {
         for (var current = element; current is not null; current = current.Parent)
         {
-            if (Focus.GetWrap(current))
+            if (KeyFocus.GetWrap(current))
             {
                 return true;
             }
@@ -213,7 +213,7 @@ public static partial class ElementHelper
     {
         for (var parent = element.Parent; parent is not null; parent = parent.Parent)
         {
-            if ((parent is VisualElement visual) && (Focus.GetScope(visual) || (parent is Page) || (parent is Popup)))
+            if ((parent is VisualElement visual) && (KeyFocus.GetScope(visual) || (parent is Page) || (parent is Popup)))
             {
                 return visual;
             }
@@ -232,7 +232,7 @@ public static partial class ElementHelper
         for (var i = 0; i < children.Count; i++)
         {
             var child = children[i];
-            if ((child is VisualElement visual) && Focus.GetScope(visual))
+            if ((child is VisualElement visual) && KeyFocus.GetScope(visual))
             {
                 return visual;
             }

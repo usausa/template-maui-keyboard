@@ -1,10 +1,9 @@
 namespace Template.MobileApp;
 
-using System.Reflection;
-
 using Template.MobileApp.Behaviors;
 using Template.MobileApp.Components;
 using Template.MobileApp.Helpers;
+using Template.MobileApp.Input;
 
 #pragma warning disable CA1724
 public static class Extensions
@@ -44,12 +43,6 @@ public static class Extensions
         }
     }
 
-    public static IEnumerable<Type> UnderNamespaceTypes(this Assembly assembly, Type baseNamespaceType)
-    {
-        var ns = baseNamespaceType.Namespace!;
-        return assembly.ExportedTypes.Where(x => x.Namespace?.StartsWith(ns, StringComparison.Ordinal) ?? false);
-    }
-
     //--------------------------------------------------------------------------------
     // Element
     //--------------------------------------------------------------------------------
@@ -57,7 +50,7 @@ public static class Extensions
     public static void SetDefaultFocus(this IVisualTreeElement parent)
     {
         var element = ElementHelper.FindFocusable(parent, Focus.GetDefault) ??
-                      ElementHelper.FindFocusable(parent, static x => !Focus.GetSkip(x));
+                      ElementHelper.FindFocusable(parent, static x => !KeyFocus.GetSkip(x));
         if (element is not null)
         {
             ElementHelper.RequestFocus(element);

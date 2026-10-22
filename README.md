@@ -26,10 +26,11 @@ For devices with physical keys.
 | `InputManager` | Input | Stacks the handlers of screens and popups, and dispatches keys to the topmost one |
 | `InputBehavior` | Input | Key handling for the screen (MainPage) and popups |
 | `Shortcut.Key` | Input | Assigns a key to an element |
-| `ShortcutBehavior` | Input | Executes a command when a key is pressed on the focused element |
+| `ShortcutBehavior` | Input | Executes a command when a key is pressed on the focused element. `ParameterProperty` reads the value with `AccessorProvider` (the types on the path need `[GenerateAccessor]` or `[GenerateAccessorFor]`) |
 | `CollectionViewShortcutBehavior` | Input | Selects a list row with Up/Down and number keys, and confirms it with a key |
-| `ControlKeyHandling` | Input | Left/Right for Slider and Stepper, Esc in date and time dialogs, `Focus.DefaultHighlight` |
-| `Focus` | Behaviors | Default focus, skipped elements, wrap-around, movement range, Android's default focus color |
+| `ControlKeyHandling` | Input | Left/Right for Slider and Stepper, Esc in date and time dialogs, `KeyFocus.DefaultHighlight` |
+| `KeyFocus` | Input | Skipped elements, wrap-around, movement range, Android's default focus color |
+| `Focus` | Behaviors | Default focus |
 | `EntryController` + `EntryBind` | Messaging / Behaviors | Handles the text, enabled state, and focus of an input field from the VM, and moves to the next field on Enter |
 | `EntryOption` | Behaviors | No soft keyboard while a hardware keyboard is present, select all, Enter, input restrictions |
 | `HardKeyboard` | Platforms/Android | Whether a hardware keyboard (including a keypad) is present. `EntryOption` and Prompt use it to decide whether to suppress the soft keyboard |
@@ -77,13 +78,13 @@ The range is limited to the screen, and the focus stops at the ends.
 |---|---|---|
 | `Focus.Default` | Element | Gets the focus when the screen opens (the first element if none) |
 | `Focus.SuppressDefaultFocus` | Screen, popup | Does not set the default focus |
-| `Focus.Skip` | Element | Skipped by Up/Down/Left/Right movement |
-| `Focus.Wrap` | Screen, popup | Wraps from one end to the opposite end |
-| `Focus.Scope` | Container | Range of movement (set on the screen container in MainPage) |
+| `KeyFocus.Skip` | Element | Skipped by Up/Down/Left/Right movement |
+| `KeyFocus.Wrap` | Screen, popup | Wraps from one end to the opposite end |
+| `KeyFocus.Scope` | Container | Range of movement (set on the screen container in MainPage) |
 
 ```xml
 <ContentView ...
-             behaviors:Focus.Wrap="True">
+             input:KeyFocus.Wrap="True">
 ```
 
 ### Lists
@@ -325,19 +326,17 @@ The files in "Merge" also contain features of template-maui, so add only the par
 | `Extender/NavigationFocusPlugin.cs` / `PopupFocusPlugin.cs` | Closes the soft keyboard after navigation, and restores the focus after a popup closes |
 | `Behaviors/EntryBind.cs` | Ignores Enter while keys are discarded (`InputManager.IsBusy`) |
 | `Behaviors/EntryOption.android.cs` | Suppresses the soft keyboard only while a hardware keyboard is present |
-| `Modules/ValidationHelper.cs` | `ValidateInputsAsync` (input field validation, and focus after an error) |
 
 ### Merge
 
 | File | What to add |
 |---|---|
-| `Behaviors/Focus.cs` | `Skip`, `Wrap`, `Scope`, and `DefaultHighlight`. Keep `FocusedStroke` and `ErrorStroke` of template-maui |
-| `Extensions.cs` | `SetDefaultFocus` of this template (skips `Focus.Skip`, and places the focus with `ElementHelper.RequestFocus`) |
+| `Extensions.cs` | `SetDefaultFocus` of this template (skips `KeyFocus.Skip`, and places the focus with `ElementHelper.RequestFocus`) |
 | `Platforms/Android/MainActivity.cs` | The `KeyInputDriver` field and the `DispatchKeyEvent` override |
-| `MainPage.xaml` | `InputBehavior` in the page behaviors, `Focus.Scope` on the content area, and `Shortcut.Key` (Function1 to Function4) on the F key buttons |
+| `MainPage.xaml` | `InputBehavior` in the page behaviors, `KeyFocus.Scope` on the content area, and `Shortcut.Key` (Function1 to Function4) on the F key buttons |
 | `MauiProgram.cs` | `HandleEnterKey` and `DisableShowSoftInputOnFocus` set to true, `ConfigureControlKeyHandling()`, `KeypadDialog` registered as `IDialog` before `AddComponentsDialog`, `DismissKeys` / `IgnorePromptDismissKeys` / `EnableDialogButtonFocus` of the dialog, and `AddComponentsPopupPlugin<PopupInputPlugin>()` |
 | `Modules/Navigation/Modal/InputNumberView.xaml` | `Shortcut.Key` on the keypad buttons |
-| `Resources/Styles/Styles.xaml` | The `Focused` state of the controls operated by keys, and `Focus.DefaultHighlight` |
+| `Resources/Styles/Styles.xaml` | The `Focused` state of the controls operated by keys, and `KeyFocus.DefaultHighlight` |
 | `Settings.XamlStyler` | `input:*` in the attribute order |
 
 ## 🔗 Links

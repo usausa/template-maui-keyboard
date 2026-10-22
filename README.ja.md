@@ -26,10 +26,11 @@
 | `InputManager` | Input | 画面とポップアップのハンドラーを積み、いちばん上へキーを配る |
 | `InputBehavior` | Input | 画面(MainPage)とポップアップのキーの処理 |
 | `Shortcut.Key` | Input | 要素にキーを割り当てる |
-| `ShortcutBehavior` | Input | フォーカスのある要素でキーを押した時に、コマンドを実行する |
+| `ShortcutBehavior` | Input | フォーカスのある要素でキーを押した時に、コマンドを実行する。`ParameterProperty` は `AccessorProvider` で値を読む(パスの型に `[GenerateAccessor]`・`[GenerateAccessorFor]` が要る) |
 | `CollectionViewShortcutBehavior` | Input | 一覧の行を上下・数字キーで選び、キーで決める |
-| `ControlKeyHandling` | Input | Slider・Stepper の左右、日付・時刻のダイアログの Esc、`Focus.DefaultHighlight` |
-| `Focus` | Behaviors | 既定のフォーカス・飛ばす要素・折り返し・移る範囲・Android の既定のフォーカスの色 |
+| `ControlKeyHandling` | Input | Slider・Stepper の左右、日付・時刻のダイアログの Esc、`KeyFocus.DefaultHighlight` |
+| `KeyFocus` | Input | 飛ばす要素・折り返し・移る範囲・Android の既定のフォーカスの色 |
+| `Focus` | Behaviors | 既定のフォーカス |
 | `EntryController` + `EntryBind` | Messaging / Behaviors | VM から入力欄の文字・有効・フォーカスを扱い、Enter で次の欄へ移す |
 | `EntryOption` | Behaviors | ハードキーボードがある間はソフトキーボードを出さない・全選択・Enter・入力の制限 |
 | `HardKeyboard` | Platforms/Android | ハードキーボード(キーパッドを含む)の有無。`EntryOption` と Prompt がソフトキーボードを出さないかの判定に使う |
@@ -77,13 +78,13 @@ F1〜F4 は画面の下の機能ボタン(`ShellProperty.Function1Text` など)�
 |---|---|---|
 | `Focus.Default` | 要素 | 画面を開いた時にフォーカスを置く(無ければ最初の要素) |
 | `Focus.SuppressDefaultFocus` | 画面・ポップアップ | 既定のフォーカスを置かない |
-| `Focus.Skip` | 要素 | 上下左右の移動で飛ばす |
-| `Focus.Wrap` | 画面・ポップアップ | 端から反対の端へ折り返す |
-| `Focus.Scope` | 入れ物 | 移る範囲(MainPage の画面の入れ物に付けてある) |
+| `KeyFocus.Skip` | 要素 | 上下左右の移動で飛ばす |
+| `KeyFocus.Wrap` | 画面・ポップアップ | 端から反対の端へ折り返す |
+| `KeyFocus.Scope` | 入れ物 | 移る範囲(MainPage の画面の入れ物に付けてある) |
 
 ```xml
 <ContentView ...
-             behaviors:Focus.Wrap="True">
+             input:KeyFocus.Wrap="True">
 ```
 
 ### 一覧
@@ -325,19 +326,17 @@ template-maui に物理キーの操作を足す時に使うファイルです。
 | `Extender/NavigationFocusPlugin.cs` / `PopupFocusPlugin.cs` | 遷移の後にソフトキーボードを閉じる、ポップアップを閉じた後にフォーカスを戻す |
 | `Behaviors/EntryBind.cs` | キーを捨てている間(`InputManager.IsBusy`)は Enter を受けない |
 | `Behaviors/EntryOption.android.cs` | ハードキーボードがある間だけソフトキーボードを出さない |
-| `Modules/ValidationHelper.cs` | `ValidateInputsAsync`(入力欄の検証と、エラーの後のフォーカス) |
 
 ### 合わせる
 
 | ファイル | 足すもの |
 |---|---|
-| `Behaviors/Focus.cs` | `Skip`・`Wrap`・`Scope`・`DefaultHighlight`。template-maui の `FocusedStroke`・`ErrorStroke` は残す |
-| `Extensions.cs` | このテンプレートの `SetDefaultFocus`(`Focus.Skip` を飛ばし、`ElementHelper.RequestFocus` でフォーカスを置く) |
+| `Extensions.cs` | このテンプレートの `SetDefaultFocus`(`KeyFocus.Skip` を飛ばし、`ElementHelper.RequestFocus` でフォーカスを置く) |
 | `Platforms/Android/MainActivity.cs` | `KeyInputDriver` のフィールドと `DispatchKeyEvent` のオーバーライド |
-| `MainPage.xaml` | ページの Behaviors の `InputBehavior`、内容の領域の `Focus.Scope`、F キーのボタンの `Shortcut.Key`(Function1〜Function4) |
+| `MainPage.xaml` | ページの Behaviors の `InputBehavior`、内容の領域の `KeyFocus.Scope`、F キーのボタンの `Shortcut.Key`(Function1〜Function4) |
 | `MauiProgram.cs` | `HandleEnterKey`・`DisableShowSoftInputOnFocus` を true、`ConfigureControlKeyHandling()`、`AddComponentsDialog` の前に `KeypadDialog` を `IDialog` として登録、ダイアログの `DismissKeys`・`IgnorePromptDismissKeys`・`EnableDialogButtonFocus`、`AddComponentsPopupPlugin<PopupInputPlugin>()` |
 | `Modules/Navigation/Modal/InputNumberView.xaml` | テンキーのボタンの `Shortcut.Key` |
-| `Resources/Styles/Styles.xaml` | キーで操作する部品の `Focused` の見た目と `Focus.DefaultHighlight` |
+| `Resources/Styles/Styles.xaml` | キーで操作する部品の `Focused` の見た目と `KeyFocus.DefaultHighlight` |
 | `Settings.XamlStyler` | 属性の並びの `input:*` |
 
 ## 🔗 リンク

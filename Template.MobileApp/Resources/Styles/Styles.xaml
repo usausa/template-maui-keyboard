@@ -3,7 +3,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:s="http://smart/maui"
                     xmlns:fonts="clr-namespace:Fonts"
-                    xmlns:behaviors="clr-namespace:Template.MobileApp.Behaviors">
+                    xmlns:behaviors="clr-namespace:Template.MobileApp.Behaviors"
+                    xmlns:input="clr-namespace:Template.MobileApp.Input">
 
     <!-- ================================================================================ -->
     <!-- Value -->
@@ -896,7 +897,7 @@
     <Style x:Key="ToggleCheckBox"
            TargetType="CheckBox">
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="behaviors:Focus.DefaultHighlight" Value="False" />
+        <Setter Property="input:KeyFocus.DefaultHighlight" Value="False" />
         <Style.Triggers>
             <Trigger TargetType="CheckBox" Property="IsFocused" Value="True">
                 <Setter Property="BackgroundColor" Value="{StaticResource SelectFocusColor}" />
@@ -907,7 +908,7 @@
     <Style x:Key="ToggleSwitch"
            TargetType="Switch">
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="behaviors:Focus.DefaultHighlight" Value="False" />
+        <Setter Property="input:KeyFocus.DefaultHighlight" Value="False" />
         <Style.Triggers>
             <Trigger TargetType="Switch" Property="IsFocused" Value="True">
                 <Setter Property="BackgroundColor" Value="{StaticResource SelectFocusColor}" />
@@ -921,7 +922,7 @@
         <Setter Property="FontSize" Value="24" />
         <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="behaviors:Focus.DefaultHighlight" Value="False" />
+        <Setter Property="input:KeyFocus.DefaultHighlight" Value="False" />
         <Style.Triggers>
             <Trigger TargetType="RadioButton" Property="IsFocused" Value="True">
                 <Setter Property="BackgroundColor" Value="{StaticResource SelectFocusColor}" />
@@ -936,7 +937,7 @@
     <Style x:Key="InputSlider"
            TargetType="Slider">
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="behaviors:Focus.DefaultHighlight" Value="False" />
+        <Setter Property="input:KeyFocus.DefaultHighlight" Value="False" />
         <Style.Triggers>
             <Trigger TargetType="Slider" Property="IsFocused" Value="True">
                 <Setter Property="BackgroundColor" Value="{StaticResource SelectFocusColor}" />
@@ -947,7 +948,7 @@
     <Style x:Key="InputStepper"
            TargetType="Stepper">
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="behaviors:Focus.DefaultHighlight" Value="False" />
+        <Setter Property="input:KeyFocus.DefaultHighlight" Value="False" />
         <Style.Triggers>
             <Trigger TargetType="Stepper" Property="IsFocused" Value="True">
                 <Setter Property="BackgroundColor" Value="{StaticResource SelectFocusColor}" />

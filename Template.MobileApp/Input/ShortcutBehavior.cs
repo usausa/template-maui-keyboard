@@ -1,7 +1,6 @@
 namespace Template.MobileApp.Input;
 
 using System;
-using System.Reflection;
 using System.Windows.Input;
 
 using Smart.Maui.Interactivity;
@@ -113,13 +112,13 @@ public sealed class ShortcutBehavior : BehaviorBase<Element>, IShortcutBehavior
                         break;
                     }
 
-                    var pi = value.GetType().GetRuntimeProperty(part);
-                    if (pi is null)
+                    var accessor = AccessorProvider.FindAccessor(value.GetType());
+                    if (accessor is null)
                     {
-                        throw new InvalidOperationException($"Invalid property name. name=[{property}]");
+                        throw new InvalidOperationException($"Accessor is not supported. type=[{value.GetType()}]");
                     }
 
-                    value = pi.GetValue(value);
+                    value = accessor.GetValue(value, part);
                 }
 
                 parameter = Converter?.Convert(value, typeof(object), ConverterParameter, CultureInfo.CurrentCulture) ?? value;

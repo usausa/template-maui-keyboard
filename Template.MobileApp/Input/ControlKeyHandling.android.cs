@@ -7,8 +7,6 @@ using Android.Widget;
 
 using Microsoft.Maui.Handlers;
 
-using Template.MobileApp.Behaviors;
-
 using DatePicker = Microsoft.Maui.Controls.DatePicker;
 using TimePicker = Microsoft.Maui.Controls.TimePicker;
 
@@ -22,7 +20,7 @@ public static partial class ControlKeyHandling
     {
         SliderHandler.Mapper.AppendToMapping(nameof(ControlKeyHandling), static (handler, _) => handler.PlatformView.SetOnKeyListener(SliderKeyListener.Instance));
         StepperHandler.Mapper.AppendToMapping(nameof(ControlKeyHandling), static (handler, _) => UpdateStepper(handler.PlatformView));
-        ViewHandler.ViewMapper.AppendToMapping(Focus.DefaultHighlightProperty.PropertyName, UpdateDefaultHighlight);
+        ViewHandler.ViewMapper.AppendToMapping(KeyFocus.DefaultHighlightProperty.PropertyName, UpdateDefaultHighlight);
 
         builder.ConfigureMauiHandlers(static handlers =>
         {
@@ -118,9 +116,9 @@ public static partial class ControlKeyHandling
 
     private static void UpdateDefaultHighlight(IViewHandler handler, IView view)
     {
-        if ((view is BindableObject bindable) && bindable.IsSet(Focus.DefaultHighlightProperty) && (handler.PlatformView is View platformView))
+        if ((view is BindableObject bindable) && bindable.IsSet(KeyFocus.DefaultHighlightProperty) && (handler.PlatformView is View platformView))
         {
-            platformView.DefaultFocusHighlightEnabled = Focus.GetDefaultHighlight(bindable);
+            platformView.DefaultFocusHighlightEnabled = KeyFocus.GetDefaultHighlight(bindable);
         }
     }
 }

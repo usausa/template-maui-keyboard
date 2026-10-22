@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:s="http://smart/maui"
              xmlns:shell="clr-namespace:Template.MobileApp.Shell"
-             xmlns:behaviors="clr-namespace:Template.MobileApp.Behaviors"
              xmlns:markup="clr-namespace:Template.MobileApp.Markup"
              xmlns:module="clr-namespace:Template.MobileApp.Modules.Key"
              xmlns:input="clr-namespace:Template.MobileApp.Input"
@@ -13,7 +12,7 @@
              shell:ShellProperty.Title="Key"
              shell:ShellProperty.Function1Text="Back"
              shell:ShellProperty.Function1Enabled="True"
-             behaviors:Focus.Wrap="True">
+             input:KeyFocus.Wrap="True">
 
     <!-- Content -->
     <Grid Style="{StaticResource MenuGrid}"

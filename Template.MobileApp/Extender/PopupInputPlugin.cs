@@ -11,7 +11,9 @@ public sealed class PopupInputPlugin : IPopupPlugin
         if (view is Popup popup)
         {
             var behavior = new InputBehavior();
-            behavior.SetBinding(InputBehavior.IsBusyProperty, new Binding("BusyState.IsBusy"));
+            behavior.SetBinding(
+                InputBehavior.IsBusyProperty,
+                static (ExtendViewModelBase viewModel) => viewModel.BusyState.IsBusy);
             popup.Behaviors.Add(behavior);
         }
     }
