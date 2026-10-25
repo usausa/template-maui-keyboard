@@ -33,11 +33,11 @@
 | `Focus` | Behaviors | 既定のフォーカス |
 | `EntryController` + `EntryBind` | Messaging / Behaviors | VM から入力欄の文字・有効・フォーカスを扱い、Enter で次の欄へ移す |
 | `EntryOption` | Behaviors | ハードキーボードがある間はソフトキーボードを出さない・全選択・Enter・入力の制限 |
-| `HardKeyboard` | Platforms/Android | ハードキーボード(キーパッドを含む)の有無。`EntryOption` と Prompt がソフトキーボードを出さないかの判定に使う |
+| `HardKeyboard` | Platforms/Android | ハードキーボード(キーパッドを含む)の有無 |
 | `ElementHelper` | Helpers | フォーカスの移動と置き方 |
 | `NavigationFocusPlugin` | Extender | 画面の既定のフォーカスと、戻った時のフォーカスの戻し |
 | `PopupFocusPlugin` / `PopupInputPlugin` | Extender | ポップアップの既定のフォーカスと閉じた後の戻し / ポップアップにキーの処理を付ける |
-| `IDialog`(MauiComponents) | MauiProgram | ダイアログ。既定のボタンにフォーカス、Esc・DEL でキャンセル、ハードキーボードがある間は Prompt でソフトキーボードを出さない、の設定で使う |
+| `IDialog`(MauiComponents) | MauiProgram | ダイアログ(既定のボタンへのフォーカスと、Esc・DEL でのキャンセルの設定) |
 | `ValidateInputsAsync` | Modules(AppViewModelBase) | 入力欄の検証と、エラーの後のフォーカス |
 
 ## ⌨️ キーの流れ
@@ -47,7 +47,7 @@ MainActivity.DispatchKeyEvent / ポップアップのダイアログの OnKeyLis
   └─ KeyInputDriver ……… KeyMap で端末のキーを ShortcutKey に変える。処理しないキーは Android へ
        └─ InputManager ……… いちばん上のハンドラー(画面か、開いているポップアップ)へ配る
             └─ InputBehavior
-                 ├─ 1. 処理中(BusyState)の間は捨てる。入力欄・コントロールに渡すキーも、KeyInputDriver が捨てる
+                 ├─ 1. 処理中(BusyState)の間は捨てる
                  ├─ 2. フォーカスのある要素の IShortcutBehavior(CollectionViewShortcutBehavior など)
                  ├─ 3. 上下左右 → フォーカスの移動(XAML に書いた順)
                  ├─ 4. Shortcut.Key が一致する要素 → タッチと同じ操作
@@ -107,13 +107,8 @@ F1〜F4 は画面の下の機能ボタン(`ShellProperty.Function1Text` など)�
 ### 入力欄
 
 Enter で `EntryController` のコマンドを呼び、`Handled` でなければ次の欄へ移る。  
-`Focus()` でその欄へフォーカスを置く。  
-ハードキーボードがある間は、入力欄にフォーカスがあってもソフトキーボードを出さない(`InputEntry` のスタイル。  
-フォーカス済みの欄への `Focus()` でも出さない)。  
+ハードキーボードがある間は、入力欄にフォーカスがあってもソフトキーボードを出さない(`InputEntry` のスタイル)。  
 出す時は `ShowSoftInputAsync()` を呼ぶ。
-
-処理中(BusyState)は、入力欄へのキーと Enter の確定(次の欄への移動)も受け付けない。  
-ただし、IME が先に受け取るキー(Gboard の日本語での数字の組み立てと、その確定)はアプリのキーの処理を通らないので、処理中でも止められない。
 
 ```xml
 <Entry Style="{StaticResource InputEntry}"
@@ -159,40 +154,19 @@ public sealed partial class KeyEntryViewModel : AppViewModelBase
 
 ### ダイアログとポップアップ
 
-- `IDialog`(MauiComponents): 既定のボタン(Confirm は Cancel)にフォーカスを置き、Esc・DEL でキャンセルする(Prompt の DEL は文字を消す)。閉じた後は開く前の要素にフォーカスが戻る(タッチで閉じた時は戻らない)。Prompt も、ハードキーボードがある間はソフトキーボードを出さない
-- ポップアップ: 既定のフォーカスは `Focus.Default` の要素。Esc でキャンセルして閉じる(結果は無し)。閉じた後のフォーカスはダイアログと同じ
-- 処理中(BusyState)の間はキーを捨てる。`Indicator` は Esc で消えない
+- `IDialog`(MauiComponents): 既定のボタン(Confirm は Cancel)にフォーカスを置き、Esc・DEL でキャンセルする。閉じた後は開く前の要素にフォーカスが戻る
+- ポップアップ: 既定のフォーカスは `Focus.Default` の要素。Esc でキャンセルして閉じる
+- 処理中(BusyState)の間はキーを捨てる
 
 ### コントロール
 
 MauiProgram の `ConfigureControlKeyHandling()` で次のように扱う。
 
 - Slider: 左右で 5% ずつ動かす。端で押すと隣のコントロールへ移る
-- Stepper: 全体で 1 つの止まり先にし、左で減らし、右で増やす。端で押すと隣へ移る
-- DatePicker・TimePicker: Enter でダイアログを開き、Esc 1 回でキャンセルする
-- 左右を押し続けた時は、入力欄やキーを処理していたコントロールの端で止まる
+- Stepper: 左で減らし、右で増やす。端で押すと隣へ移る
+- DatePicker・TimePicker: Enter でダイアログを開き、Esc でキャンセルする
 
-フォーカスのある間の色は Styles.xaml のスタイルで付ける。  
-白地のコントロールは `SelectFocusColor`(`InputEntry`・`InputEditor`・`InputPicker`・`InputDatePicker`・`InputTimePicker`・`ToggleCheckBox`・`ToggleSwitch`・`ToggleRadioButton`・`InputSlider`・`InputStepper`)、色付きのボタンは各スタイルの Focused の色。
-
-## 🔢 キーの対応表
-
-今のテンプレートでの実装例(`Platforms/Android/KeyMap.cs`)。
-
-| 端末のキー | ShortcutKey | 動く時 | 入力欄にフォーカスがある時 |
-|---|---|---|---|
-| ↑ ↓ | Up / Down | 押した時(押し続けると繰り返す) | アプリ(複数行の入力欄では行の移動が先) |
-| ← → | Left / Right | 押した時(押し続けると繰り返す) | 入力欄が先(カーソルの移動)。端ではアプリ |
-| Enter・テンキーの Enter・DPAD の中央 | Enter | 離した時 | 入力欄 |
-| Esc | Escape | 離した時 | アプリ |
-| DEL(Backspace) | Del | 離した時 | 入力欄 |
-| -・テンキーの - | Minus | 離した時 | 入力欄 |
-| .・テンキーの . | Period | 離した時 | 入力欄 |
-| 0〜9・テンキーの 0〜9 | Num0〜Num9 | 離した時 | 入力欄 |
-| F1〜F4 | Function1〜Function4 | 離した時 | アプリ |
-
-左右は入力欄の外でもフォーカスのあるコントロールが先に処理し(Slider・Stepper の値など)、処理しない時にアプリがフォーカスを移す。  
-表に無いキーとアプリで処理しなかったキーは Android へ渡る。
+フォーカスのある間の色は Styles.xaml の各スタイルで付ける。
 
 ## 📱 見本の画面
 
@@ -218,29 +192,18 @@ USB デバッグでつないだ端末へ、キーパッドのキーを adb で�
 
 <img width="40%" src="Document/Images/KeypadSimulator.png" />
 
-| 項目 | 内容 |
-|---|---|
-| Device | `adb devices -l` の端末。adb は appsettings.json の `Simulator:AdbPath`・`ANDROID_HOME`・`ANDROID_SDK_ROOT`・既定の SDK のフォルダ・PATH の順に探す |
-| Mode | Hardware: `uinput` で仮想の USB キーボードを登録して送る。端末からは物理キーボードに見え、押し続けると端末がキーを繰り返す。Input: `input keyevent` で送る。物理キーボードは無いままなので、ソフトキーボードと IME が先にキーを取ることがある |
-| Keyboard | Hardware の時の種類。Alphabetic: 端末の構成が `qwerty` になり、`HardKeyboard` は「あり」。Numeric: 構成は `nokeys` のままで、`HardKeyboard` は「無し」 |
-| Options | PC keys: 窓にフォーカスがある間、PC の数字・テンキー・矢印・Enter・Esc・Backspace・Delete・F1〜F4・-・. を同じキーとして送る。Numpad: 数字・ENT・-・. をテンキーのキーとして送る(PC のテンキーはいつもテンキーのキー) |
-| 📌 | 常に手前に表示 |
-
-- Connect で送り始める。Disconnect かツールを閉じると、仮想のキーボードが消える
-- 端末・送り方・オプション・窓の位置は、次の起動に残る
+- Mode の Hardware は仮想の USB キーボードとして送る(端末からは物理キーボードに見える)。Input は `input keyevent` で送る
+- Connect で送り始め、Disconnect かツールを閉じると仮想のキーボードが消える
 
 ### adb
 
-adb でも送れる(仮想のキーボードとして届くので、ソフトキーボードが出て数字を組み立てることがある。  
-入力欄で Tab を送ると、Gboard が自分でソフトキーボードを出す)。
+adb の keyevent では、ソフトキーボードが出て数字を組み立てることがある。
 
 ```
 adb shell input keyevent KEYCODE_1
 adb shell input keyevent KEYCODE_DPAD_DOWN
 adb shell input keyevent KEYCODE_F1
 adb shell input keyevent KEYCODE_ESCAPE
-adb shell input keyevent KEYCODE_DEL
-adb shell input keyevent --longpress KEYCODE_DPAD_RIGHT
 ```
 
 ## ⚠️ Focus() でソフトキーボードが出る問題と対応

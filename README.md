@@ -33,11 +33,11 @@ For devices with physical keys.
 | `Focus` | Behaviors | Default focus |
 | `EntryController` + `EntryBind` | Messaging / Behaviors | Handles the text, enabled state, and focus of an input field from the VM, and moves to the next field on Enter |
 | `EntryOption` | Behaviors | No soft keyboard while a hardware keyboard is present, select all, Enter, input restrictions |
-| `HardKeyboard` | Platforms/Android | Whether a hardware keyboard (including a keypad) is present. `EntryOption` and Prompt use it to decide whether to suppress the soft keyboard |
+| `HardKeyboard` | Platforms/Android | Whether a hardware keyboard (including a keypad) is present |
 | `ElementHelper` | Helpers | Moving and placing focus |
 | `NavigationFocusPlugin` | Extender | Default focus of a screen, and focus restoration when navigating back |
 | `PopupFocusPlugin` / `PopupInputPlugin` | Extender | Default focus of a popup and focus restoration after it closes / Adds key handling to popups |
-| `IDialog` (MauiComponents) | MauiProgram | Dialogs. Configured to focus the default button, cancel with Esc or DEL, and not show the soft keyboard in Prompt while a hardware keyboard is present |
+| `IDialog` (MauiComponents) | MauiProgram | Dialogs (configured to focus the default button and cancel with Esc or DEL) |
 | `ValidateInputsAsync` | Modules (AppViewModelBase) | Input field validation, and focus after an error |
 
 ## ⌨️ Key flow
@@ -47,7 +47,7 @@ MainActivity.DispatchKeyEvent / OnKeyListener of the popup dialog
   └─ KeyInputDriver ……… Converts device keys to ShortcutKey with KeyMap. Unhandled keys go to Android
        └─ InputManager ……… Dispatches to the topmost handler (the screen or an open popup)
             └─ InputBehavior
-                 ├─ 1. Discards keys while busy (BusyState). KeyInputDriver also discards keys for input fields and controls
+                 ├─ 1. Discards keys while busy (BusyState)
                  ├─ 2. IShortcutBehavior of the focused element (CollectionViewShortcutBehavior, etc.)
                  ├─ 3. Up/Down/Left/Right → focus movement (in the order written in XAML)
                  ├─ 4. Element with a matching Shortcut.Key → same action as a touch
@@ -107,13 +107,8 @@ The `KeyCode` key passes the selected row to `Command`.
 ### Input fields
 
 Enter calls the command of `EntryController` and, unless `Handled`, moves to the next field.  
-`Focus()` puts the focus on that field.  
-While a hardware keyboard is present, the soft keyboard does not appear even when an input field has focus (the `InputEntry` style.  
-It does not appear on `Focus()` to an already focused field either).  
+While a hardware keyboard is present, the soft keyboard does not appear even when an input field has focus (the `InputEntry` style).  
 To show it, call `ShowSoftInputAsync()`.
-
-While busy (BusyState), keys for input fields and Enter confirmation (moving to the next field) are not accepted either.  
-However, keys that the IME receives first (composing digits in Gboard's Japanese input, and committing them) do not go through the app's key handling, so they cannot be stopped even while busy.
 
 ```xml
 <Entry Style="{StaticResource InputEntry}"
@@ -159,40 +154,19 @@ public sealed partial class KeyEntryViewModel : AppViewModelBase
 
 ### Dialogs and popups
 
-- `IDialog` (MauiComponents): Puts the focus on the default button (Cancel for Confirm), and cancels with Esc or DEL (DEL in Prompt deletes characters). After closing, the focus returns to the element that had it before opening (not when closed by touch). Prompt also does not show the soft keyboard while a hardware keyboard is present
-- Popups: The default focus is the element with `Focus.Default`. Esc cancels and closes the popup (no result). The focus after closing works the same as for dialogs
-- While busy (BusyState), keys are discarded. Esc does not dismiss `Indicator`
+- `IDialog` (MauiComponents): Puts the focus on the default button (Cancel for Confirm), and cancels with Esc or DEL. After closing, the focus returns to the element that had it before opening
+- Popups: The default focus is the element with `Focus.Default`. Esc cancels and closes the popup
+- While busy (BusyState), keys are discarded
 
 ### Controls
 
 `ConfigureControlKeyHandling()` in MauiProgram handles them as follows.
 
 - Slider: Left/Right move it in 5% steps. Pressing at an end moves to the adjacent control
-- Stepper: The whole Stepper is a single focus stop, Left decreases the value, and Right increases it. Pressing at an end moves to the adjacent control
-- DatePicker, TimePicker: Enter opens the dialog, and a single Esc cancels it
-- When Left/Right is held down, the movement stops at the end of the input field or of the control that was handling the key
+- Stepper: Left decreases the value, and Right increases it. Pressing at an end moves to the adjacent control
+- DatePicker, TimePicker: Enter opens the dialog, and Esc cancels it
 
-The color while focused is set by the styles in Styles.xaml.  
-Controls with a white background use `SelectFocusColor` (`InputEntry`, `InputEditor`, `InputPicker`, `InputDatePicker`, `InputTimePicker`, `ToggleCheckBox`, `ToggleSwitch`, `ToggleRadioButton`, `InputSlider`, `InputStepper`), and colored buttons use the Focused color of each style.
-
-## 🔢 Key map
-
-Implementation example in this template (`Platforms/Android/KeyMap.cs`).
-
-| Device key | ShortcutKey | Trigger | When an input field has focus |
-|---|---|---|---|
-| ↑ ↓ | Up / Down | Press (repeats while held) | App (in a multi-line input field, moving between lines comes first) |
-| ← → | Left / Right | Press (repeats while held) | Input field first (cursor movement). App at the ends |
-| Enter, numpad Enter, DPAD center | Enter | Release | Input field |
-| Esc | Escape | Release | App |
-| DEL (Backspace) | Del | Release | Input field |
-| -, numpad - | Minus | Release | Input field |
-| ., numpad . | Period | Release | Input field |
-| 0 to 9, numpad 0 to 9 | Num0 to Num9 | Release | Input field |
-| F1 to F4 | Function1 to Function4 | Release | App |
-
-Even outside input fields, the focused control handles Left/Right first (such as Slider and Stepper values), and the app moves the focus when the control does not handle them.  
-Keys not in the table and keys the app does not handle go to Android.
+The color while focused is set by each style in Styles.xaml.
 
 ## 📱 Sample screens
 
@@ -218,29 +192,18 @@ It sends the keys of a keypad with adb to a device connected for USB debugging.
 
 <img width="40%" src="Document/Images/KeypadSimulator.png" />
 
-| Item | Contents |
-|---|---|
-| Device | Devices from `adb devices -l`. adb is searched for in `Simulator:AdbPath` of appsettings.json, `ANDROID_HOME`, `ANDROID_SDK_ROOT`, the default SDK folders, and PATH, in this order |
-| Mode | Hardware: Registers a virtual USB keyboard with `uinput`. The device sees a hardware keyboard and repeats a key while it is held. Input: Sends `input keyevent`. The device has no hardware keyboard, so the soft keyboard and the IME may take keys first |
-| Keyboard | Keyboard type for Hardware. Alphabetic: The device configuration becomes `qwerty`, and `HardKeyboard` is true. Numeric: The configuration stays `nokeys`, and `HardKeyboard` is false |
-| Options | PC keys: While the window has focus, the PC's digits, numpad, arrows, Enter, Esc, Backspace, Delete, F1 to F4, - and . are sent as the same keys. Numpad: Digits, ENT, - and . are sent as numpad keys (the PC's numpad keys always are) |
-| 📌 | Keeps the window on top |
-
+- Hardware mode sends keys as a virtual USB keyboard (the device sees a hardware keyboard). Input mode sends `input keyevent`
 - Connect starts sending. Disconnect or closing the tool removes the virtual keyboard
-- The device, mode, options, and window position are kept for the next start
 
 ### adb
 
-Keys can also be sent with adb (they arrive from a virtual keyboard, so the soft keyboard may appear and compose digits.  
-Sending Tab in an input field makes Gboard show the soft keyboard by itself).
+With adb keyevent, the soft keyboard may appear and compose digits.
 
 ```
 adb shell input keyevent KEYCODE_1
 adb shell input keyevent KEYCODE_DPAD_DOWN
 adb shell input keyevent KEYCODE_F1
 adb shell input keyevent KEYCODE_ESCAPE
-adb shell input keyevent KEYCODE_DEL
-adb shell input keyevent --longpress KEYCODE_DPAD_RIGHT
 ```
 
 ## ⚠️ Focus() showing the soft keyboard: problem and workaround
