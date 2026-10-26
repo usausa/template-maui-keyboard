@@ -21,6 +21,11 @@ internal static partial class Log
     [LoggerMessage(Level = LogLevel.Error, Message = "Unknown exception.")]
     public static partial void ErrorUnknownException(this ILogger logger, Exception ex);
 
+    // Setting
+
+    [LoggerMessage(Level = LogLevel.Warning, Message = "Unknown key name in the key map. name=[{name}]")]
+    public static partial void WarnUnknownKeyName(this ILogger logger, string name);
+
     // Adb
 
     [LoggerMessage(Level = LogLevel.Warning, Message = "Adb command failed. arguments=[{arguments}]")]

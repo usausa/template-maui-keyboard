@@ -36,6 +36,21 @@ public sealed class MainActivity : MauiAppCompatActivity
         OnBackPressedDispatcher.AddCallback(this, backPressedCallback);
     }
 
+    protected override void OnResume()
+    {
+        base.OnResume();
+
+        HardKeyboard.Changed += OnHardKeyboardChanged;
+        UpdateSoftInputState();
+    }
+
+    protected override void OnPause()
+    {
+        HardKeyboard.Changed -= OnHardKeyboardChanged;
+
+        base.OnPause();
+    }
+
     protected override void Dispose(bool disposing)
     {
         if (disposing)
@@ -55,6 +70,19 @@ public sealed class MainActivity : MauiAppCompatActivity
         }
 
         return base.DispatchKeyEvent(e);
+    }
+
+    private void OnHardKeyboardChanged(object? sender, EventArgs e) => UpdateSoftInputState();
+
+    private void UpdateSoftInputState()
+    {
+        if (Window?.Attributes is not { } attributes)
+        {
+            return;
+        }
+
+        var state = HardKeyboard.SuppressSoftInput ? Android.Views.SoftInput.StateHidden : Android.Views.SoftInput.StateUnspecified;
+        Window.SetSoftInputMode((attributes.SoftInputMode & Android.Views.SoftInput.MaskAdjust) | state);
     }
 
     private sealed class BackPressedCallback : OnBackPressedCallback

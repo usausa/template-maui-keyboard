@@ -23,6 +23,8 @@ public sealed class UinputKeySender : IKeySender
 
     private readonly AdbService adbService;
 
+    private readonly KeypadKeyMap keyMap;
+
     private readonly KeyboardType keyboardType;
 
     private readonly Dictionary<KeypadKey, (int Device, string Code)> pressedKeys = [];
@@ -33,9 +35,10 @@ public sealed class UinputKeySender : IKeySender
 
     public string Description => keyboardType == KeyboardType.Alphabetic ? "Hardware (alphabetic)" : "Hardware (numeric)";
 
-    public UinputKeySender(AdbService adbService, KeyboardType keyboardType)
+    public UinputKeySender(AdbService adbService, KeypadKeyMap keyMap, KeyboardType keyboardType)
     {
         this.adbService = adbService;
+        this.keyMap = keyMap;
         this.keyboardType = keyboardType;
     }
 
@@ -55,7 +58,7 @@ public sealed class UinputKeySender : IKeySender
         session = adbService.StartShell(serial, "uinput", "-");
         session.Exited += OnExited;
 
-        var keys = KeypadKeys.All
+        var keys = keyMap.All
             .Where(static x => !x.IsCenter)
             .SelectMany(static x => x.NumpadLinuxKey is null ? [x.LinuxKey] : (IEnumerable<string>)[x.LinuxKey, x.NumpadLinuxKey]);
         if (keyboardType == KeyboardType.Alphabetic)
@@ -63,7 +66,7 @@ public sealed class UinputKeySender : IKeySender
             keys = keys.Concat(AlphabeticKeys);
         }
 
-        if (!session.WriteLine(MakeRegister(KeysDeviceId, KeysDeviceName, KeysProductId, keys)) ||
+        if (!session.WriteLine(MakeRegister(KeysDeviceId, KeysDeviceName, KeysProductId, keys.Distinct())) ||
             !session.WriteLine(MakeRegister(CenterDeviceId, CenterDeviceName, CenterProductId, [KeypadKey.CenterLinuxKey])))
         {
             return false;

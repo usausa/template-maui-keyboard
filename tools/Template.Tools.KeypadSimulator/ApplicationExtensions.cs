@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
+using Template.Tools.KeypadSimulator.Services;
 using Template.Tools.KeypadSimulator.Settings;
 using Template.Tools.KeypadSimulator.Views;
 
@@ -44,6 +45,7 @@ public static partial class ApplicationExtensions
         builder.Services.AddOptions<SimulatorSettings>().BindConfiguration("Simulator");
         builder.Services.AddSingleton(static p => p.GetRequiredService<IOptions<SimulatorSettings>>().Value);
         builder.Services.AddSingleton<UserSettings>();
+        builder.Services.AddSingleton<KeypadKeyMap>();
 
         // Service
         builder.Services.AddServices();

@@ -21,6 +21,8 @@ public sealed partial class MainWindowViewModel : ExtendViewModelBase
 
     public IWindowManager WindowManager { get; }
 
+    public KeypadKeyMap Keys { get; }
+
     public ObservableCollection<AdbDevice> Devices { get; } = [];
 
     [ObservableProperty]
@@ -80,12 +82,14 @@ public sealed partial class MainWindowViewModel : ExtendViewModelBase
         ILogger<MainWindowViewModel> log,
         IWindowManager windowManager,
         UserSettings settings,
-        AdbService adbService)
+        AdbService adbService,
+        KeypadKeyMap keys)
     {
         this.log = log;
         WindowManager = windowManager;
         this.settings = settings;
         this.adbService = adbService;
+        Keys = keys;
         context = SynchronizationContext.Current;
 
         IsHardware = settings.Mode == SendMode.Hardware;
@@ -191,7 +195,7 @@ public sealed partial class MainWindowViewModel : ExtendViewModelBase
             var mode = settings.Mode;
             var keyboardType = settings.KeyboardType;
             IKeySender sender = mode == SendMode.Hardware
-                ? new UinputKeySender(adbService, keyboardType)
+                ? new UinputKeySender(adbService, Keys, keyboardType)
                 : new InputKeySender(adbService);
             sender.Disconnected += OnSenderDisconnected;
 
@@ -312,11 +316,11 @@ public sealed partial class MainWindowViewModel : ExtendViewModelBase
     {
         if (!input.IsRepeat || (settings.Mode != SendMode.Hardware))
         {
-            Send(input.Key, Numpad || input.Numpad);
+            Send(Keys[input.Id], Numpad || input.Numpad);
         }
     }
 
-    private void PcKeyUp(PcKeyInput input) => keySender?.Release(input.Key);
+    private void PcKeyUp(PcKeyInput input) => keySender?.Release(Keys[input.Id]);
 
     private void ReleaseAll() => keySender?.ReleaseAll();
 
