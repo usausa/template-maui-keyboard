@@ -194,35 +194,7 @@ USB デバッグでつないだ端末へ、キーパッドのキーを adb で�
 
 - Mode の Hardware は仮想の USB キーボードとして送る(端末からは物理キーボードに見える)。Input は `input keyevent` で送る
 - Connect で送り始め、Disconnect かツールを閉じると仮想のキーボードが消える
-- キーの表示と送るコードは、`appsettings.json` の `Simulator:Keys` で変えられる。書かなかったキー・項目は下の既定値になる
-- テンキーのコード(`NumpadAndroidKey`・`NumpadLinuxKey`)は、Numpad の時と、PC のテンキーの数字・`-`・`.` で送る
-- コードは確かめずに送る。Hardware で端末の知らないコードがあると、Connect が失敗する
-
-| 名前 | Label | AndroidKey(Input) | LinuxKey(Hardware) | テンキーのコード |
-|---|---|---|---|---|
-| F1〜F4 | F1〜F4 | `KEYCODE_F1`〜`F4` | `KEY_F1`〜`F4` | |
-| Escape | ESC | `KEYCODE_ESCAPE` | `KEY_ESC` | |
-| Up | ▲ | `KEYCODE_DPAD_UP` | `KEY_UP` | |
-| Space | SPC | `KEYCODE_SPACE` | `KEY_SPACE` | |
-| Left | ◀ | `KEYCODE_DPAD_LEFT` | `KEY_LEFT` | |
-| Center | ● | `KEYCODE_DPAD_CENTER` | `KEY_SELECT` | |
-| Right | ▶ | `KEYCODE_DPAD_RIGHT` | `KEY_RIGHT` | |
-| Del | DEL | `KEYCODE_DEL` | `KEY_BACKSPACE` | |
-| Down | ▼ | `KEYCODE_DPAD_DOWN` | `KEY_DOWN` | |
-| Enter | ENT | `KEYCODE_ENTER` | `KEY_ENTER` | `KEYCODE_NUMPAD_ENTER` / `KEY_KPENTER` |
-| Num0〜Num9 | 0〜9 | `KEYCODE_0`〜`9` | `KEY_0`〜`9` | `KEYCODE_NUMPAD_0`〜`9` / `KEY_KP0`〜`9` |
-| Minus | - | `KEYCODE_MINUS` | `KEY_MINUS` | `KEYCODE_NUMPAD_SUBTRACT` / `KEY_KPMINUS` |
-| Period | . | `KEYCODE_PERIOD` | `KEY_DOT` | `KEYCODE_NUMPAD_DOT` / `KEY_KPDOT` |
-
-```json
-{
-  "Simulator": {
-    "Keys": {
-      "F1": { "Label": "戻る", "AndroidKey": "KEYCODE_BACK", "LinuxKey": "KEY_BACK" }
-    }
-  }
-}
-```
+- キーの表示と送るコードは、`appsettings.json` で変えられる
 
 ### adb
 
@@ -262,7 +234,6 @@ adb shell input keyevent KEYCODE_ESCAPE
 - `EntryOption` が、`EntryHandler`・`EditorHandler` の Focus のコマンドを `CommandMapper.ModifyMapping` で包む(`DisableShowSoftInputOnFocus` を有効にした時)。フォーカス済み かつ `ShowSoftInputOnFocus` が false の時は、MAUI の処理を通さずに結果だけ返す。フォーカスは既にあるので、状態は変わらない。それ以外は MAUI の処理のまま
 - 包むのは `UseMauiApp` より後(`ConfigureCustomBehaviors`)。MAUI が足した `InputView.MapFocus` を外側から包むため
 - Prompt のダイアログ(`IDialog` の `SuppressPromptSoftInput`)は、ハードキーボードがある間はウィンドウを `SoftInput.StateHidden` にし、入力欄を `ShowSoftInputOnFocus = false` にする
-- 大画面(sw600dp 以上)では、入力欄にフォーカスがある画面へ戻った時(裏から戻すなど)に、Android がソフトキーボードを出す。ハードキーボードがある間は、`MainActivity` がウィンドウを `SoftInput.StateHidden` にする(画面が前に出た時と、つないだ時・外した時)
 - ハードキーボードの有無は `HardKeyboard`。英字のキーボード(構成の `qwerty`)と、数字キー(0〜9)を持つキーボードの機器(英字の無いキーパッド。構成は `nokeys` のまま)を「有り」とする。音量ボタンなどの数字キーの無い機器は数えない。つないだ時・外した時は構成の変更と入力機器の追加・削除で受け取り、入力欄の設定を直す
 - ソフトキーボードを出す時は `ShowSoftInputAsync()` を呼ぶ(フォーカス済みなら Focus のコマンドを通らずに出す)
 

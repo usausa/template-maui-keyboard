@@ -194,35 +194,7 @@ It sends the keys of a keypad with adb to a device connected for USB debugging.
 
 - Hardware mode sends keys as a virtual USB keyboard (the device sees a hardware keyboard). Input mode sends `input keyevent`
 - Connect starts sending. Disconnect or closing the tool removes the virtual keyboard
-- The key labels and the codes to send can be changed in `Simulator:Keys` of `appsettings.json`. Keys and fields that are not written use the defaults below
-- The numpad codes (`NumpadAndroidKey`, `NumpadLinuxKey`) are sent with Numpad, and for the digits, `-`, and `.` of the PC numpad
-- The codes are sent without checking. In Hardware mode, Connect fails if a code is unknown to the device
-
-| Name | Label | AndroidKey (Input) | LinuxKey (Hardware) | Numpad codes |
-|---|---|---|---|---|
-| F1 to F4 | F1 to F4 | `KEYCODE_F1` to `F4` | `KEY_F1` to `F4` | |
-| Escape | ESC | `KEYCODE_ESCAPE` | `KEY_ESC` | |
-| Up | ▲ | `KEYCODE_DPAD_UP` | `KEY_UP` | |
-| Space | SPC | `KEYCODE_SPACE` | `KEY_SPACE` | |
-| Left | ◀ | `KEYCODE_DPAD_LEFT` | `KEY_LEFT` | |
-| Center | ● | `KEYCODE_DPAD_CENTER` | `KEY_SELECT` | |
-| Right | ▶ | `KEYCODE_DPAD_RIGHT` | `KEY_RIGHT` | |
-| Del | DEL | `KEYCODE_DEL` | `KEY_BACKSPACE` | |
-| Down | ▼ | `KEYCODE_DPAD_DOWN` | `KEY_DOWN` | |
-| Enter | ENT | `KEYCODE_ENTER` | `KEY_ENTER` | `KEYCODE_NUMPAD_ENTER` / `KEY_KPENTER` |
-| Num0 to Num9 | 0 to 9 | `KEYCODE_0` to `9` | `KEY_0` to `9` | `KEYCODE_NUMPAD_0` to `9` / `KEY_KP0` to `9` |
-| Minus | - | `KEYCODE_MINUS` | `KEY_MINUS` | `KEYCODE_NUMPAD_SUBTRACT` / `KEY_KPMINUS` |
-| Period | . | `KEYCODE_PERIOD` | `KEY_DOT` | `KEYCODE_NUMPAD_DOT` / `KEY_KPDOT` |
-
-```json
-{
-  "Simulator": {
-    "Keys": {
-      "F1": { "Label": "Back", "AndroidKey": "KEYCODE_BACK", "LinuxKey": "KEY_BACK" }
-    }
-  }
-}
-```
+- The key labels and the codes to send can be changed in `appsettings.json`
 
 ### adb
 
@@ -262,7 +234,6 @@ adb shell input keyevent KEYCODE_ESCAPE
 - `EntryOption` wraps the Focus command of `EntryHandler` and `EditorHandler` with `CommandMapper.ModifyMapping` (when `DisableShowSoftInputOnFocus` is enabled). When the view is already focused and `ShowSoftInputOnFocus` is false, it returns only the result without going through the MAUI processing. The view already has focus, so the state does not change. Otherwise, the MAUI processing runs as is
 - The wrapping is done after `UseMauiApp` (`ConfigureCustomBehaviors`) so that it wraps `InputView.MapFocus`, added by MAUI, from the outside
 - The Prompt dialog (`SuppressPromptSoftInput` of `IDialog`) sets the window to `SoftInput.StateHidden` and the input field to `ShowSoftInputOnFocus = false` while a hardware keyboard is present
-- On large screens (sw600dp and above), Android shows the soft keyboard when returning to a screen whose input field has focus (for example, coming back from the background). While a hardware keyboard is present, `MainActivity` sets the window to `SoftInput.StateHidden` (when the screen comes to the front, and when the keyboard is connected or disconnected)
 - `HardKeyboard` tells whether a hardware keyboard is present. It counts an alphabetic keyboard (`qwerty` in the configuration) and a keyboard device with the number keys 0 to 9 (a keypad without letters, which leaves the configuration at `nokeys`). Devices without number keys, such as the volume buttons, are not counted. Connecting and disconnecting are received as configuration changes and as input device additions and removals, and the input field settings are updated
 - To show the soft keyboard, call `ShowSoftInputAsync()` (if the field is already focused, it shows the keyboard without going through the Focus command)
 
