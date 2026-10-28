@@ -2,8 +2,7 @@
 
 [English](README.md) | 日本語
 
-物理キー(数字・矢印・Enter・Esc・F1〜F4 など)だけで操作する Android アプリの MAUI のテンプレートプロジェクト。  
-物理キー付きの端末向け。
+物理キー付きの端末向けの、物理キー(数字・矢印・Enter・Esc・F1～F4 など)だけで操作する Android アプリの MAUI のテンプレートプロジェクト。
 
 <img width="40%" src="Document/Images/HT.jpg" />
 
@@ -11,55 +10,53 @@
 
 - 数字キー・F キーでのボタンのショートカット
 - 上下左右キーによる完全なフォーカスの移動
-- キーで操作する一覧
 - ハードキーボード向けの入力欄
-- 入力の検証で最初のエラーの欄へフォーカス
-- キーだけで操作するダイアログ・ポップアップ・コントロール
-- 処理中のキーを捨てる
-- キーパッドの模擬ツール(adb で物理キーを送る)
+- 入力の検証時のフォーカス制御
+- キーで操作するリスト
+- キーだけで操作するダイアログ
 
 ## 🧩 クラス
 
 | クラス | 場所 | 役割 |
 |---|---|---|
-| `KeyInputDriver` / `KeyMap` | Platforms/Android | 端末のキーを ShortcutKey に変えて InputManager へ渡す / キーの対応表 |
-| `InputManager` | Input | 画面とポップアップのハンドラーを積み、いちばん上へキーを配る |
-| `InputBehavior` | Input | 画面(MainPage)とポップアップのキーの処理 |
-| `Shortcut.Key` | Input | 要素にキーを割り当てる |
-| `ShortcutBehavior` | Input | フォーカスのある要素でキーを押した時に、コマンドを実行する |
-| `CollectionViewShortcutBehavior` | Input | 一覧の行を上下・数字キーで選び、キーで決める |
-| `ControlKeyHandling` | Input | Slider・Stepper の左右、日付・時刻のダイアログの Esc、`KeyFocus.DefaultHighlight` |
-| `KeyFocus` | Input | 飛ばす要素・折り返し・移る範囲・Android の既定のフォーカスの色 |
-| `Focus` | Behaviors | 既定のフォーカス |
-| `EntryController` + `EntryBind` | Messaging / Behaviors | VM から入力欄の文字・有効・フォーカスを扱い、Enter で次の欄へ移す |
-| `EntryOption` | Behaviors | ハードキーボードがある間はソフトキーボードを出さない・全選択・Enter・入力の制限 |
-| `HardKeyboard` | Platforms/Android | ハードキーボード(キーパッドを含む)の有無 |
-| `ElementHelper` | Helpers | フォーカスの移動と置き方 |
-| `NavigationFocusPlugin` | Extender | 画面の既定のフォーカスと、戻った時のフォーカスの戻し |
-| `PopupFocusPlugin` / `PopupInputPlugin` | Extender | ポップアップの既定のフォーカスと閉じた後の戻し / ポップアップにキーの処理を付ける |
-| `IDialog`(MauiComponents) | MauiProgram | ダイアログ(既定のボタンへのフォーカスと、Esc・DEL でのキャンセルの設定) |
+| `KeyInputDriver` / `KeyMap` | Platforms/Android | 物理キーイベントを論理キーイベントとして InputManager へ渡す入力部分 |
+| `InputManager` | Input | 画面とポップアップの管理とイベントの配信 |
+| `InputBehavior` | Input | MainPageとポップアップのキーの制御 |
+| `Shortcut.Key` | Input | ショートカット用のマーカー |
+| `ShortcutBehavior` | Input | ショートカットによるコマンド実行 |
+| `CollectionViewShortcutBehavior` | Input | CollectionView の物理キーによる制御 |
+| `ControlKeyHandling` | Input | Slider・Stepper の左右、日付・時刻のダイアログの Esc 等の制御 |
+| `KeyFocus` | Input | 物理キーによるフォーカス制御のマーカー |
+| `Focus` | Behaviors | フォーカス制御用のマーカー |
+| `EntryController` + `EntryBind` | Messaging / Behaviors | VM から入力欄の文字・有効・フォーカスを扱うメッセンジャーと Behavior |
+| `EntryOption` | Behaviors | ハードキーボードがある間はソフトキーボードを出さない・全選択・Enter・入力の制限等の指定 |
+| `HardKeyboard` | Platforms/Android | ハードキーボード(キーパッドを含む)の検知 |
+| `ElementHelper` | Helpers | フォーカスの移動 |
+| `NavigationFocusPlugin` | Extender | 画面の既定のフォーカスと、戻った時のフォーカス制御 |
+| `PopupFocusPlugin` / `PopupInputPlugin` | Extender | ポップアップの既定のフォーカスと閉じた後の制御 |
+| `IDialog`(MauiComponents) | MauiProgram | 物理キー対応のダイアログ設定(Esc でのキャンセル等) |
 | `ValidateInputsAsync` | Modules(AppViewModelBase) | 入力欄の検証と、エラーの後のフォーカス |
 
 ## ⌨️ キーの流れ
 
 ```
-MainActivity.DispatchKeyEvent / ポップアップのダイアログの OnKeyListener
-  └─ KeyInputDriver ……… KeyMap で端末のキーを ShortcutKey に変える。処理しないキーは Android へ
-       └─ InputManager ……… いちばん上のハンドラー(画面か、開いているポップアップ)へ配る
+MainActivity.DispatchKeyEvent / キーイベントのフック
+  └─ KeyInputDriver ……… 物理キーイベントの論理キーイベントへの変換
+       └─ InputManager ……… トップ画面へのイベントの配信
             └─ InputBehavior
-                 ├─ 1. 処理中(BusyState)の間は捨てる
-                 ├─ 2. フォーカスのある要素の IShortcutBehavior(CollectionViewShortcutBehavior など)
-                 ├─ 3. 上下左右 → フォーカスの移動(XAML に書いた順)
-                 ├─ 4. Shortcut.Key が一致する要素 → タッチと同じ操作
-                 └─ 5. Esc → 画面は戻る、ポップアップはキャンセルで閉じる
+                 ├─ 1. 処理中のイベント実行判定
+                 ├─ 2. ショートカット処理実行
+                 ├─ 3. 上下左右 → フォーカスの移動(XAML 順)
+                 ├─ 4. Shortcut.Key の判定 → タッチと同じ操作
+                 └─ 5. Esc → 戻る、ポップアップのキャンセル
 ```
 
 ## 🛠️ 使い方
 
 ### 数字キー・F キー
 
-`Shortcut.Key` を付けた要素は、そのキーでタッチと同じ操作をする(Button は押す、CheckBox・Switch は切り替える、RadioButton は選ぶ、ほかの要素はフォーカスを置く)。  
-F1〜F4 は画面の下の機能ボタン(`ShellProperty.Function1Text` など)。
+`Shortcut.Key` を付けた要素は、そのキーでタッチと同じ動作を行う。  
+Button はタップ、CheckBox・Switch は切り替え、RadioButton は選択、他の要素はフォーカス。  
 
 ```xml
 <Button Style="{StaticResource MenuButton}"
@@ -71,16 +68,16 @@ F1〜F4 は画面の下の機能ボタン(`ShellProperty.Function1Text` など)�
 
 ### フォーカスの移動
 
-上下左右で XAML に書いた順に前後へ移る。  
-範囲は画面の中だけで、端では止まる。
+上下左右で XAML に書いた順に前後へ移動。  
+範囲は画面の中だけで、規定の動作では端では止まる仕様。
 
 | 添付プロパティ | 付ける所 | 動き |
 |---|---|---|
-| `Focus.Default` | 要素 | 画面を開いた時にフォーカスを置く(無ければ最初の要素) |
-| `Focus.SuppressDefaultFocus` | 画面・ポップアップ | 既定のフォーカスを置かない |
-| `KeyFocus.Skip` | 要素 | 上下左右の移動で飛ばす |
-| `KeyFocus.Wrap` | 画面・ポップアップ | 端から反対の端へ折り返す |
-| `KeyFocus.Scope` | 入れ物 | 移る範囲(MainPage の画面の入れ物に付けてある) |
+| `Focus.Default` | 要素 | 画面を開いた時にフォーカスを設定(無ければ最初の要素) |
+| `Focus.SuppressDefaultFocus` | 画面・ポップアップ | 既定のフォーカスを置かない指定 |
+| `KeyFocus.Skip` | 要素 | 上下左右の移動でスキップする指定 |
+| `KeyFocus.Wrap` | 画面・ポップアップ | 端から反対の端へ折り返す指定 |
+| `KeyFocus.Scope` | コンテナ | 移動する範囲 |
 
 ```xml
 <ContentView ...
@@ -89,9 +86,9 @@ F1〜F4 は画面の下の機能ボタン(`ShellProperty.Function1Text` など)�
 
 ### 一覧
 
-上下で行を選び、先頭・最後の行では一覧の外へ移る。  
+上下で行を選択し、先頭・最後の行では一覧の外へ移動。  
 `KeyCode` のキーで選んだ行を `Command` に渡す。  
-`SelectByNumberKey` は 1〜9 キーで 1〜9 行目を選ぶ。
+`SelectByNumberKey` は 1～9 キーで 1～9 行目を選択する。
 
 ```xml
 <CollectionView ItemsSource="{Binding Items}"
@@ -106,9 +103,9 @@ F1〜F4 は画面の下の機能ボタン(`ShellProperty.Function1Text` など)�
 
 ### 入力欄
 
-Enter で `EntryController` のコマンドを呼び、`Handled` でなければ次の欄へ移る。  
-ハードキーボードがある間は、入力欄にフォーカスがあってもソフトキーボードを出さない(`InputEntry` のスタイル)。  
-出す時は `ShowSoftInputAsync()` を呼ぶ。
+Enter で `EntryController` のコマンドを実行、`Handled` の結果により次の欄へ移動。  
+ハードキーボードがある間は、入力欄にフォーカスがあってもソフトキーボードを表示しない(`InputEntry` のスタイル)。  
+表示するときは `ShowSoftInputAsync()` を呼ぶ。
 
 ```xml
 <Entry Style="{StaticResource InputEntry}"
@@ -126,10 +123,9 @@ private void Input1Complete(EntryCompleteEvent ice)
 
 ### 入力の検証
 
-`EntryController` のプロパティに DataAnnotations の属性を付け、`ValidateInputsAsync` で名前の順に確かめる。  
-最初のエラーのメッセージを Information で出し、その入力欄へフォーカスを移す。  
+`EntryController` のプロパティに DataAnnotations の属性を付けて、`ValidateInputsAsync` で名前の順に検証する。  
 エラーは VM の `Errors` に入る。  
-VM には `[GenerateAccessor]` が要る。
+VM には `[GenerateAccessor]` が必要。
 
 ```csharp
 [GenerateAccessor]
@@ -154,47 +150,42 @@ public sealed partial class KeyEntryViewModel : AppViewModelBase
 
 ### ダイアログとポップアップ
 
-- `IDialog`(MauiComponents): 既定のボタン(Confirm は Cancel)にフォーカスを置き、Esc・DEL でキャンセルする。閉じた後は開く前の要素にフォーカスが戻る
-- ポップアップ: 既定のフォーカスは `Focus.Default` の要素。Esc でキャンセルして閉じる
-- 処理中(BusyState)の間はキーを捨てる
+- `IDialog`(MauiComponents): 既定のボタンにフォーカスされ、Esc でキャンセルする設定。閉じた後は開く前の要素にフォーカスが戻る
+- ポップアップ: 既定のフォーカスは `Focus.Default` の要素におかれる。Esc でキャンセルして閉じる
+- 処理中の間はキーイベントを捨てられる
 
 ### コントロール
 
-MauiProgram の `ConfigureControlKeyHandling()` で次のように扱う。
+MauiProgram の `ConfigureControlKeyHandling()` で次のような設定をしている。
 
-- Slider: 左右で 5% ずつ動かす。端で押すと隣のコントロールへ移る
-- Stepper: 左で減らし、右で増やす。端で押すと隣へ移る
+- Slider: 左右で 5% ずつ移動。端では隣のコントロールへ移動
+- Stepper: 左右で増減。端では隣のコントロールへ移動
 - DatePicker・TimePicker: Enter でダイアログを開き、Esc でキャンセルする
 
-フォーカスのある間の色は Styles.xaml の各スタイルで付ける。
-
-## 📱 見本の画面
+## 📱 サンプルの画面
 
 | 画面 | KeyMenu | 内容 |
 |---|---|---|
-| Entry | 1 | 入力欄 3 つと複数行の入力欄、Enter 送り、F2 で検証、F3 で Input1 の有効・無効、F4 で Input3 に値 |
-| List | 2 | 一覧(上下・数字キー・Enter) |
-| Dialog | 3 | ダイアログ 5 つ・数値のポップアップ・Indicator・Loading |
-| Control | 4 | CheckBox・Switch・RadioButton(数字キー・Enter) |
-| Mixed | 5 | 各種コントロールを 1 画面に置いた確かめ用 |
+| Entry | 1 | 入力欄 3 つと複数行の入力欄、Enter でアクション、F2 で検証、F3 で Input1 の有効・無効、F4 で Input3 に値 |
+| List | 2 | リスト(上下・数字キー・Enter) |
+| Dialog | 3 | ダイアログ・数値のポップアップ・Indicator・Loading |
+| Control | 4 | CheckBox・Switch・RadioButton |
+| Mixed | 5 | 各種コントロールを 1 画面に置いた時の確認用 |
 
-KeyMenu で戻る(BACK・Esc・F1)を押すと、確かめてからアプリを裏に回す。
+## 🔍 確認方法
 
-## 🔍 確かめ方
-
-USB か Bluetooth のキーボードを端末につなぐ。  
-無い時は、PC からキーパッドの模擬ツールか adb でキーを送る。
+物理キーボードがない場合は、PC からキーパッドの模擬ツールか adb でキーを送信して確認する。
 
 ### キーパッドの模擬ツール
 
 `tools/Template.Tools.KeypadSimulator` の WPF のツール。  
-USB デバッグでつないだ端末へ、キーパッドのキーを adb で送る。
+USB デバッグでつないだ端末へキーパッドのキーを adb で送る。
 
 <img width="40%" src="Document/Images/KeypadSimulator.png" />
 
-- Mode の Hardware は仮想の USB キーボードとして送る(端末からは物理キーボードに見える)。Input は `input keyevent` で送る
-- Connect で送り始め、Disconnect かツールを閉じると仮想のキーボードが消える
-- キーの表示と送るコードは、`appsettings.json` で変えられる
+- Mode の Hardware では仮想の USB キーボードとして送る(端末からは物理キーボードに見える)。Input は `input keyevent` で送る
+- Connect で開始し、Disconnect かツールを閉じると仮想のキーボードが消える
+- `appsettings.json` で設定変更可能
 
 ### adb
 
@@ -211,31 +202,27 @@ adb shell input keyevent KEYCODE_ESCAPE
 
 ### MAUI の実装
 
-- MAUI の Android の実装には、ソフトキーボードを明示的に出す `InputMethodManager.ShowSoftInput(view, 0)` の呼び出しがある
-- フォーカス済みの Entry・Editor に `Focus()` を呼ぶと、`ShowSoftInputOnFocus` を見ずにこれを呼ぶ
-- 経路は `InputView.MapFocus` → `InputViewExtensions.ShowKeyboardIfFocused` → `ViewExtensions.ShowSoftInput`。`InputView.MapFocus` は、`UseMauiApp` が Entry・Editor の Focus のコマンドの前に足す
+- MAUI の Android の実装では、ソフトキーボードを明示的に出す `InputMethodManager.ShowSoftInput(view, 0)` の呼び出し箇所がある
+- フォーカス済みの Entry・Editor で `Focus()` を呼ぶと、`ShowSoftInputOnFocus` を見ずにこれが呼びだされる
+- `InputView.MapFocus` → `InputViewExtensions.ShowKeyboardIfFocused` → `ViewExtensions.ShowSoftInput`の経路
 - override では対応が難しい
-  - 3 つとも MAUI の internal static のメソッドで、override できない
-  - `EntryHandler` を派生させても、Focus は静的な `EntryHandler.CommandMapper` を通る。避けるには、ハンドラーごと差し替えて Focus を作り直すことになる
+  - 3 つとも MAUI の internal static のメソッドで、override できない箇所の処理
+  - `EntryHandler` を派生させても、Focus は静的な `EntryHandler.CommandMapper` を通るため、避けるにはハンドラーごと差し替えて Focus を作り直すことになる
   - Android の `EditText` の側にも、`InputMethodManager` の呼び出しを止める仮想メソッドが無い
-- そのため、Focus のコマンドを外側から包んで、元の処理を通さない(下の「対応」)
 
 ### 問題
 
-- `EntryOption.DisableShowSoftInputOnFocus` で `ShowSoftInputOnFocus` を false にしても、この呼び出しは止まらない
-- フォーカス済みの入力欄への `Focus()` は、このテンプレートではよく起きる
-  - 画面を開いた時の既定のフォーカス(`NavigationFocusPlugin`)
-  - ポップアップを閉じた後のフォーカスの戻し(`PopupFocusPlugin`)
-  - `EntryController.Focus()`、フォーカス済みの入力欄へのショートカット
-- ハードキーボードのある端末でソフトキーボードが出ると、画面の下が隠れ、IME がキーを先に取ることがある(数字を全角に組み立てる、組み立て中は F キーが効かない)
+- `EntryOption.DisableShowSoftInputOnFocus` で `ShowSoftInputOnFocus` を false にしても、この呼び出しを抑制できない
+- そのため、Focus のコマンドを外側から包んで、元の処理を通さない対応が必要になる
 
-### 対応
+### 対応方法
 
-- `EntryOption` が、`EntryHandler`・`EditorHandler` の Focus のコマンドを `CommandMapper.ModifyMapping` で包む(`DisableShowSoftInputOnFocus` を有効にした時)。フォーカス済み かつ `ShowSoftInputOnFocus` が false の時は、MAUI の処理を通さずに結果だけ返す。フォーカスは既にあるので、状態は変わらない。それ以外は MAUI の処理のまま
-- 包むのは `UseMauiApp` より後(`ConfigureCustomBehaviors`)。MAUI が足した `InputView.MapFocus` を外側から包むため
+- `EntryOption` で、`EntryHandler`・`EditorHandler` の Focus のコマンドを `CommandMapper.ModifyMapping` でラップする
+  - フォーカス済み かつ `ShowSoftInputOnFocus` が false の時は、MAUI の処理を通さずに結果だけ返すようにする。フォーカスは既にあるので状態は変わらない
+- ラップするのはは `UseMauiApp` より後(`ConfigureCustomBehaviors`)で、MAUI が設定した `InputView.MapFocus` を外側からラップするため
 - Prompt のダイアログ(`IDialog` の `SuppressPromptSoftInput`)は、ハードキーボードがある間はウィンドウを `SoftInput.StateHidden` にし、入力欄を `ShowSoftInputOnFocus = false` にする
-- ハードキーボードの有無は `HardKeyboard`。英字のキーボード(構成の `qwerty`)と、数字キー(0〜9)を持つキーボードの機器(英字の無いキーパッド。構成は `nokeys` のまま)を「有り」とする。音量ボタンなどの数字キーの無い機器は数えない。つないだ時・外した時は構成の変更と入力機器の追加・削除で受け取り、入力欄の設定を直す
-- ソフトキーボードを出す時は `ShowSoftInputAsync()` を呼ぶ(フォーカス済みなら Focus のコマンドを通らずに出す)
+- ハードキーボードの有無は `HardKeyboard`で検知する。英字のキーボード(`qwerty`)と、数字キー(0～9)を持つキーボードの機器を「有り」と判定するする。音量ボタンなどの数字キーの無い機器は数えない
+- ソフトキーボードを明示的に表示する時は `ShowSoftInputAsync()` を呼ぶ
 
 ```csharp
 // Behaviors/EntryOption.android.cs(Editor も同じ)
@@ -261,17 +248,18 @@ private static bool SuppressFocusSoftInput(TextView editText, IView view, object
 
 ### 注意
 
-- Material3(`UseMaterial3`)では、Entry・Editor のハンドラーが MAUI の内部のクラス(`EntryHandler2`・`EditorHandler2`)に替わり、Focus のコマンドの包みも `EntryOption` のマッパーも効かない。このテンプレートは `UseMaterial3` をコメントにしている
+- Material3(`UseMaterial3`)では、Entry・Editor のハンドラーが MAUI の内部のクラス(`EntryHandler2`・`EditorHandler2`)に替わり、Focus のコマンドのラップも `EntryOption` のマッパーも効かない
+  - 本テンプレートでは `UseMaterial3` はオフ
 - SearchBar は対象外(AndroidX の SearchView が自分でソフトキーボードを出す)
-- 英字の無いキーパッドでテキストの入力欄に数字を打つと、IME(Gboard の日本語)が組み立てを始めてソフトキーボードを出し、組み立て中は F キーが効かない。数字だけを入れる欄は `Keyboard="Numeric"` にする(組み立てずに半角のまま入る)
-- MAUI の `DisplayPromptAsync` は `StateVisible` で出す。入力は `IDialog` の `PromptAsync` を使う
-- MAUI を上げた時は、`InputView.MapFocus`・`InputViewExtensions.ShowKeyboardIfFocused`・`TextViewExtensions.Focus` の実装が変わっていないかを確かめる
+- 英字の無いキーパッドでテキストの入力欄に数字を打つと、IME がソフトキーボードを出し、組み立て中は F キーが効かない
+  - 数字だけを使用する入力欄は `Keyboard="Numeric"` にする
+- MAUI をのバージョンアップ時は、`InputView.MapFocus`・`InputViewExtensions.ShowKeyboardIfFocused`・`TextViewExtensions.Focus` の実装が変わっていないかを確認する
 
-## 📦 template-maui に足す時
+## 📦 template-maui に物理キー対応を追加する時
 
-template-maui に物理キーの操作を足す時に使うファイルです。  
-「コピー」のファイルはそのまま写し、「置き換え」のファイルはこのテンプレートのファイルで置き換えます。  
-「合わせる」のファイルには template-maui の機能も入っているので、上書きせずに表の部分だけを足します。
+template-maui に物理キーの操作を追加する時に使用するファイルについて。  
+「コピー」のファイルはそのまま追加し、「置き換え」のファイルはこのテンプレートのファイルで置き換えます。  
+「マージ」のファイルには template-maui の機能も入っているので、上書きせずに表の部分だけをマージします。
 
 ### コピー
 
@@ -280,28 +268,24 @@ template-maui に物理キーの操作を足す時に使うファイルです。
 | `Input/` | すべて |
 | `Platforms/Android/KeyInputDriver.cs` / `KeyMap.cs` / `HardKeyboard.cs` | |
 | `Extender/PopupInputPlugin.cs` | |
-| `Modules/Key/` | 見本の画面(要る時)。`ViewId` の `Key*` とメニューの項目も足す |
 
 ### 置き換え
 
 | ファイル | template-maui との違い |
 |---|---|
-| `Helpers/ElementHelper.cs` / `ElementHelper.android.cs` | XAML に書いた順のフォーカスの移動(Skip・Wrap・Scope)と、入力欄以外へのフォーカスの置き方。template-maui の公開メンバーは残る |
-| `Extender/NavigationFocusPlugin.cs` / `PopupFocusPlugin.cs` | 戻した画面のフォーカスを入力欄以外にも置く(`ElementHelper.RequestFocus`)、ポップアップを閉じた後にフォーカスを戻す |
-| `Behaviors/EntryBind.cs` | キーを捨てている間(`InputManager.IsBusy`)は Enter を受けない |
-| `Behaviors/EntryOption.android.cs` | ハードキーボードがある間だけソフトキーボードを出さない |
+| `Helpers/ElementHelper.cs` / `ElementHelper.android.cs` | XAML に書いた順のフォーカスの移動と、入力欄以外へのフォーカスの制御 |
+| `Extender/NavigationFocusPlugin.cs` / `PopupFocusPlugin.cs` | 戻した画面のフォーカス制御、ポップアップを閉じた後のフォーカスを戻す制御 |
+| `Behaviors/EntryBind.cs` | Enter の制御 |
+| `Behaviors/EntryOption.android.cs` | ハードキーボードがある間の制御 |
 
-### 合わせる
+### マージ
 
 | ファイル | 足すもの |
 |---|---|
-| `Extensions.cs` | このテンプレートの `SetDefaultFocus`(`KeyFocus.Skip` を飛ばし、`ElementHelper.RequestFocus` でフォーカスを置く) |
-| `Platforms/Android/MainActivity.cs` | `KeyInputDriver` のフィールドと `DispatchKeyEvent` のオーバーライド、ハードキーボードがある間のウィンドウの `StateHidden`(`OnResume`・`OnPause`) |
-| `MainPage.xaml` | ページの Behaviors の `InputBehavior`、内容の領域の `KeyFocus.Scope`、F キーのボタンの `Shortcut.Key`(Function1〜Function4) |
+| `Extensions.cs` | `SetDefaultFocus` を追加 |
+| `Platforms/Android/MainActivity.cs` | `KeyInputDriver` のフィールドと `DispatchKeyEvent` のオーバーライド、ハードキーボードがある間のウィンドウの `StateHidden`(`OnResume`・`OnPause`) の追加 |
+| `MainPage.xaml` | ページの Behaviors の `InputBehavior`、コンテンツ領域の `KeyFocus.Scope`、F キーのボタンの `Shortcut.Key`(Function1～Function4) を追加 |
 | `MauiProgram.cs` | `HandleEnterKey`・`DisableShowSoftInputOnFocus` を true、`ConfigureControlKeyHandling()`、ダイアログの `DismissKeys`・`IgnorePromptDismissKeys`・`EnableDialogButtonFocus`・`SuppressPromptSoftInput`、`AddComponentsPopupPlugin<PopupInputPlugin>()` |
-| `Modules/Navigation/Modal/InputNumberView.xaml` | テンキーのボタンの `Shortcut.Key` |
-| `Resources/Styles/Styles.xaml` | キーで操作する部品の `Focused` の見た目と `KeyFocus.DefaultHighlight` |
-| `Settings.XamlStyler` | 属性の並びの `input:*` |
 
 ## 🔗 リンク
 
