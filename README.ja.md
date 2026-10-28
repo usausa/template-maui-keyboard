@@ -2,7 +2,7 @@
 
 [English](README.md) | 日本語
 
-物理キー付きの端末向けの、物理キー(数字・矢印・Enter・Esc・F1～F4 など)だけで操作する Android アプリの MAUI のテンプレートプロジェクト。
+物理キー付きの端末向けに、物理キー(数字・矢印・Enter・Esc・F1～F4 など)だけで操作する Android アプリの MAUI のテンプレートプロジェクト。
 
 <img width="40%" src="Document/Images/HT.jpg" />
 
@@ -202,26 +202,32 @@ adb shell input keyevent KEYCODE_ESCAPE
 
 ### MAUI の実装
 
-- MAUI の Android の実装では、ソフトキーボードを明示的に出す `InputMethodManager.ShowSoftInput(view, 0)` の呼び出し箇所がある
-- フォーカス済みの Entry・Editor で `Focus()` を呼ぶと、`ShowSoftInputOnFocus` を見ずにこれが呼びだされる
-- `InputView.MapFocus` → `InputViewExtensions.ShowKeyboardIfFocused` → `ViewExtensions.ShowSoftInput`の経路
-- override では対応が難しい
-  - 3 つとも MAUI の internal static のメソッドで、override できない箇所の処理
+- Entry・Editor で `Focus()` を呼ぶと、Android では 2 つのメソッドが順番に呼びだされる
+  - 1: `InputView.MapFocus`。MAUI の Controls が Focus のコマンドの先頭にマップする
+  - 2: `EntryHandler.MapFocus`。ハンドラー本来の処理で、ここで実際にフォーカスが移る
+- 1 つ目の処理にソフトキーボードを表示する処理があり、`ShowSoftInputOnFocus` の値を見ずにフォーカスが当たっていれば出るようになっている
+  - `InputView.MapFocus` → `InputViewExtensions.ShowKeyboardIfFocused` → `ViewExtensions.ShowSoftInput` → `InputMethodManager.ShowSoftInput(view, 0)` の順で処理が行われる
+  - `ShowKeyboardIfFocused` が見ているのは `IsFocused` のみ
+- 2 つ目の `TextViewExtensions.Focus` は `ShowSoftInputOnFocus` を見ていて、false ならソフトキーボードを表示しない
+- override ではこの無効化が難しい
+  - 処理が MAUI の internal static のメソッドで、override できない
   - `EntryHandler` を派生させても、Focus は静的な `EntryHandler.CommandMapper` を通るため、避けるにはハンドラーごと差し替えて Focus を作り直すことになる
   - Android の `EditText` の側にも、`InputMethodManager` の呼び出しを止める仮想メソッドが無い
 
 ### 問題
 
-- `EntryOption.DisableShowSoftInputOnFocus` で `ShowSoftInputOnFocus` を false にしても、この呼び出しを抑制できない
-- そのため、Focus のコマンドを外側から包んで、元の処理を通さない対応が必要になる
+- `EntryOption.DisableShowSoftInputOnFocus` で `ShowSoftInputOnFocus` を false にしても、`ShowKeyboardIfFocused` はそれを見ないのでソフトキーボードは出てしまう
+- Focus のコマンドを外側からラップして、`InputView.MapFocus` を呼ばせないようにする必要がある
 
 ### 対応方法
 
-- `EntryOption` で、`EntryHandler`・`EditorHandler` の Focus のコマンドを `CommandMapper.ModifyMapping` でラップする
-  - フォーカス済み かつ `ShowSoftInputOnFocus` が false の時は、MAUI の処理を通さずに結果だけ返すようにする。フォーカスは既にあるので状態は変わらない
-- ラップするのは `UseMauiApp` より後(`ConfigureCustomBehaviors`)で、MAUI が設定した `InputView.MapFocus` を外側からラップするため
-- Prompt のダイアログ(`IDialog` の `SuppressPromptSoftInput`)は、ハードキーボードがある間はウィンドウを `SoftInput.StateHidden` にし、入力欄を `ShowSoftInputOnFocus = false` にする
-- ハードキーボードの有無は `HardKeyboard`で検知する。英字のキーボード(`qwerty`)と、数字キー(0～9)を持つキーボードの機器を「有り」と判定する。音量ボタンなどの数字キーの無い機器は数えない
+- `EntryHandler`・`EditorHandler` の Focus のコマンドを `CommandMapper.ModifyMapping` でラップする
+  - すでにフォーカスがあって `ShowSoftInputOnFocus` が false の時は、`InputView.MapFocus` を呼ばずに `FocusRequest` へ結果だけ返すようにする
+- ラップは `UseMauiApp` より後(`ConfigureCustomBehaviors`)で行う
+- ハードキーボードの有無は `HardKeyboard` で検知する。次のどちらかに当たれば「有り」と判定する
+  - `Configuration.Keyboard` が `nokeys` 以外(英字のキーボードなら `qwerty` になる)で、かつ `HardKeyboardHidden` が `yes` でない
+  - `InputDevice` を見て、キーボード扱いの機器が 0～9 のキーを全部持っている(英字の無いキーパッドはこちら。`Configuration.Keyboard` は `nokeys` のまま)
+  - 音量ボタンのように数字キーの無い機器は数えない
 - ソフトキーボードを明示的に表示する時は `ShowSoftInputAsync()` を呼ぶ
 
 ```csharp
@@ -253,7 +259,9 @@ private static bool SuppressFocusSoftInput(TextView editText, IView view, object
 - SearchBar は対象外(AndroidX の SearchView が自分でソフトキーボードを出す)
 - 英字の無いキーパッドでテキストの入力欄に数字を打つと、IME がソフトキーボードを出し、組み立て中は F キーが効かない
   - 数字だけを使用する入力欄は `Keyboard="Numeric"` にする
-- MAUI のバージョンアップ時は、`InputView.MapFocus`・`InputViewExtensions.ShowKeyboardIfFocused`・`TextViewExtensions.Focus` の実装が変わっていないかを確認する
+- MAUI のバージョンアップ時は、次の実装が変わっていないかを確認する
+  - ソフトキーボードを出す側: `InputView.MapFocus`・`InputViewExtensions.ShowKeyboardIfFocused`・`ViewExtensions.ShowSoftInput`
+  - ラップで呼ばなくなる側: `TextViewExtensions.Focus`
 
 ## 📦 template-maui に物理キー対応を追加する時
 

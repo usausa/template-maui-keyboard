@@ -2,7 +2,7 @@
 
 English | [日本語](README.ja.md)
 
-Template project for MAUI Android apps operated only with physical keys (digits, arrows, Enter, Esc, F1 to F4, and so on), for devices with physical keys.
+For devices with physical keys, a MAUI template project for Android apps operated only with physical keys (digits, arrows, Enter, Esc, F1 to F4, and so on).
 
 <img width="40%" src="Document/Images/HT.jpg" />
 
@@ -202,26 +202,32 @@ adb shell input keyevent KEYCODE_ESCAPE
 
 ### MAUI implementation
 
-- The Android implementation of MAUI has a place that calls `InputMethodManager.ShowSoftInput(view, 0)`, which explicitly shows the soft keyboard
-- Calling `Focus()` on an already focused Entry or Editor makes this call without checking `ShowSoftInputOnFocus`
-- The path is `InputView.MapFocus` → `InputViewExtensions.ShowKeyboardIfFocused` → `ViewExtensions.ShowSoftInput`
-- It is hard to deal with by overriding
-  - All three are internal static methods of MAUI, in code that cannot be overridden
+- Calling `Focus()` on an Entry or Editor calls two methods in order on Android
+  - 1: `InputView.MapFocus`. MAUI Controls maps it to the head of the Focus command
+  - 2: `EntryHandler.MapFocus`. The handler's own, where the focus actually moves
+- The first one has processing that shows the soft keyboard, and it shows whenever the view has focus, without looking at the value of `ShowSoftInputOnFocus`
+  - The processing goes in the order `InputView.MapFocus` → `InputViewExtensions.ShowKeyboardIfFocused` → `ViewExtensions.ShowSoftInput` → `InputMethodManager.ShowSoftInput(view, 0)`
+  - All `ShowKeyboardIfFocused` looks at is `IsFocused`
+- The second one, `TextViewExtensions.Focus`, does look at `ShowSoftInputOnFocus`, and does not show the soft keyboard when it is false
+- It is hard to disable this by overriding
+  - The processing is in internal static methods of MAUI and cannot be overridden
   - Even with a class derived from `EntryHandler`, Focus goes through the static `EntryHandler.CommandMapper`, so avoiding it means replacing the whole handler and rebuilding Focus
   - The Android `EditText` side has no virtual method that stops the `InputMethodManager` call either
 
 ### Problem
 
-- Setting `ShowSoftInputOnFocus` to false with `EntryOption.DisableShowSoftInputOnFocus` does not suppress this call
-- Therefore, the Focus command has to be wrapped from the outside so that the original processing does not run
+- Setting `ShowSoftInputOnFocus` to false with `EntryOption.DisableShowSoftInputOnFocus` still shows the soft keyboard, because `ShowKeyboardIfFocused` does not look at it
+- The Focus command has to be wrapped from the outside to keep `InputView.MapFocus` from being called
 
 ### Workaround
 
-- `EntryOption` wraps the Focus command of `EntryHandler` and `EditorHandler` with `CommandMapper.ModifyMapping`
-  - When the view is already focused and `ShowSoftInputOnFocus` is false, it returns only the result without going through the MAUI processing. The view already has the focus, so the state does not change
-- The wrapping is done after `UseMauiApp` (`ConfigureCustomBehaviors`), so that `InputView.MapFocus` set by MAUI is wrapped from the outside
-- The Prompt dialog (`SuppressPromptSoftInput` of `IDialog`) sets the window to `SoftInput.StateHidden` and the input field to `ShowSoftInputOnFocus = false` while a hardware keyboard is present
-- `HardKeyboard` detects whether a hardware keyboard is present. An alphabetic keyboard (`qwerty`) and a keyboard device with the number keys 0 to 9 count as present. Devices without number keys, such as the volume buttons, are not counted
+- Wrap the Focus command of `EntryHandler` and `EditorHandler` with `CommandMapper.ModifyMapping`
+  - When the view already has focus and `ShowSoftInputOnFocus` is false, return only the result to `FocusRequest` without calling `InputView.MapFocus`
+- The wrapping is done after `UseMauiApp` (`ConfigureCustomBehaviors`)
+- `HardKeyboard` detects whether a hardware keyboard is present. Either of the following counts as present
+  - `Configuration.Keyboard` is other than `nokeys` (`qwerty` for an alphabetic keyboard), and `HardKeyboardHidden` is not `yes`
+  - `InputDevice` has a device treated as a keyboard that has all of the keys 0 to 9 (this is the case for a keypad without letters; `Configuration.Keyboard` stays at `nokeys`)
+  - Devices without number keys, such as the volume buttons, do not count
 - To show the soft keyboard explicitly, call `ShowSoftInputAsync()`
 
 ```csharp
@@ -253,7 +259,9 @@ private static bool SuppressFocusSoftInput(TextView editText, IView view, object
 - SearchBar is out of scope (the AndroidX SearchView shows the soft keyboard by itself)
 - With a keypad without letters, typing digits into a text input field makes the IME show the soft keyboard, and F keys do not work during composition
   - Set `Keyboard="Numeric"` on input fields that use only digits
-- When updating MAUI, check whether the implementations of `InputView.MapFocus`, `InputViewExtensions.ShowKeyboardIfFocused`, and `TextViewExtensions.Focus` have changed
+- When updating MAUI, check whether these implementations have changed
+  - The side that shows the soft keyboard: `InputView.MapFocus`, `InputViewExtensions.ShowKeyboardIfFocused`, `ViewExtensions.ShowSoftInput`
+  - The side the wrapper stops calling: `TextViewExtensions.Focus`
 
 ## 📦 Adding physical key support to template-maui
 
