@@ -21,7 +21,7 @@
 |---|---|---|
 | `KeyInputDriver` / `KeyMap` | Platforms/Android | 物理キーイベントを論理キーイベントとして InputManager へ渡す入力部分 |
 | `InputManager` | Input | 画面とポップアップの管理とイベントの配信 |
-| `InputBehavior` | Input | MainPageとポップアップのキーの制御 |
+| `InputBehavior` | Input | MainPage とポップアップのキーの制御 |
 | `Shortcut.Key` | Input | ショートカット用のマーカー |
 | `ShortcutBehavior` | Input | ショートカットによるコマンド実行 |
 | `CollectionViewShortcutBehavior` | Input | CollectionView の物理キーによる制御 |
@@ -42,7 +42,7 @@
 ```
 MainActivity.DispatchKeyEvent / キーイベントのフック
   └─ KeyInputDriver ……… 物理キーイベントの論理キーイベントへの変換
-       └─ InputManager ……… トップ画面へのイベントの配信
+       └─ InputManager ……… 最上位のハンドラー(画面・ポップアップ)へのイベントの配信
             └─ InputBehavior
                  ├─ 1. 処理中のイベント実行判定
                  ├─ 2. ショートカット処理実行
@@ -56,7 +56,7 @@ MainActivity.DispatchKeyEvent / キーイベントのフック
 ### 数字キー・F キー
 
 `Shortcut.Key` を付けた要素は、そのキーでタッチと同じ動作を行う。  
-Button はタップ、CheckBox・Switch は切り替え、RadioButton は選択、他の要素はフォーカス。  
+Button はタップ、CheckBox・Switch は切り替え、RadioButton は選択、他の要素はフォーカス。
 
 ```xml
 <Button Style="{StaticResource MenuButton}"
@@ -69,7 +69,7 @@ Button はタップ、CheckBox・Switch は切り替え、RadioButton は選択�
 ### フォーカスの移動
 
 上下左右で XAML に書いた順に前後へ移動。  
-範囲は画面の中だけで、規定の動作では端では止まる仕様。
+範囲は画面の中だけで、既定の動作では端で止まる仕様。
 
 | 添付プロパティ | 付ける所 | 動き |
 |---|---|---|
@@ -152,7 +152,7 @@ public sealed partial class KeyEntryViewModel : AppViewModelBase
 
 - `IDialog`(MauiComponents): 既定のボタンにフォーカスされ、Esc でキャンセルする設定。閉じた後は開く前の要素にフォーカスが戻る
 - ポップアップ: 既定のフォーカスは `Focus.Default` の要素におかれる。Esc でキャンセルして閉じる
-- 処理中の間はキーイベントを捨てられる
+- 処理中の間はキーイベントを捨てる
 
 ### コントロール
 
@@ -219,9 +219,9 @@ adb shell input keyevent KEYCODE_ESCAPE
 
 - `EntryOption` で、`EntryHandler`・`EditorHandler` の Focus のコマンドを `CommandMapper.ModifyMapping` でラップする
   - フォーカス済み かつ `ShowSoftInputOnFocus` が false の時は、MAUI の処理を通さずに結果だけ返すようにする。フォーカスは既にあるので状態は変わらない
-- ラップするのはは `UseMauiApp` より後(`ConfigureCustomBehaviors`)で、MAUI が設定した `InputView.MapFocus` を外側からラップするため
+- ラップするのは `UseMauiApp` より後(`ConfigureCustomBehaviors`)で、MAUI が設定した `InputView.MapFocus` を外側からラップするため
 - Prompt のダイアログ(`IDialog` の `SuppressPromptSoftInput`)は、ハードキーボードがある間はウィンドウを `SoftInput.StateHidden` にし、入力欄を `ShowSoftInputOnFocus = false` にする
-- ハードキーボードの有無は `HardKeyboard`で検知する。英字のキーボード(`qwerty`)と、数字キー(0～9)を持つキーボードの機器を「有り」と判定するする。音量ボタンなどの数字キーの無い機器は数えない
+- ハードキーボードの有無は `HardKeyboard`で検知する。英字のキーボード(`qwerty`)と、数字キー(0～9)を持つキーボードの機器を「有り」と判定する。音量ボタンなどの数字キーの無い機器は数えない
 - ソフトキーボードを明示的に表示する時は `ShowSoftInputAsync()` を呼ぶ
 
 ```csharp
@@ -253,7 +253,7 @@ private static bool SuppressFocusSoftInput(TextView editText, IView view, object
 - SearchBar は対象外(AndroidX の SearchView が自分でソフトキーボードを出す)
 - 英字の無いキーパッドでテキストの入力欄に数字を打つと、IME がソフトキーボードを出し、組み立て中は F キーが効かない
   - 数字だけを使用する入力欄は `Keyboard="Numeric"` にする
-- MAUI をのバージョンアップ時は、`InputView.MapFocus`・`InputViewExtensions.ShowKeyboardIfFocused`・`TextViewExtensions.Focus` の実装が変わっていないかを確認する
+- MAUI のバージョンアップ時は、`InputView.MapFocus`・`InputViewExtensions.ShowKeyboardIfFocused`・`TextViewExtensions.Focus` の実装が変わっていないかを確認する
 
 ## 📦 template-maui に物理キー対応を追加する時
 
