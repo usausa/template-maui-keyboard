@@ -22,6 +22,7 @@ global using Microsoft.Extensions.Logging;
 global using Smart;
 global using Smart.ComponentModel;
 global using Smart.Mvvm;
+global using Smart.Mvvm.Collections;
 global using Smart.Mvvm.ViewModels;
 global using Smart.Windows.Input;
 global using Smart.Windows.ViewModels;
