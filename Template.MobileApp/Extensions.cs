@@ -1,6 +1,7 @@
 namespace Template.MobileApp;
 
-using Template.MobileApp.Behaviors;
+using Smart.Maui.Interactivity;
+
 using Template.MobileApp.Components;
 using Template.MobileApp.Helpers;
 using Template.MobileApp.Input;
@@ -49,7 +50,7 @@ public static class Extensions
 
     public static void SetDefaultFocus(this IVisualTreeElement parent)
     {
-        var element = ElementHelper.FindFocusable(parent, Focus.GetDefault) ??
+        var element = ElementHelper.FindFocusable(parent, DefaultFocus.GetIsTarget) ??
                       ElementHelper.FindFocusable(parent, static x => !KeyFocus.GetSkip(x));
         if (element is not null)
         {

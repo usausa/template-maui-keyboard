@@ -3,7 +3,6 @@
            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
            xmlns:s="http://smart/maui"
            xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-           xmlns:behaviors="clr-namespace:Template.MobileApp.Behaviors"
            xmlns:markup="clr-namespace:Template.MobileApp.Markup"
            xmlns:modules="clr-namespace:Template.MobileApp.Modules"
            xmlns:module="clr-namespace:Template.MobileApp.Modules.Navigation.Modal"
@@ -112,7 +111,7 @@
                     ImageSource="{x:Static markup:AppIcons.Close}" />
             <Button Grid.Column="1"
                     Style="{StaticResource InputIconButton}"
-                    behaviors:Focus.Default="True"
+                    s:DefaultFocus.IsTarget="True"
                     Command="{Binding CommitCommand}"
                     input:Shortcut.Key="Function4"
                     ImageSource="{x:Static markup:AppIcons.Check}" />
