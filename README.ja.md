@@ -2,7 +2,7 @@
 
 [English](README.md) | 日本語
 
-物理キー付きの端末向けに、物理キー(数字・矢印・Enter・Esc・F1～F4 など)だけで操作する Android アプリの MAUI のテンプレートプロジェクト。
+[Template](https://usausa.github.io/template/) project for MAUI with physical keys.
 
 <img width="40%" src="Document/Images/HT.jpg" />
 
@@ -295,6 +295,8 @@ template-maui に物理キーの操作を追加する時に使用するファイ
 | `MainPage.xaml` | ページの Behaviors の `InputBehavior`、コンテンツ領域の `KeyFocus.Scope`、F キーのボタンの `Shortcut.Key`(Function1～Function4) を追加 |
 | `MauiProgram.cs` | `HandleEnterKey`・`DisableShowSoftInputOnFocus` を true、`ConfigureControlKeyHandling()`、ダイアログの `DismissKeys`・`IgnorePromptDismissKeys`・`EnableDialogButtonFocus`・`SuppressPromptSoftInput`、`AddComponentsPopupPlugin<PopupInputPlugin>()` |
 
-## 🔗 リンク
+## 🔗 関連プロジェクト
 
-[template-maui](https://github.com/usausa/template-maui)
+| プロジェクト | 説明 |
+| --- | --- |
+| [template-maui](https://github.com/usausa/template-maui) | MAUI アプリのテンプレート |

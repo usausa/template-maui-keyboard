@@ -2,7 +2,7 @@
 
 English | [日本語](README.ja.md)
 
-For devices with physical keys, a MAUI template project for Android apps operated only with physical keys (digits, arrows, Enter, Esc, F1 to F4, and so on).
+[Template](https://usausa.github.io/template/) project for MAUI with physical keys.
 
 <img width="40%" src="Document/Images/HT.jpg" />
 
@@ -295,6 +295,8 @@ The files in "Merge" also contain features of template-maui, so merge only the p
 | `MainPage.xaml` | Add `InputBehavior` to the page behaviors, `KeyFocus.Scope` to the content area, and `Shortcut.Key` (Function1 to Function4) to the F key buttons |
 | `MauiProgram.cs` | `HandleEnterKey` and `DisableShowSoftInputOnFocus` set to true, `ConfigureControlKeyHandling()`, `DismissKeys` / `IgnorePromptDismissKeys` / `EnableDialogButtonFocus` / `SuppressPromptSoftInput` of the dialog, and `AddComponentsPopupPlugin<PopupInputPlugin>()` |
 
-## 🔗 Links
+## 🔗 Related Projects
 
-[template-maui](https://github.com/usausa/template-maui)
+| Project | Description |
+| --- | --- |
+| [template-maui](https://github.com/usausa/template-maui) | MAUI application template |
