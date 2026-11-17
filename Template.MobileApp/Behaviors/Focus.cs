@@ -1,5 +1,6 @@
 namespace Template.MobileApp.Behaviors;
 
+#pragma warning disable CA1724
 public static class Focus
 {
     //--------------------------------------------------------------------------------
@@ -16,3 +17,4 @@ public static class Focus
 
     public static void SetSuppressDefaultFocus(BindableObject bindable, bool value) => bindable.SetValue(SuppressDefaultFocusProperty, value);
 }
+#pragma warning restore CA1724

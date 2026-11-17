@@ -71,7 +71,7 @@ public sealed class AdbService
         var devices = new List<AdbDevice>();
         foreach (var line in output.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
         {
-            if (line.StartsWith("List of devices", StringComparison.Ordinal) || line.StartsWith('*'))
+            if (line.StartsWith("List of devices", StringComparison.Ordinal) || line.StartsWith('*', StringComparison.Ordinal))
             {
                 continue;
             }

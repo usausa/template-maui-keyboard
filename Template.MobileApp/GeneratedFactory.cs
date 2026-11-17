@@ -3,6 +3,7 @@
 [assembly: global::BunnyTail.DependencyInjection.GenerateComponentFactory(typeof(global::Template.MobileApp.App))]
 [assembly: global::BunnyTail.DependencyInjection.GenerateComponentFactory(typeof(global::Template.MobileApp.Extender.PopupActivationPlugin))]
 [assembly: global::BunnyTail.DependencyInjection.GenerateComponentFactory(typeof(global::Template.MobileApp.Extender.PopupFocusPlugin))]
+[assembly: global::BunnyTail.DependencyInjection.GenerateComponentFactory(typeof(global::Template.MobileApp.Extender.PopupInputPlugin))]
 [assembly: global::BunnyTail.DependencyInjection.GenerateComponentFactory(typeof(global::MauiComponents.DefaultPopupFactory))]
 [assembly: global::BunnyTail.DependencyInjection.GenerateComponentFactory(typeof(global::MauiComponents.DialogImplementation))]
 [assembly: global::BunnyTail.DependencyInjection.GenerateComponentFactory(typeof(global::MauiComponents.DisplayImplementation))]

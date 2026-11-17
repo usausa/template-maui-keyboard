@@ -14,7 +14,7 @@ public sealed class MainPageViewModel : ExtendViewModelBase, IShellControl, IApp
 
     private bool destroying;
 
-    private IDisposable? navigatingBusy;
+    private BusyStateScope? navigatingBusy;
 
     // Shell
 
